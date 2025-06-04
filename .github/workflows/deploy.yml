@@ -1,0 +1,81 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-backend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: backend/package-lock.json
+    
+    - name: Install backend dependencies
+      run: |
+        cd backend
+        npm ci
+    
+    - name: Test backend
+      run: |
+        cd backend
+        npm test
+      env:
+        NODE_ENV: test
+        DATABASE_URL: postgresql://test:test@localhost:5432/test
+
+  test-frontend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+    
+    - name: Install frontend dependencies
+      run: |
+        cd frontend
+        npm ci
+    
+    - name: Build frontend
+      run: |
+        cd frontend
+        npm run build
+      env:
+        VITE_API_URL: https://test-api.example.com/api
+
+  deploy-backend:
+    needs: [test-backend]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Deploy to Railway
+      run: |
+        echo "Railway автоматически деплоит при push в main"
+        echo "Или настройте Railway CLI здесь"
+
+  deploy-frontend:
+    needs: [test-frontend]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Deploy to Vercel
+      run: |
+        echo "Vercel автоматически деплоит при push в main"
+        echo "Или настройте Vercel CLI здесь" 

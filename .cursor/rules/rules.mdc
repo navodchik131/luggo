@@ -1,0 +1,184 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+{
+  "project_name": "Luggo",
+  "description": "Платформа по типу fl.ru, специализирующаяся на услугах по переезду (квартирный, офисный, межгород)",
+  "purpose": "Создание маркетплейса для заказчиков и исполнителей услуг по переезду с функциями заявок, чата, рейтинга и откликов.",
+  "target_audience": [
+    "Физические лица, нуждающиеся в переезде",
+    "Грузчики, водители, бригады по переезду",
+    "Организации, предоставляющие услуги переезда"
+  ],
+  "technologies": {
+    "backend": "Node.js + Express / NestJS",
+    "frontend": "React + Vite / Next.js",
+    "database": "PostgreSQL / MySQL / MongoDB",
+    "orm": "TypeORM / Sequelize / Mongoose",
+    "authentication": "JWT / OAuth2",
+    "styles": "SCSS / Tailwind CSS",
+    "chat": "Socket.IO / WebSockets",
+    "notifications": "Firebase Cloud Messaging / Email.js",
+    "file_upload": "Multer / Cloudinary",
+    "hosting": "Vercel (Frontend), Railway / Render / AWS (Backend)"
+  },
+  "models": {
+    "User": {
+      "id": "string",
+      "email": "string",
+      "password": "string",
+      "name": "string",
+      "phone": "string",
+      "avatar": "string | null",
+      "role": "enum('customer', 'executor', 'admin')",
+      "rating": "float",
+      "createdAt": "datetime"
+    },
+    "Task": {
+      "id": "string",
+      "title": "string",
+      "description": "text",
+      "fromAddress": "string",
+      "toAddress": "string",
+      "date": "date",
+      "category": "string ('flat', 'office', 'intercity')",
+      "status": "enum('draft', 'active', 'in_progress', 'completed')",
+      "userId": "string",
+      "createdAt": "datetime"
+    },
+    "Bid": {
+      "id": "string",
+      "price": "decimal",
+      "comment": "text",
+      "taskId": "string",
+      "userId": "string",
+      "accepted": "boolean",
+      "createdAt": "datetime"
+    },
+    "Message": {
+      "id": "string",
+      "text": "text",
+      "taskId": "string",
+      "senderId": "string",
+      "receiverId": "string",
+      "read": "boolean",
+      "createdAt": "datetime"
+    },
+    "Review": {
+      "id": "string",
+      "rating": "int (1–5)",
+      "comment": "text",
+      "taskId": "string",
+      "authorId": "string",
+      "targetId": "string",
+      "createdAt": "datetime"
+    }
+  },
+  "routes": {
+    "/auth/register": {
+      "method": "POST",
+      "description": "Регистрация пользователя"
+    },
+    "/auth/login": {
+      "method": "POST",
+      "description": "Вход в систему"
+    },
+    "/tasks": {
+      "method": "GET/POST",
+      "description": "Получение и создание заявок"
+    },
+    "/tasks/:id": {
+      "method": "GET",
+      "description": "Детали заявки"
+    },
+    "/tasks/:id/bid": {
+      "method": "POST",
+      "description": "Отклик исполнителя"
+    },
+    "/messages/:taskId": {
+      "method": "GET",
+      "description": "Чат по заявке"
+    },
+    "/messages": {
+      "method": "POST",
+      "description": "Отправка сообщения"
+    },
+    "/reviews": {
+      "method": "POST",
+      "description": "Оставить отзыв"
+    },
+    "/users/:id": {
+      "method": "GET",
+      "description": "Информация о пользователе"
+    }
+  },
+  "features": {
+    "guest": [
+      "Регистрация",
+      "Вход",
+      "Просмотр открытых заявок"
+    ],
+    "customer": [
+      "Создание заявки",
+      "Редактирование заявки",
+      "Отслеживание статуса",
+      "Общение с исполнителями",
+      "Оценка выполненной работы",
+      "История заявок"
+    ],
+    "executor": [
+      "Профиль с опытом и фото",
+      "Поиск заявок",
+      "Отклик на заявку",
+      "Общение с заказчиком",
+      "Уведомления",
+      "Рейтинг и отзывы"
+    ],
+    "admin": [
+      "Просмотр всех заявок",
+      "Модерация контента",
+      "Блокировка пользователей",
+      "Статистика"
+    ]
+  },
+  "security": {
+    "xss": "React DOM escapes content by default",
+    "csrf": "Handled via JWT tokens and CORS",
+    "password_hashing": "bcrypt",
+    "token_based_auth": "JWT",
+    "access_control": "Middleware-based role checks"
+  },
+  "ui_pages": [
+    "Главная",
+    "Регистрация",
+    "Вход",
+    "Личный кабинет",
+    "Список заявок",
+    "Заявка",
+    "Отклики",
+    "Чат",
+    "Профиль"
+  ],
+  "development_plan": {
+    "stage_1": "Настройка Node.js backend и Express сервера",
+    "stage_2": "Создание моделей и маршрутов",
+    "stage_3": "Настройка базы данных (MySQL/PostgreSQL/MongoDB)",
+    "stage_4": "Создание React-фронта с Vite",
+    "stage_5": "Интеграция API и страниц",
+    "stage_6": "Добавление авторизации через JWT",
+    "stage_7": "Реализация чата через WebSocket",
+    "stage_8": "Тестирование и деплой"
+  },
+  "future_features": [
+    "Калькулятор стоимости",
+    "Push-уведомления",
+    "Подписки для исполнителей",
+    "API для мобильного приложения",
+    "Страхование",
+    "Интеграция карт",
+    "SMS/email уведомления"
+  ]
+
+}
