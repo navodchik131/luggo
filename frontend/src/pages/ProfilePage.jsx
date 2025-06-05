@@ -14,7 +14,8 @@ const ProfilePage = () => {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
-    services: []
+    services: [],
+    showContacts: true
   })
 
   useEffect(() => {
@@ -44,7 +45,8 @@ const ProfilePage = () => {
         setFormData({
           name: response.data.user.name,
           phone: response.data.user.phone,
-          services: response.data.user.services || []
+          services: response.data.user.services || [],
+          showContacts: response.data.user.showContacts !== undefined ? response.data.user.showContacts : true
         })
       }
     } catch (error) {
@@ -55,10 +57,10 @@ const ProfilePage = () => {
   }
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target
+    const { name, value, type, checked } = e.target
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value
     }))
   }
 
@@ -245,6 +247,28 @@ const ProfilePage = () => {
                   />
                 </div>
 
+                {/* Настройка приватности контактов */}
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <label className="flex items-start gap-3">
+                    <input
+                      type="checkbox"
+                      name="showContacts"
+                      checked={formData.showContacts}
+                      onChange={handleInputChange}
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-1"
+                    />
+                    <div>
+                      <span className="text-sm font-medium text-gray-900">
+                        Показывать мои контакты другим пользователям
+                      </span>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Если опция включена, другие пользователи смогут видеть ваш email и телефон в профиле и откликах. 
+                        Если выключена - контакты будут скрыты от всех, кроме вас.
+                      </p>
+                    </div>
+                  </label>
+                </div>
+
                 {/* Услуги для исполнителей */}
                 {profile.role === 'executor' && (
                   <div>
@@ -303,6 +327,19 @@ const ProfilePage = () => {
                     </>
                   )}
                   <div>📅 Регистрация: {formatDate(profile.createdAt)}</div>
+                  <div className="flex items-center gap-2 mt-3 pt-2 border-t border-gray-200">
+                    <span className={`inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full ${
+                      profile.showContacts 
+                        ? 'bg-green-100 text-green-700' 
+                        : 'bg-yellow-100 text-yellow-700'
+                    }`}>
+                      {profile.showContacts ? (
+                        <>👁️ Контакты видны всем</>
+                      ) : (
+                        <>🔒 Контакты скрыты</>
+                      )}
+                    </span>
+                  </div>
                 </div>
               </div>
             )}

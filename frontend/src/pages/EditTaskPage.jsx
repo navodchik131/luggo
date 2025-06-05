@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import api from '../services/api'
+import AddressAutocomplete from '../components/AddressAutocomplete'
 
 const EditTaskPage = () => {
   const navigate = useNavigate()
@@ -311,45 +312,23 @@ const EditTaskPage = () => {
 
           {/* Адреса */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div>
-              <label htmlFor="fromAddress" className="block text-sm font-medium text-gray-700 mb-2">
-                Откуда *
-              </label>
-              <input
-                type="text"
-                id="fromAddress"
-                name="fromAddress"
-                value={formData.fromAddress}
-                onChange={handleChange}
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  errors.fromAddress ? 'border-red-500' : 'border-gray-300'
-                }`}
-                placeholder="Адрес отправления"
-              />
-              {errors.fromAddress && (
-                <p className="mt-1 text-sm text-red-600">{errors.fromAddress}</p>
-              )}
-            </div>
+            <AddressAutocomplete
+              label="Откуда"
+              value={formData.fromAddress}
+              onChange={(e) => handleChange({ target: { name: 'fromAddress', value: e.target.value } })}
+              placeholder="Начните вводить адрес в Перми..."
+              required={true}
+              error={errors.fromAddress}
+            />
 
-            <div>
-              <label htmlFor="toAddress" className="block text-sm font-medium text-gray-700 mb-2">
-                Куда *
-              </label>
-              <input
-                type="text"
-                id="toAddress"
-                name="toAddress"
-                value={formData.toAddress}
-                onChange={handleChange}
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  errors.toAddress ? 'border-red-500' : 'border-gray-300'
-                }`}
-                placeholder="Адрес назначения"
-              />
-              {errors.toAddress && (
-                <p className="mt-1 text-sm text-red-600">{errors.toAddress}</p>
-              )}
-            </div>
+            <AddressAutocomplete
+              label="Куда"
+              value={formData.toAddress}
+              onChange={(e) => handleChange({ target: { name: 'toAddress', value: e.target.value } })}
+              placeholder="Начните вводить адрес в Перми..."
+              required={true}
+              error={errors.toAddress}
+            />
           </div>
 
           {/* Дата */}

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import api from '../services/api'
+import AddressAutocomplete from '../components/AddressAutocomplete'
 
 const CreateTaskPage = () => {
   const navigate = useNavigate()
@@ -143,27 +144,27 @@ const CreateTaskPage = () => {
   const fillExample = (category) => {
     const examples = {
       flat: {
-        title: 'Переезд 2-комнатной квартиры',
+        title: 'Переезд 2-комнатной квартиры в Перми',
         description: 'Переезд из 2-комнатной квартиры на 5 этаже (лифт есть) в новую квартиру на 3 этаже. Примерно 15-20 коробок, холодильник, стиральная машина, диван, кровать, шкаф. Требуется упаковка хрупких предметов.',
-        fromAddress: 'Москва, ул. Ленина, 10',
-        toAddress: 'Москва, ул. Пушкина, 25'
+        fromAddress: 'ул. Ленина, 10, Пермь',
+        toAddress: 'ул. Пушкина, 25, Пермь'
       },
       office: {
-        title: 'Переезд офиса на 20 сотрудников',  
+        title: 'Переезд офиса на 20 сотрудников в Перми',  
         description: 'Переезд небольшого офиса: 20 рабочих мест, компьютеры, принтеры, офисная мебель, документы. Необходима аккуратная упаковка техники и конфиденциальных документов. Переезд в выходные дни.',
-        fromAddress: 'Москва, Тверская ул., 5, офис 210',
-        toAddress: 'Москва, Новый Арбат, 15, офис 305'
+        fromAddress: 'ул. Монастырская, 5, офис 210, Пермь',
+        toAddress: 'ул. Комсомольский проспект, 15, офис 305, Пермь'
       },
       intercity: {
-        title: 'Межгородский переезд Москва-СПб',
-        description: 'Переезд семьи из 3 человек из Москвы в Санкт-Петербург. 1-комнатная квартира, основная мебель, личные вещи. Нужна помощь с упаковкой и погрузкой/разгрузкой. Переезд на постоянное место жительства.',
-        fromAddress: 'Москва, ул. Академика Королева, 13',
-        toAddress: 'Санкт-Петербург, Невский проспект, 85'
+        title: 'Межгородский переезд Пермь-Екатеринбург',
+        description: 'Переезд семьи из 3 человек из Перми в Екатеринбург. 1-комнатная квартира, основная мебель, личные вещи. Нужна помощь с упаковкой и погрузкой/разгрузкой. Переезд на постоянное место жительства.',
+        fromAddress: 'ул. Петропавловская, 13, Пермь',
+        toAddress: 'ул. Ленина, 85, Екатеринбург'
       },
       garbage: {
-        title: 'Вывоз строительного мусора после ремонта',
+        title: 'Вывоз строительного мусора после ремонта в Перми',
         description: 'Необходимо вывезти строительный мусор после ремонта квартиры: куски гипсокартона, старая плитка, обрезки ламината, упаковочные материалы. Примерный объем 3-4 куба. Мусор находится на 2 этаже, лифта нет.',
-        fromAddress: 'Москва, ул. Строителей, 15, кв. 45',
+        fromAddress: 'ул. Строителей, 15, кв. 45, Пермь',
         toAddress: 'Полигон или свалка (по согласованию)'
       }
     }
@@ -297,45 +298,23 @@ const CreateTaskPage = () => {
 
           {/* Адреса */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div>
-              <label htmlFor="fromAddress" className="block text-sm font-medium text-gray-700 mb-2">
-                Откуда *
-              </label>
-              <input
-                type="text"
-                id="fromAddress"
-                name="fromAddress"
-                value={formData.fromAddress}
-                onChange={handleChange}
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  errors.fromAddress ? 'border-red-500' : 'border-gray-300'
-                }`}
-                placeholder="Адрес отправления"
-              />
-              {errors.fromAddress && (
-                <p className="mt-1 text-sm text-red-600">{errors.fromAddress}</p>
-              )}
-            </div>
+            <AddressAutocomplete
+              label="Откуда"
+              value={formData.fromAddress}
+              onChange={(e) => handleChange({ target: { name: 'fromAddress', value: e.target.value } })}
+              placeholder="Начните вводить адрес в Перми..."
+              required={true}
+              error={errors.fromAddress}
+            />
 
-            <div>
-              <label htmlFor="toAddress" className="block text-sm font-medium text-gray-700 mb-2">
-                Куда *
-              </label>
-              <input
-                type="text"
-                id="toAddress"
-                name="toAddress"
-                value={formData.toAddress}
-                onChange={handleChange}
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  errors.toAddress ? 'border-red-500' : 'border-gray-300'
-                }`}
-                placeholder="Адрес назначения"
-              />
-              {errors.toAddress && (
-                <p className="mt-1 text-sm text-red-600">{errors.toAddress}</p>
-              )}
-            </div>
+            <AddressAutocomplete
+              label="Куда"
+              value={formData.toAddress}
+              onChange={(e) => handleChange({ target: { name: 'toAddress', value: e.target.value } })}
+              placeholder="Начните вводить адрес в Перми..."
+              required={true}
+              error={errors.toAddress}
+            />
           </div>
 
           {/* Дата */}

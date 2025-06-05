@@ -171,6 +171,37 @@ const ExecutorProfilePage = () => {
                 </div>
               </div>
             )}
+
+            {/* Контактная информация */}
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              <h3 className="font-medium mb-3">Контактная информация</h3>
+              {profile.email && profile.phone ? (
+                <div className="space-y-2 text-gray-600">
+                  <div className="flex items-center gap-2">
+                    <span>📧</span>
+                    <a href={`mailto:${profile.email}`} className="text-blue-600 hover:underline">
+                      {profile.email}
+                    </a>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span>📞</span>
+                    <a href={`tel:${profile.phone}`} className="text-blue-600 hover:underline">
+                      {profile.phone}
+                    </a>
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                  <div className="flex items-center gap-2 text-yellow-700">
+                    <span>🔒</span>
+                    <span className="text-sm font-medium">Контактная информация скрыта</span>
+                  </div>
+                  <p className="text-sm text-yellow-600 mt-1">
+                    Исполнитель скрыл свои контакты. Вы сможете связаться через чат после создания заявки.
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

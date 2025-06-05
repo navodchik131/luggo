@@ -49,7 +49,7 @@ su - luggo
 ### ⏰ 30 минут: Деплоим приложение
 ```bash
 # 1. Клонируем код (2 минуты)
-git clone https://github.com/ваш-username/luggo.git
+git clone https://github.com/navodchik131/luggo.git
 cd luggo
 
 # 2. Настраиваем бэкенд (10 минут)
@@ -146,7 +146,7 @@ echo "🚀 Устанавливаем Luggo на сервер..."
 # Переменные (ИЗМЕНИТЕ НА СВОИ!)
 DOMAIN="ваш-домен.ru"
 DB_PASSWORD="сложный-пароль-123"
-GITHUB_REPO="https://github.com/ваш-username/luggo.git"
+GITHUB_REPO="https://github.com/navodchik131/luggo.git"
 
 # Обновляем систему
 apt update && apt upgrade -y

@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout'
+import { UnreadProvider } from './contexts/UnreadContext'
 
 // Pages
 import HomePage from './pages/HomePage'
@@ -15,6 +16,7 @@ import ProfilePage from './pages/ProfilePage'
 import ExecutorsPage from './pages/ExecutorsPage'
 import ExecutorProfilePage from './pages/ExecutorProfilePage'
 import ChatPage from './pages/ChatPage'
+import ChatsPage from './pages/ChatsPage'
 import TestAPIPage from './pages/TestAPIPage'
 import NotificationsPage from './pages/NotificationsPage'
 
@@ -26,31 +28,34 @@ import AdminReportsPage from './pages/AdminReportsPage'
 
 function App() {
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/tasks" element={<TasksPage />} />
-        <Route path="/tasks/:id" element={<TaskDetailPage />} />
-        <Route path="/create-task" element={<CreateTaskPage />} />
-        <Route path="/edit-task/:id" element={<EditTaskPage />} />
-        <Route path="/my-tasks" element={<MyTasksPage />} />
-        <Route path="/my-jobs" element={<MyJobsPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/executors" element={<ExecutorsPage />} />
-        <Route path="/executor/:userId" element={<ExecutorProfilePage />} />
-        <Route path="/chat/:taskId" element={<ChatPage />} />
-        <Route path="/test-api" element={<TestAPIPage />} />
-        <Route path="/notifications" element={<NotificationsPage />} />
-        
-        {/* Admin Routes */}
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/users" element={<AdminUsersPage />} />
-        <Route path="/admin/tasks" element={<AdminTasksPage />} />
-        <Route path="/admin/reports" element={<AdminReportsPage />} />
-      </Routes>
-    </Layout>
+    <UnreadProvider>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/tasks" element={<TasksPage />} />
+          <Route path="/tasks/:id" element={<TaskDetailPage />} />
+          <Route path="/create-task" element={<CreateTaskPage />} />
+          <Route path="/edit-task/:id" element={<EditTaskPage />} />
+          <Route path="/my-tasks" element={<MyTasksPage />} />
+          <Route path="/my-jobs" element={<MyJobsPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/executors" element={<ExecutorsPage />} />
+          <Route path="/executor/:userId" element={<ExecutorProfilePage />} />
+          <Route path="/chat/:taskId" element={<ChatPage />} />
+          <Route path="/chats" element={<ChatsPage />} />
+          <Route path="/test-api" element={<TestAPIPage />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
+          
+          {/* Admin Routes */}
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/users" element={<AdminUsersPage />} />
+          <Route path="/admin/tasks" element={<AdminTasksPage />} />
+          <Route path="/admin/reports" element={<AdminReportsPage />} />
+        </Routes>
+      </Layout>
+    </UnreadProvider>
   )
 }
 

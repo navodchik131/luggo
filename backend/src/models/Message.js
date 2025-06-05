@@ -54,4 +54,25 @@ const Message = sequelize.define('Message', {
   tableName: 'messages'
 });
 
+// Определяем связи
+Message.associate = (models) => {
+  // Сообщение принадлежит заявке
+  Message.belongsTo(models.Task, {
+    foreignKey: 'taskId',
+    as: 'task'
+  });
+
+  // Сообщение принадлежит отправителю
+  Message.belongsTo(models.User, {
+    foreignKey: 'senderId',
+    as: 'sender'
+  });
+
+  // Сообщение принадлежит получателю
+  Message.belongsTo(models.User, {
+    foreignKey: 'receiverId',
+    as: 'receiver'
+  });
+};
+
 module.exports = Message; 

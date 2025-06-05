@@ -64,6 +64,12 @@ const User = sequelize.define('User', {
   isBlocked: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
+  },
+  showContacts: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
+    allowNull: false,
+    comment: 'Показывать ли email и телефон другим пользователям'
   }
 }, {
   tableName: 'users',
@@ -92,6 +98,51 @@ User.prototype.toJSON = function() {
   const values = Object.assign({}, this.get());
   delete values.password;
   return values;
+};
+
+// Определяем связи
+User.associate = (models) => {
+  // Пользователь может иметь много заявок как заказчик
+  User.hasMany(models.Task, {
+    foreignKey: 'userId',
+    as: 'tasks'
+  });
+
+  // Пользователь может иметь много откликов как исполнитель
+  User.hasMany(models.Bid, {
+    foreignKey: 'userId',
+    as: 'bids'
+  });
+
+  // Пользователь может иметь много отправленных сообщений
+  User.hasMany(models.Message, {
+    foreignKey: 'senderId',
+    as: 'sentMessages'
+  });
+
+  // Пользователь может иметь много полученных сообщений
+  User.hasMany(models.Message, {
+    foreignKey: 'receiverId',
+    as: 'receivedMessages'
+  });
+
+  // Пользователь может иметь много отзывов как автор
+  User.hasMany(models.Review, {
+    foreignKey: 'authorId',
+    as: 'writtenReviews'
+  });
+
+  // Пользователь может иметь много отзывов как получатель
+  User.hasMany(models.Review, {
+    foreignKey: 'targetId',
+    as: 'receivedReviews'
+  });
+
+  // Пользователь может иметь много фотографий транспорта
+  User.hasMany(models.VehiclePhoto, {
+    foreignKey: 'userId',
+    as: 'vehiclePhotos'
+  });
 };
 
 module.exports = User; 

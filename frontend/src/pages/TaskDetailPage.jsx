@@ -5,6 +5,7 @@ import api from '../services/api'
 import BidModal from '../components/BidModal'
 import TaskCompletionConfirmation from '../components/TaskCompletionConfirmation'
 import UserAvatar from '../components/UserAvatar'
+import ChatModal from '../components/ChatModal'
 
 const TaskDetailPage = () => {
   const { id } = useParams()
@@ -17,6 +18,8 @@ const TaskDetailPage = () => {
   const [bidsVisible, setBidsVisible] = useState(false)
   const [bidModalOpen, setBidModalOpen] = useState(false)
   const [acceptingBid, setAcceptingBid] = useState(null)
+  const [chatModalOpen, setChatModalOpen] = useState(false)
+  const [selectedExecutor, setSelectedExecutor] = useState(null)
 
   const categoryLabels = {
     flat: 'Квартирный переезд',
@@ -119,6 +122,11 @@ const TaskDetailPage = () => {
     console.log('Подтверждение завершения:', confirmationData)
     // Перезагружаем заявку для получения актуального статуса
     await loadTask()
+  }
+
+  const handleOpenChat = (executor) => {
+    setSelectedExecutor(executor)
+    setChatModalOpen(true)
   }
 
   if (loading) {
@@ -233,7 +241,7 @@ const TaskDetailPage = () => {
             <h3 className="font-semibold mb-2">👤 Заказчик</h3>
             <div className="flex items-center gap-3">
               <UserAvatar user={task.customer} size="lg" />
-              <div>
+              <div className="flex-1">
                 <div className="font-medium">{task.customer.name}</div>
                 {task.customer.role === 'executor' && (
                   <div className="text-sm text-gray-600">
@@ -241,6 +249,15 @@ const TaskDetailPage = () => {
                   </div>
                 )}
               </div>
+              {/* Кнопка для исполнителей, чтобы написать заказчику */}
+              {!isOwner && user && user.role === 'executor' && (
+                <button 
+                  onClick={() => handleOpenChat(task.customer)}
+                  className="btn btn-secondary btn-sm"
+                >
+                  Написать
+                </button>
+              )}
             </div>
           </div>
         )}
@@ -269,7 +286,7 @@ const TaskDetailPage = () => {
                   <div className="bg-blue-50 border border-blue-200 rounded-lg px-4 py-3">
                     <div className="flex items-center gap-2 text-blue-800">
                       <span className="text-lg">✅</span>
-                      <div>
+                      <div className="flex-1">
                         <div className="font-semibold">Вы уже откликнулись</div>
                         <div className="text-sm">
                           Ваша цена: <span className="font-medium">{userBid.price} ₽</span>
@@ -280,16 +297,30 @@ const TaskDetailPage = () => {
                           )}
                         </div>
                       </div>
+                      <button 
+                        onClick={() => handleOpenChat(task.customer)}
+                        className="btn btn-secondary btn-sm ml-3"
+                      >
+                        Написать заказчику
+                      </button>
                     </div>
                   </div>
                 </div>
               ) : (
-                <button 
-                  onClick={() => setBidModalOpen(true)}
-                  className="btn btn-primary"
-                >
-                  Откликнуться на заявку
-                </button>
+                <div className="flex gap-2">
+                  <button 
+                    onClick={() => setBidModalOpen(true)}
+                    className="btn btn-primary"
+                  >
+                    Откликнуться на заявку
+                  </button>
+                  <button 
+                    onClick={() => handleOpenChat(task.customer)}
+                    className="btn btn-secondary"
+                  >
+                    Написать заказчику
+                  </button>
+                </div>
               )}
             </div>
           )}
@@ -315,6 +346,31 @@ const TaskDetailPage = () => {
                       </div>
                       <div className="text-sm text-gray-600">
                         ⭐ {bid.executor?.rating || 'Новый'}
+                      </div>
+                      {/* Контактная информация */}
+                      <div className="text-sm text-gray-600 mt-1">
+                        {bid.executor?.email ? (
+                          <div className="flex items-center gap-1">
+                            <span>📧</span>
+                            <a href={`mailto:${bid.executor.email}`} className="text-blue-600 hover:underline">
+                              {bid.executor.email}
+                            </a>
+                          </div>
+                        ) : null}
+                        {bid.executor?.phone ? (
+                          <div className="flex items-center gap-1">
+                            <span>📞</span>
+                            <a href={`tel:${bid.executor.phone}`} className="text-blue-600 hover:underline">
+                              {bid.executor.phone}
+                            </a>
+                          </div>
+                        ) : null}
+                        {!bid.executor?.email && !bid.executor?.phone && (
+                          <div className="flex items-center gap-1 text-yellow-600">
+                            <span>🔒</span>
+                            <span className="text-xs">Контакты скрыты</span>
+                          </div>
+                        )}
                       </div>
                     </div>
                     {bid.accepted && (
@@ -356,7 +412,10 @@ const TaskDetailPage = () => {
                         'Принять'
                       )}
                     </button>
-                    <button className="btn btn-secondary btn-sm">
+                    <button 
+                      onClick={() => handleOpenChat(bid.executor)}
+                      className="btn btn-secondary btn-sm"
+                    >
                       Написать
                     </button>
                   </div>
@@ -383,6 +442,14 @@ const TaskDetailPage = () => {
         onClose={() => setBidModalOpen(false)}
         task={task}
         onBidCreated={handleBidCreated}
+      />
+
+      {/* Модальное окно чата */}
+      <ChatModal
+        isOpen={chatModalOpen}
+        onClose={() => setChatModalOpen(false)}
+        task={task}
+        executor={selectedExecutor}
       />
     </div>
   )

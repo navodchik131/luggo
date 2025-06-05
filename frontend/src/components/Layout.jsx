@@ -1,11 +1,23 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { User, LogOut, Plus, MessageCircle, FileText } from 'lucide-react'
 import NotificationIcon from './NotificationIcon'
 import UserAvatar from './UserAvatar'
+import { useState } from 'react'
+import { useUnread } from '../contexts/UnreadContext'
 
 const Layout = ({ children }) => {
   const { user, logout, isAuthenticated } = useAuth()
+  const { unreadCount, resetUnreadCount } = useUnread()
+  const location = useLocation()
+  const navigate = useNavigate()
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+
+  const handleChatsClick = () => {
+    // Сбрасываем счетчик при переходе к чатам
+    resetUnreadCount()
+    navigate('/chats')
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -75,6 +87,20 @@ const Layout = ({ children }) => {
                   <div className="flex items-center space-x-2">
                     {/* Уведомления */}
                     <NotificationIcon />
+                    
+                    {/* Чаты */}
+                    <button
+                      onClick={handleChatsClick}
+                      className="p-2 text-gray-700 hover:text-blue-600 rounded-full hover:bg-gray-100 transition-colors relative"
+                      title="Мои чаты"
+                    >
+                      <MessageCircle size={20} />
+                      {unreadCount > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
+                          {unreadCount > 99 ? '99+' : unreadCount}
+                        </span>
+                      )}
+                    </button>
                     
                     <Link to="/profile" className="flex items-center space-x-2 text-gray-700 hover:text-blue-600">
                       <UserAvatar user={user} size="md" />

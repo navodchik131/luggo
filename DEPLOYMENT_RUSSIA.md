@@ -93,7 +93,7 @@ sudo systemctl restart postgresql
 ### Шаг 4: Деплой бэкенда
 ```bash
 # Клонирование репозитория
-git clone https://github.com/your-username/luggo.git
+git clone https://github.com/navodchik131/luggo.git
 cd luggo/backend
 
 # Установка зависимостей

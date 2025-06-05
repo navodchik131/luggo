@@ -53,6 +53,9 @@ app.use(morgan('combined'));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
+// Делаем io доступным в контроллерах
+app.set('io', io);
+
 // CORS middleware для статических файлов - более агрессивный подход
 app.use('/uploads', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*'); // Разрешаем все источники
@@ -176,12 +179,26 @@ app.get('/api/image/:type/:filename', (req, res) => {
 });
 
 // Socket.IO для чата
+const userSockets = new Map(); // Хранилище socket'ов пользователей
+
 io.on('connection', (socket) => {
   console.log('Пользователь подключился:', socket.id);
+  
+  // Регистрируем пользователя при подключении
+  socket.on('registerUser', (userId) => {
+    userSockets.set(userId, socket.id);
+    socket.userId = userId;
+    console.log(`👤 Пользователь ${userId} зарегистрирован с socket ${socket.id}`);
+  });
   
   socket.on('joinTask', (taskId) => {
     socket.join(`task_${taskId}`);
     console.log(`Пользователь ${socket.id} присоединился к чату задачи ${taskId}`);
+  });
+
+  socket.on('leaveTask', (taskId) => {
+    socket.leave(`task_${taskId}`);
+    console.log(`Пользователь ${socket.id} покинул чат задачи ${taskId}`);
   });
 
   socket.on('sendMessage', (data) => {
@@ -189,9 +206,17 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
+    // Удаляем пользователя из хранилища при отключении
+    if (socket.userId) {
+      userSockets.delete(socket.userId);
+      console.log(`👤 Пользователь ${socket.userId} отключился`);
+    }
     console.log('Пользователь отключился:', socket.id);
   });
 });
+
+// Делаем userSockets доступным в контроллерах
+app.set('userSockets', userSockets);
 
 // Error handling
 app.use(notFound);

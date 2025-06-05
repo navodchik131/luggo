@@ -50,13 +50,14 @@ const getMyProfile = async (req, res) => {
   }
 };
 
-// Получение публичного профиля пользователя (для исполнителей)
+// Получение публичного профиля
 const getPublicProfile = async (req, res) => {
   try {
     const { userId } = req.params;
+    const currentUserId = req.user?.id; // ID текущего пользователя
     
     const user = await User.findByPk(userId, {
-      attributes: ['id', 'name', 'avatar', 'role', 'rating', 'createdAt'],
+      attributes: ['id', 'name', 'email', 'phone', 'avatar', 'role', 'rating', 'showContacts', 'createdAt'],
       include: [
         {
           model: VehiclePhoto,
@@ -92,9 +93,18 @@ const getPublicProfile = async (req, res) => {
       });
     }
 
+    // Проверяем приватность контактов
+    const userProfile = user.toJSON();
+    
+    // Если это не владелец профиля и контакты скрыты - убираем email и phone
+    if (currentUserId !== userId && !user.showContacts) {
+      delete userProfile.email;
+      delete userProfile.phone;
+    }
+
     res.json({
       success: true,
-      user
+      user: userProfile
     });
   } catch (error) {
     console.error('Ошибка получения публичного профиля:', error);
@@ -109,7 +119,7 @@ const getPublicProfile = async (req, res) => {
 const updateProfile = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { name, phone, services } = req.body;
+    const { name, phone, services, showContacts } = req.body;
     
     const user = await User.findByPk(userId);
     
@@ -124,6 +134,7 @@ const updateProfile = async (req, res) => {
     const updateData = {};
     if (name) updateData.name = name;
     if (phone) updateData.phone = phone;
+    if (showContacts !== undefined) updateData.showContacts = Boolean(showContacts);
 
     // Обработка услуг для исполнителей
     if (user.role === 'executor' && services !== undefined) {

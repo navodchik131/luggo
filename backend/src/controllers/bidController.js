@@ -131,6 +131,7 @@ const createBid = async (req, res) => {
 const getBidsForTask = async (req, res) => {
   try {
     const { taskId } = req.params;
+    const currentUserId = req.user?.id;
 
     const bids = await Bid.findAll({
       where: { taskId },
@@ -138,15 +139,28 @@ const getBidsForTask = async (req, res) => {
         {
           model: User,
           as: 'executor',
-          attributes: ['id', 'name', 'email', 'rating', 'avatar', 'createdAt']
+          attributes: ['id', 'name', 'email', 'phone', 'rating', 'avatar', 'showContacts', 'createdAt']
         }
       ],
       order: [['createdAt', 'DESC']]
     });
 
+    // Фильтруем контакты исполнителей в зависимости от настроек приватности
+    const filteredBids = bids.map(bid => {
+      const bidData = bid.toJSON();
+      
+      // Если это не профиль самого исполнителя и контакты скрыты
+      if (currentUserId !== bidData.executor.id && !bidData.executor.showContacts) {
+        delete bidData.executor.email;
+        delete bidData.executor.phone;
+      }
+      
+      return bidData;
+    });
+
     res.json({
       success: true,
-      bids
+      bids: filteredBids
     });
 
   } catch (error) {

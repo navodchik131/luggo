@@ -79,4 +79,37 @@ const Task = sequelize.define('Task', {
   tableName: 'tasks'
 });
 
+// Определяем связи
+Task.associate = (models) => {
+  // Заявка принадлежит пользователю (заказчику)
+  Task.belongsTo(models.User, {
+    foreignKey: 'userId',
+    as: 'customer'
+  });
+
+  // Заявка может иметь много откликов
+  Task.hasMany(models.Bid, {
+    foreignKey: 'taskId',
+    as: 'bids'
+  });
+
+  // Заявка может иметь принятый отклик
+  Task.belongsTo(models.Bid, {
+    foreignKey: 'acceptedBidId',
+    as: 'acceptedBid'
+  });
+
+  // Заявка может иметь много сообщений
+  Task.hasMany(models.Message, {
+    foreignKey: 'taskId',
+    as: 'messages'
+  });
+
+  // Заявка может иметь много отзывов
+  Task.hasMany(models.Review, {
+    foreignKey: 'taskId',
+    as: 'reviews'
+  });
+};
+
 module.exports = Task; 
