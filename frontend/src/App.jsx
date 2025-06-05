@@ -19,12 +19,19 @@ import ChatPage from './pages/ChatPage'
 import ChatsPage from './pages/ChatsPage'
 import TestAPIPage from './pages/TestAPIPage'
 import NotificationsPage from './pages/NotificationsPage'
+import NewsPage from './pages/NewsPage'
+import NewsDetailPage from './pages/NewsDetailPage'
+import SupportPage from './pages/SupportPage'
+import PrivacyPage from './pages/PrivacyPage'
+import TermsPage from './pages/TermsPage'
 
 // Admin Pages
 import AdminDashboard from './pages/AdminDashboard'
 import AdminUsersPage from './pages/AdminUsersPage'
 import AdminTasksPage from './pages/AdminTasksPage'
 import AdminReportsPage from './pages/AdminReportsPage'
+import AdminNewsPage from './pages/AdminNewsPage'
+import AdminNewsFormPage from './pages/AdminNewsFormPage'
 
 function App() {
   return (
@@ -47,12 +54,20 @@ function App() {
           <Route path="/chats" element={<ChatsPage />} />
           <Route path="/test-api" element={<TestAPIPage />} />
           <Route path="/notifications" element={<NotificationsPage />} />
+          <Route path="/news" element={<NewsPage />} />
+          <Route path="/news/:slug" element={<NewsDetailPage />} />
+          <Route path="/support" element={<SupportPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/users" element={<AdminUsersPage />} />
           <Route path="/admin/tasks" element={<AdminTasksPage />} />
           <Route path="/admin/reports" element={<AdminReportsPage />} />
+          <Route path="/admin/news" element={<AdminNewsPage />} />
+          <Route path="/admin/news/create" element={<AdminNewsFormPage />} />
+          <Route path="/admin/news/edit/:id" element={<AdminNewsFormPage />} />
         </Routes>
       </Layout>
     </UnreadProvider>

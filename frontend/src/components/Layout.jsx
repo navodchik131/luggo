@@ -3,6 +3,7 @@ import { useAuth } from '../hooks/useAuth'
 import { User, LogOut, Plus, MessageCircle, FileText } from 'lucide-react'
 import NotificationIcon from './NotificationIcon'
 import UserAvatar from './UserAvatar'
+import Footer from './Footer'
 import { useState } from 'react'
 import { useUnread } from '../contexts/UnreadContext'
 
@@ -12,6 +13,9 @@ const Layout = ({ children }) => {
   const location = useLocation()
   const navigate = useNavigate()
   const [dropdownOpen, setDropdownOpen] = useState(false)
+
+  // Проверяем, является ли текущая страница главной
+  const isHomePage = location.pathname === '/'
 
   const handleChatsClick = () => {
     // Сбрасываем счетчик при переходе к чатам
@@ -35,13 +39,11 @@ const Layout = ({ children }) => {
               <Link to="/executors" className="text-gray-700 hover:text-blue-600">
                 Исполнители
               </Link>
+              <Link to="/news" className="text-gray-700 hover:text-blue-600">
+                Новости
+              </Link>
               {isAuthenticated && (
                 <>
-                  {user?.role === 'customer' && (
-                    <Link to="/create-task" className="text-gray-700 hover:text-blue-600">
-                      Создать заявку
-                    </Link>
-                  )}
                   {user?.role === 'admin' && (
                     <Link to="/admin" className="text-red-600 hover:text-red-700 font-medium">
                       Админ панель
@@ -130,9 +132,11 @@ const Layout = ({ children }) => {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className={isHomePage ? '' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'}>
         {children}
       </main>
+
+      <Footer />
     </div>
   )
 }

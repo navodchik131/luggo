@@ -6,6 +6,7 @@ import BidModal from '../components/BidModal'
 import TaskCompletionConfirmation from '../components/TaskCompletionConfirmation'
 import UserAvatar from '../components/UserAvatar'
 import ChatModal from '../components/ChatModal'
+import RouteMap from '../components/RouteMap'
 
 const TaskDetailPage = () => {
   const { id } = useParams()
@@ -225,6 +226,14 @@ const TaskDetailPage = () => {
               {formatDate(task.date)}
             </div>
           </div>
+        </div>
+
+        {/* Карта с маршрутом */}
+        <div className="mb-6">
+          <RouteMap 
+            fromAddress={task.fromAddress} 
+            toAddress={task.toAddress} 
+          />
         </div>
 
         {/* Описание */}

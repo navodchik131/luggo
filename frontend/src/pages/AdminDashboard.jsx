@@ -85,6 +85,12 @@ const AdminDashboard = () => {
           >
             Отчеты
           </Link>
+          <Link 
+            to="/admin/news" 
+            className="btn btn-secondary"
+          >
+            Новости
+          </Link>
         </div>
       </div>
 
@@ -203,6 +209,12 @@ const AdminDashboard = () => {
               className="block p-2 text-sm text-blue-600 hover:bg-blue-50 rounded"
             >
               Отчет за неделю
+            </Link>
+            <Link 
+              to="/admin/news" 
+              className="block p-2 text-sm text-blue-600 hover:bg-blue-50 rounded"
+            >
+              Управление новостями
             </Link>
           </div>
         </div>

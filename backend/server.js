@@ -19,6 +19,7 @@ const executorRoutes = require('./src/routes/executorRoutes');
 const profileRoutes = require('./src/routes/profileRoutes');
 const notificationRoutes = require('./src/routes/notificationRoutes');
 const adminRoutes = require('./src/routes/adminRoutes');
+const newsRoutes = require('./src/routes/newsRoutes');
 
 const { errorHandler } = require('./src/middleware/errorMiddleware');
 const { notFound } = require('./src/middleware/notFoundMiddleware');
@@ -80,6 +81,7 @@ app.use('/api/executor', executorRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/news', newsRoutes);
 
 // API info route
 app.get('/api', (req, res) => {
@@ -94,6 +96,7 @@ app.get('/api', (req, res) => {
       messages: '/api/messages',
       reviews: '/api/reviews',
       users: '/api/users',
+      news: '/api/news',
       health: '/api/health'
     },
     timestamp: new Date().toISOString()

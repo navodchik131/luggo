@@ -5,6 +5,7 @@ const Message = require('./Message');
 const Review = require('./Review');
 const Notification = require('./Notification');
 const VehiclePhoto = require('./VehiclePhoto');
+const News = require('./News');
 
 // Связи между моделями
 
@@ -51,6 +52,10 @@ Notification.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 User.hasMany(VehiclePhoto, { foreignKey: 'userId', as: 'vehiclePhotos' });
 VehiclePhoto.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
+// User - News (админ может создавать новости)
+User.hasMany(News, { foreignKey: 'authorId', as: 'news' });
+News.belongsTo(User, { foreignKey: 'authorId', as: 'author' });
+
 module.exports = {
   User,
   Task,
@@ -58,5 +63,6 @@ module.exports = {
   Message,
   Review,
   Notification,
-  VehiclePhoto
+  VehiclePhoto,
+  News
 }; 

@@ -144,7 +144,7 @@ const TasksPage = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div>
       {/* Заголовок и кнопка создания */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Заявки на переезд</h1>
