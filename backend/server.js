@@ -26,11 +26,27 @@ const { notFound } = require('./src/middleware/notFoundMiddleware');
 
 const app = express();
 const server = http.createServer(app);
+
+// Улучшенная конфигурация Socket.IO для продакшена
 const io = socketIo(server, {
   cors: {
     origin: process.env.FRONTEND_URL || "http://localhost:5173",
-    credentials: true
-  }
+    credentials: true,
+    methods: ["GET", "POST"]
+  },
+  // Поддержка различных транспортов для лучшей совместимости
+  transports: ['websocket', 'polling'],
+  // Настройки для продакшена
+  pingTimeout: 60000,
+  pingInterval: 25000,
+  // Позволяем обновления
+  allowUpgrades: true,
+  // Начинаем с polling, потом апгрейдим до websocket
+  upgradeTimeout: 30000,
+  // Настройки для работы за прокси (nginx)
+  rememberUpgrade: false,
+  // Дополнительные настройки безопасности
+  serveClient: false
 });
 
 const PORT = process.env.PORT || 5000;
@@ -110,6 +126,23 @@ app.get('/api/health', (req, res) => {
     status: 'OK', 
     timestamp: new Date().toISOString(),
     uptime: process.uptime()
+  });
+});
+
+// Socket.IO health check
+app.get('/api/socket-health', (req, res) => {
+  const connectedClients = io.engine.clientsCount;
+  res.status(200).json({
+    success: true,
+    socketIO: {
+      status: 'running',
+      connectedClients,
+      transports: ['websocket', 'polling'],
+      cors: {
+        origin: process.env.FRONTEND_URL || "http://localhost:5173"
+      }
+    },
+    timestamp: new Date().toISOString()
   });
 });
 

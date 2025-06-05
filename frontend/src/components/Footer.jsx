@@ -69,8 +69,13 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/create-task" className="text-gray-300 hover:text-white transition-colors text-sm">
-                  Создать заявку
+                <Link to="/for-customers" className="text-gray-300 hover:text-white transition-colors text-sm">
+                  Заказчикам
+                </Link>
+              </li>
+              <li>
+                <Link to="/for-executors" className="text-gray-300 hover:text-white transition-colors text-sm">
+                  Исполнителям
                 </Link>
               </li>
             </ul>

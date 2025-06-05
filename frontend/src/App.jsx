@@ -24,6 +24,8 @@ import NewsDetailPage from './pages/NewsDetailPage'
 import SupportPage from './pages/SupportPage'
 import PrivacyPage from './pages/PrivacyPage'
 import TermsPage from './pages/TermsPage'
+import ExecutorsGuidePage from './pages/ExecutorsGuidePage'
+import CustomersGuidePage from './pages/CustomersGuidePage'
 
 // Admin Pages
 import AdminDashboard from './pages/AdminDashboard'
@@ -59,6 +61,8 @@ function App() {
           <Route path="/support" element={<SupportPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />
+          <Route path="/for-executors" element={<ExecutorsGuidePage />} />
+          <Route path="/for-customers" element={<CustomersGuidePage />} />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminDashboard />} />

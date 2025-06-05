@@ -1,10 +1,10 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
-import { User, LogOut, Plus, MessageCircle, FileText } from 'lucide-react'
+import { User, LogOut, Plus, MessageCircle, FileText, ChevronDown } from 'lucide-react'
 import NotificationIcon from './NotificationIcon'
 import UserAvatar from './UserAvatar'
 import Footer from './Footer'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useUnread } from '../contexts/UnreadContext'
 
 const Layout = ({ children }) => {
@@ -13,9 +13,22 @@ const Layout = ({ children }) => {
   const location = useLocation()
   const navigate = useNavigate()
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [guidesDropdownOpen, setGuidesDropdownOpen] = useState(false)
 
   // Проверяем, является ли текущая страница главной
   const isHomePage = location.pathname === '/'
+
+  // Закрываем выпадающие меню при клике вне их области
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.guides-dropdown')) {
+        setGuidesDropdownOpen(false)
+      }
+    }
+    
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   const handleChatsClick = () => {
     // Сбрасываем счетчик при переходе к чатам
@@ -39,6 +52,37 @@ const Layout = ({ children }) => {
               <Link to="/executors" className="text-gray-700 hover:text-blue-600">
                 Исполнители
               </Link>
+              
+              {/* Выпадающее меню "Руководства" */}
+              <div className="relative guides-dropdown">
+                <button
+                  onClick={() => setGuidesDropdownOpen(!guidesDropdownOpen)}
+                  className="flex items-center gap-1 text-gray-700 hover:text-blue-600 transition-colors"
+                >
+                  Руководства
+                  <ChevronDown size={16} className={`transition-transform ${guidesDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+                
+                {guidesDropdownOpen && (
+                  <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                    <Link
+                      to="/for-customers"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600"
+                      onClick={() => setGuidesDropdownOpen(false)}
+                    >
+                      🏠 Для заказчиков
+                    </Link>
+                    <Link
+                      to="/for-executors"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600"
+                      onClick={() => setGuidesDropdownOpen(false)}
+                    >
+                      🔧 Для исполнителей
+                    </Link>
+                  </div>
+                )}
+              </div>
+              
               <Link to="/news" className="text-gray-700 hover:text-blue-600">
                 Новости
               </Link>
