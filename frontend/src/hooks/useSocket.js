@@ -30,7 +30,14 @@ export const useSocket = () => {
         // Дополнительные заголовки для CORS
         extraHeaders: {
           'Access-Control-Allow-Origin': '*'
-        }
+        },
+        // Явно указываем path и namespace для избежания ошибок
+        path: '/socket.io/',
+        // Подключаемся к корневому namespace
+        namespace: '/',
+        // Дополнительные настройки для исправления namespace ошибок
+        autoConnect: true,
+        withCredentials: true
       })
 
       socketRef.current.on('connect', () => {

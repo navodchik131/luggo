@@ -30,9 +30,16 @@ const server = http.createServer(app);
 // Улучшенная конфигурация Socket.IO для продакшена
 const io = socketIo(server, {
   cors: {
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    origin: [
+      "https://luggo.ru",
+      "https://www.luggo.ru", 
+      "http://localhost:5173",
+      "http://localhost:3000"
+    ],
     credentials: true,
-    methods: ["GET", "POST"]
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    optionsSuccessStatus: 200
   },
   // Поддержка различных транспортов для лучшей совместимости
   transports: ['websocket', 'polling'],
@@ -46,10 +53,16 @@ const io = socketIo(server, {
   // Настройки для работы за прокси (nginx)
   rememberUpgrade: false,
   // Дополнительные настройки безопасности
-  serveClient: false
+  serveClient: false,
+  // Настройка namespace
+  path: '/socket.io/',
+  // Дополнительные настройки для исправления namespace
+  connectTimeout: 45000,
+  // Отключаем автоматическое подключение к корневому namespace
+  forceNew: false
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3001;
 
 // Rate limiting
 const limiter = rateLimit({
@@ -62,8 +75,16 @@ app.use(helmet({
   contentSecurityPolicy: false, // Полностью отключаем CSP для отладки
 }));
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:5173",
-  credentials: true
+  origin: [
+    "https://luggo.ru",
+    "https://www.luggo.ru", 
+    "http://localhost:5173",
+    "http://localhost:3000"
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  optionsSuccessStatus: 200
 }));
 app.use(limiter);
 app.use(morgan('combined'));
