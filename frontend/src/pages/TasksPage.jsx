@@ -332,15 +332,15 @@ const TasksPage = () => {
                 {user && user.role === 'executor' && task.status === 'active' && user.id !== task.customer?.id && (
                   <div className="w-full sm:w-auto">
                     {task.userBid ? (
-                      <div className="bg-blue-50 border border-blue-200 rounded-lg px-3 py-2">
-                        <div className="flex items-center gap-2 text-blue-800">
-                          <span>✅</span>
-                          <div className="text-sm">
-                            <div className="font-medium">Вы откликнулись</div>
-                            <div className="text-xs">
-                              {task.userBid.price} ₽
+                      <div className="task-card-bid-status">
+                        <div className="task-card-bid-content">
+                          <span className="task-card-bid-icon">✅</span>
+                          <div className="task-card-bid-info">
+                            <div className="task-card-bid-title">Вы откликнулись</div>
+                            <div className="task-card-bid-details">
+                              <span>{task.userBid.price} ₽</span>
                               {task.userBid.accepted && (
-                                <span className="ml-1 bg-green-100 text-green-800 px-1 py-0.5 rounded text-xs">
+                                <span className="bg-green-100 text-green-800 px-1.5 py-0.5 rounded text-xs font-medium">
                                   ✓ Принят
                                 </span>
                               )}

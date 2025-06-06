@@ -52,7 +52,7 @@ const Layout = ({ children }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 no-overflow">
       <header className="bg-white shadow-sm border-b relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -226,73 +226,73 @@ const Layout = ({ children }) => {
 
         {/* Мобильное меню */}
         {mobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-white border-b shadow-lg z-50 mobile-menu">
-            <div className="px-4 py-2 space-y-1">
+          <div className="md:hidden mobile-menu">
+            <div className="mobile-menu-content">
               {/* Навигационные ссылки */}
-              <Link to="/tasks" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors">
+              <Link to="/tasks" className="mobile-nav-link">
                 📋 Заявки
               </Link>
-              <Link to="/executors" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors">
+              <Link to="/executors" className="mobile-nav-link">
                 👷 Исполнители
               </Link>
-              <Link to="/for-customers" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors">
+              <Link to="/for-customers" className="mobile-nav-link">
                 🏠 Для заказчиков
               </Link>
-              <Link to="/for-executors" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors">
+              <Link to="/for-executors" className="mobile-nav-link">
                 🔧 Для исполнителей
               </Link>
-              <Link to="/news" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors">
+              <Link to="/news" className="mobile-nav-link">
                 📰 Новости
               </Link>
 
               {isAuthenticated ? (
                 <>
-                  <div className="border-t border-gray-200 my-2"></div>
+                  <div className="mobile-nav-divider"></div>
                   
                   {/* Пользовательские ссылки */}
-                  <Link to="/profile" className="flex items-center px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors">
+                  <Link to="/profile" className="mobile-nav-link flex items-center">
                     <UserAvatar user={user} size="sm" className="mr-3" />
                     <span>{user?.name}</span>
                   </Link>
                   
                   {user?.role === 'customer' && (
                     <>
-                      <Link to="/my-tasks" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors">
+                      <Link to="/my-tasks" className="mobile-nav-link">
                         📂 Мои заявки
                       </Link>
-                      <Link to="/create-task" className="block px-3 py-2 text-blue-600 font-medium hover:bg-blue-50 rounded-md transition-colors">
+                      <Link to="/create-task" className="mobile-nav-link text-blue-600 font-medium">
                         ➕ Создать заявку
                       </Link>
                     </>
                   )}
                   
                   {user?.role === 'executor' && (
-                    <Link to="/my-jobs" className="block px-3 py-2 text-blue-600 font-medium hover:bg-blue-50 rounded-md transition-colors">
+                    <Link to="/my-jobs" className="mobile-nav-link text-blue-600 font-medium">
                       💼 Мои работы
                     </Link>
                   )}
 
                   {user?.role === 'admin' && (
-                    <Link to="/admin" className="block px-3 py-2 text-red-600 font-medium hover:bg-red-50 rounded-md transition-colors">
+                    <Link to="/admin" className="mobile-nav-link text-red-600 font-medium">
                       🛡️ Админ панель
                     </Link>
                   )}
                   
-                  <div className="border-t border-gray-200 my-2"></div>
+                  <div className="mobile-nav-divider"></div>
                   <button
                     onClick={handleLogout}
-                    className="w-full text-left px-3 py-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                    className="mobile-nav-link w-full text-left text-red-600"
                   >
                     🚪 Выйти
                   </button>
                 </>
               ) : (
                 <>
-                  <div className="border-t border-gray-200 my-2"></div>
-                  <Link to="/login" className="block px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors">
+                  <div className="mobile-nav-divider"></div>
+                  <Link to="/login" className="mobile-nav-link">
                     🔑 Войти
                   </Link>
-                  <Link to="/register" className="block px-3 py-2 text-blue-600 font-medium hover:bg-blue-50 rounded-md transition-colors">
+                  <Link to="/register" className="mobile-nav-link text-blue-600 font-medium">
                     👤 Регистрация
                   </Link>
                 </>
