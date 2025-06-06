@@ -8,7 +8,6 @@ const socketIo = require('socket.io');
 const path = require('path');
 require('dotenv').config();
 
-const logger = require('./src/utils/logger');
 const { initializeDatabase } = require('./src/config/init');
 const authRoutes = require('./src/routes/authRoutes');
 const taskRoutes = require('./src/routes/taskRoutes');
@@ -240,23 +239,23 @@ app.get('/api/image/:type/:filename', (req, res) => {
 const userSockets = new Map(); // Хранилище socket'ов пользователей
 
 io.on('connection', (socket) => {
-  logger.info('Пользователь подключился:', socket.id);
+  console.log('Пользователь подключился:', socket.id);
   
   // Регистрируем пользователя при подключении
   socket.on('registerUser', (userId) => {
     userSockets.set(userId, socket.id);
     socket.userId = userId;
-    logger.info(`👤 Пользователь ${userId} зарегистрирован с socket ${socket.id}`);
+    console.log(`👤 Пользователь ${userId} зарегистрирован с socket ${socket.id}`);
   });
   
   socket.on('joinTask', (taskId) => {
     socket.join(`task_${taskId}`);
-    logger.info(`Пользователь ${socket.id} присоединился к чату задачи ${taskId}`);
+    console.log(`Пользователь ${socket.id} присоединился к чату задачи ${taskId}`);
   });
 
   socket.on('leaveTask', (taskId) => {
     socket.leave(`task_${taskId}`);
-    logger.info(`Пользователь ${socket.id} покинул чат задачи ${taskId}`);
+    console.log(`Пользователь ${socket.id} покинул чат задачи ${taskId}`);
   });
 
   socket.on('sendMessage', (data) => {
@@ -267,9 +266,9 @@ io.on('connection', (socket) => {
     // Удаляем пользователя из хранилища при отключении
     if (socket.userId) {
       userSockets.delete(socket.userId);
-      logger.info(`👤 Пользователь ${socket.userId} отключился`);
+      console.log(`👤 Пользователь ${socket.userId} отключился`);
     }
-    logger.info('Пользователь отключился:', socket.id);
+    console.log('Пользователь отключился:', socket.id);
   });
 });
 
@@ -285,13 +284,13 @@ const startServer = async () => {
   const dbInitialized = await initializeDatabase();
   
   if (!dbInitialized) {
-    logger.error('❌ Не удалось инициализировать базу данных');
+    console.error('❌ Не удалось инициализировать базу данных');
     process.exit(1);
   }
 
   server.listen(PORT, () => {
-    logger.info(`🚀 Сервер запущен на порту ${PORT}`);
-    logger.info(`📱 Frontend URL: ${process.env.FRONTEND_URL || "http://localhost:5173"}`);
+    console.log(`🚀 Сервер запущен на порту ${PORT}`);
+    console.log(`📱 Frontend URL: ${process.env.FRONTEND_URL || "http://localhost:5173"}`);
   });
 };
 

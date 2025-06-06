@@ -112,7 +112,7 @@ const logger = {
 }
 
 // Функция для логирования ошибок с контекстом
-export const logError = (error, context = {}) => {
+const logError = (error, context = {}) => {
   const errorInfo = {
     message: error.message,
     stack: isDevelopment ? error.stack : error.message, // Полный stack только в development
@@ -135,4 +135,5 @@ export const logError = (error, context = {}) => {
   }
 }
 
-module.exports = logger 
+module.exports = logger
+module.exports.logError = logError 
