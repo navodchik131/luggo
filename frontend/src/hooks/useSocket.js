@@ -44,32 +44,25 @@ export const useSocket = () => {
       })
 
       socketRef.current.on('connect', () => {
-        logger.websocket('Подключен к серверу', socketUrl)
-        logger.websocket('Transport:', socketRef.current.io.engine.transport.name)
+        logger.websocket('connect', socketUrl)
         // Регистрируем пользователя в Socket.IO
         socketRef.current.emit('registerUser', user.id)
       })
 
       socketRef.current.on('disconnect', (reason) => {
-        logger.websocket('Отключен от сервера. Причина:', reason)
+        logger.websocket('disconnect', reason)
       })
 
       socketRef.current.on('connect_error', (error) => {
-        logger.error('Ошибка WebSocket подключения:', error.message)
-        logger.websocket('Попытка переподключения...')
+        logger.websocket('error', error.message)
       })
 
       socketRef.current.on('reconnect', (attemptNumber) => {
-        logger.websocket('Переподключен после попыток:', attemptNumber)
+        logger.info('WebSocket переподключен после попыток:', attemptNumber)
       })
 
       socketRef.current.on('reconnect_error', (error) => {
         logger.error('Ошибка переподключения WebSocket:', error.message)
-      })
-
-      // Логируем смену транспорта
-      socketRef.current.io.on('upgrade', () => {
-        logger.websocket('Upgraded to', socketRef.current.io.engine.transport.name)
       })
     }
 
@@ -84,14 +77,14 @@ export const useSocket = () => {
   const joinTaskRoom = (taskId) => {
     if (socketRef.current && socketRef.current.connected) {
       socketRef.current.emit('joinTask', taskId)
-      logger.websocket('Подключились к комнате задачи:', taskId)
+      logger.debug('Подключились к комнате задачи:', taskId)
     }
   }
 
   const leaveTaskRoom = (taskId) => {
     if (socketRef.current && socketRef.current.connected) {
       socketRef.current.emit('leaveTask', taskId)
-      logger.websocket('Покинули комнату задачи:', taskId)
+      logger.debug('Покинули комнату задачи:', taskId)
     }
   }
 

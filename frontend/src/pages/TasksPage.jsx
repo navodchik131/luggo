@@ -51,38 +51,20 @@ const TasksPage = () => {
     loadTasks()
   }, [filters, pagination.page])
 
-  const loadTasks = async () => {
+  const loadTasks = async (params = {}) => {
+    setLoading(true)
     try {
-      setLoading(true)
-      
-      const params = {
-        page: pagination.page,
-        limit: pagination.limit,
-        ...filters
-      }
-      
-      // Удаляем пустые значения
-      Object.keys(params).forEach(key => {
-        if (!params[key]) delete params[key]
-      })
-      
-      logger.log('Загружаю заявки с параметрами:', params)
-      
+      logger.debug('Загружаю заявки с параметрами:', params)
       const response = await api.get('/tasks', { params })
-      logger.log('Ответ API:', response.data)
+      logger.debug('Ответ API:', response.data)
       
       if (response.data.success) {
         setTasks(response.data.tasks)
-        setPagination(prev => ({
-          ...prev,
-          ...response.data.pagination
-        }))
-      } else {
-        setError('Ошибка загрузки заявок')
+        setPagination(response.data.pagination)
       }
-    } catch (err) {
-      logger.error('Ошибка загрузки заявок:', err)
-      setError(err.response?.data?.message || 'Ошибка загрузки заявок')
+    } catch (error) {
+      logger.error('Ошибка загрузки заявок:', error)
+      setError('Ошибка загрузки заявок')
     } finally {
       setLoading(false)
     }
@@ -129,7 +111,7 @@ const TasksPage = () => {
   }
 
   const handleBidCreated = (newBid) => {
-    logger.log('Новый отклик создан:', newBid)
+    logger.success('Новый отклик создан')
     // Обновляем заявку в списке - добавляем отклик и помечаем как userBid
     setTasks(prev => prev.map(task => 
       task.id === selectedTask.id 
@@ -142,6 +124,26 @@ const TasksPage = () => {
     ))
     setBidModalOpen(false)
     setSelectedTask(null)
+  }
+
+  const handleCreateBid = async (bidData) => {
+    try {
+      const response = await api.post(`/tasks/${bidData.taskId}/bid`, bidData)
+      
+      if (response.data.success) {
+        const newBid = response.data.bid
+        logger.success('Отклик успешно создан')
+        
+        // Обновляем задачу в списке
+        setTasks(prev => prev.map(task => 
+          task.id === bidData.taskId 
+            ? { ...task, bids: [...(task.bids || []), newBid] }
+            : task
+        ))
+      }
+    } catch (error) {
+      logger.error('Ошибка создания отклика:', error)
+    }
   }
 
   return (
