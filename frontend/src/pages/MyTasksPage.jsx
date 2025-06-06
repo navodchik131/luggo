@@ -120,44 +120,44 @@ const MyTasksPage = () => {
   return (
     <div className="max-w-6xl mx-auto">
       {/* Заголовок */}
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
         <div>
-          <h1 className="text-3xl font-bold">Мои заявки</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold">Мои заявки</h1>
           <p className="text-gray-600 mt-2">
             Управляйте своими заявками и отслеживайте отклики
           </p>
         </div>
-        <Link to="/create-task" className="btn btn-primary">
+        <Link to="/create-task" className="btn btn-primary w-full sm:w-auto">
           + Создать заявку
         </Link>
       </div>
 
       {/* Статистика */}
       {!loading && tasks.length > 0 && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-            <div className="text-2xl font-bold text-green-600">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
+          <div className="bg-green-50 border border-green-200 rounded-lg p-3 sm:p-4">
+            <div className="text-xl sm:text-2xl font-bold text-green-600">
               {statusStats.active || 0}
             </div>
-            <div className="text-sm text-green-700">Активные</div>
+            <div className="text-xs sm:text-sm text-green-700">Активные</div>
           </div>
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-            <div className="text-2xl font-bold text-yellow-600">
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 sm:p-4">
+            <div className="text-xl sm:text-2xl font-bold text-yellow-600">
               {statusStats.in_progress || 0}
             </div>
-            <div className="text-sm text-yellow-700">В процессе</div>
+            <div className="text-xs sm:text-sm text-yellow-700">В процессе</div>
           </div>
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <div className="text-2xl font-bold text-blue-600">
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4">
+            <div className="text-xl sm:text-2xl font-bold text-blue-600">
               {statusStats.completed || 0}
             </div>
-            <div className="text-sm text-blue-700">Завершенные</div>
+            <div className="text-xs sm:text-sm text-blue-700">Завершенные</div>
           </div>
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-            <div className="text-2xl font-bold text-gray-600">
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 sm:p-4">
+            <div className="text-xl sm:text-2xl font-bold text-gray-600">
               {tasks.reduce((sum, task) => sum + (task.stats?.totalBids || 0), 0)}
             </div>
-            <div className="text-sm text-gray-700">Всего откликов</div>
+            <div className="text-xs sm:text-sm text-gray-700">Всего откликов</div>
           </div>
         </div>
       )}
@@ -188,7 +188,8 @@ const MyTasksPage = () => {
             onClick={() => handleStatusFilter('awaiting_confirmation')}
             className={`btn btn-sm ${statusFilter === 'awaiting_confirmation' ? 'btn-primary' : 'btn-secondary'}`}
           >
-            Ожидает подтверждения
+            <span className="hidden sm:inline">Ожидает подтверждения</span>
+            <span className="sm:hidden">Ожидает</span>
           </button>
           <button
             onClick={() => handleStatusFilter('completed')}

@@ -153,7 +153,7 @@ const NotificationIcon = () => {
 
       {/* Dropdown с уведомлениями */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+        <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-lg shadow-lg border border-gray-200 z-50 max-w-[calc(100vw-2rem)] sm:max-w-none">
           {/* Заголовок */}
           <div className="px-4 py-3 border-b border-gray-200">
             <div className="flex justify-between items-center">
@@ -169,58 +169,56 @@ const NotificationIcon = () => {
           </div>
 
           {/* Список уведомлений */}
-          <div className="max-h-96 overflow-y-auto">
+          <div className="max-h-80 sm:max-h-96 overflow-y-auto">
             {loading ? (
               <div className="flex justify-center items-center py-8">
                 <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
               </div>
             ) : notifications.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
-                <div className="text-3xl mb-2">🔔</div>
-                <div>Нет новых уведомлений</div>
+                <div className="text-2xl sm:text-3xl mb-2">🔔</div>
+                <div className="text-sm sm:text-base">Нет новых уведомлений</div>
               </div>
             ) : (
-              <div>
-                {notifications.map(notification => (
-                  <div
-                    key={notification.id}
-                    className={`px-4 py-3 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors ${
-                      !notification.isRead ? 'bg-blue-50' : ''
-                    }`}
-                    onClick={() => {
-                      if (!notification.isRead) {
-                        markAsRead(notification.id)
-                      }
-                      if (notification.actionUrl) {
-                        setIsOpen(false)
-                        // Переход по ссылке будет обработан через Link компонент
-                      }
-                    }}
-                  >
-                    <div className="flex items-start gap-3">
-                      <span className="text-xl flex-shrink-0">
-                        {getNotificationIcon(notification.type)}
-                      </span>
-                      <div className="flex-1 min-w-0">
-                        <div className={`font-medium text-sm ${
-                          !notification.isRead ? 'text-gray-900' : 'text-gray-700'
-                        }`}>
-                          {notification.title}
-                        </div>
-                        <div className="text-xs text-gray-500 mt-1 line-clamp-2">
-                          {notification.message}
-                        </div>
-                        <div className="text-xs text-gray-400 mt-1">
+              notifications.map((notification) => (
+                <div
+                  key={notification.id}
+                  className={`px-4 py-3 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors ${
+                    !notification.isRead ? 'bg-blue-50' : ''
+                  }`}
+                  onClick={() => {
+                    if (!notification.isRead) {
+                      markAsRead(notification.id)
+                    }
+                    if (notification.actionUrl) {
+                      setIsOpen(false)
+                      // Переход по ссылке будет обработан через Link компонент
+                    }
+                  }}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 mt-0.5">
+                      {getNotificationIcon(notification.type)}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-900 mb-1 leading-tight">
+                        {notification.title}
+                      </p>
+                      <p className="text-xs sm:text-sm text-gray-600 mb-2 leading-relaxed">
+                        {notification.message}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-500">
                           {formatTime(notification.createdAt)}
-                        </div>
+                        </span>
+                        {!notification.isRead && (
+                          <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
+                        )}
                       </div>
-                      {!notification.isRead && (
-                        <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-1"></div>
-                      )}
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))
             )}
           </div>
 

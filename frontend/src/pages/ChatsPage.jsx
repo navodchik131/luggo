@@ -6,6 +6,7 @@ import api from '../services/api'
 import UserAvatar from '../components/UserAvatar'
 import ChatModal from '../components/ChatModal'
 import logger from '../utils/logger'
+import { MessageCircle } from 'lucide-react'
 
 const ChatsPage = () => {
   const { user } = useAuth()
@@ -153,58 +154,62 @@ const ChatsPage = () => {
             <div
               key={`${chat.taskId}-${chat.otherUser.id}`}
               onClick={() => openChat(chat)}
-              className="card hover:shadow-md transition-shadow cursor-pointer border-l-4 border-blue-500"
+              className="chat-card"
             >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4 flex-1">
+              <div className="chat-header">
+                <div className="chat-user-info">
                   {/* Аватар собеседника */}
                   <UserAvatar user={chat.otherUser} size="lg" />
                   
                   {/* Информация о чате */}
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-semibold text-lg truncate">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-1">
+                      <h3 className="chat-user-name">
                         {chat.otherUser.name}
                       </h3>
                       {chat.unreadCount > 0 && (
-                        <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium">
+                        <span className="chat-unread-badge">
                           {chat.unreadCount}
                         </span>
                       )}
                     </div>
                     
                     {/* Информация о заявке */}
-                    <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
+                    <div className="chat-task-info">
                       <Link 
                         to={`/tasks/${chat.taskId}`}
                         onClick={(e) => e.stopPropagation()}
-                        className="text-blue-600 hover:underline truncate max-w-xs"
+                        className="chat-task-title"
                       >
                         {chat.task.title}
                       </Link>
-                      <span className="text-gray-400">•</span>
-                      <span className={getStatusColor(chat.task.status)}>
+                      <span className="text-gray-400 hidden sm:inline">•</span>
+                      <span className={`${getStatusColor(chat.task.status)} text-xs`}>
                         {getStatusText(chat.task.status)}
                       </span>
                     </div>
                     
                     {/* Последнее сообщение */}
                     {chat.lastMessage && (
-                      <div className="text-sm text-gray-700">
-                        <span className="font-medium">
-                          {chat.lastMessage.senderId === user.id ? 'Вы: ' : ''}
-                        </span>
-                        <span className="truncate max-w-md inline-block">
-                          {chat.lastMessage.text}
-                        </span>
+                      <div className="chat-last-message mt-2">
+                        {chat.lastMessage.senderId === user?.id ? 'Вы: ' : ''}
+                        {chat.lastMessage.text}
                       </div>
                     )}
                   </div>
                 </div>
                 
-                {/* Время последнего сообщения */}
-                <div className="text-xs text-gray-500 text-right">
-                  {chat.lastMessage && formatTime(chat.lastMessage.createdAt)}
+                {/* Время и дополнительная информация */}
+                <div className="flex flex-col items-end gap-1 text-right">
+                  {chat.lastMessage && (
+                    <span className="chat-timestamp">
+                      {formatTime(chat.lastMessage.createdAt)}
+                    </span>
+                  )}
+                  <div className="flex items-center gap-1 text-xs text-gray-500">
+                    <MessageCircle size={12} />
+                    <span>{chat.messageCount || 0}</span>
+                  </div>
                 </div>
               </div>
             </div>

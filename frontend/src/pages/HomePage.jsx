@@ -38,13 +38,13 @@ const HomePage = () => {
         url="/"
       />
       
-      {/* Hero секция */}
-      <div className="bg-gradient-to-br from-blue-50 to-indigo-100 py-16">
+      {/* Hero section */}
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-100 py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl font-bold text-gray-900 mb-6">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
             Переезды стали проще с <span className="text-blue-600">Luggo</span>
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg lg:text-xl text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto px-4">
             {user?.role === 'executor' 
               ? 'Найдите выгодные заказы по переезду. Работайте с проверенными заказчиками и развивайте свой бизнес.'
               : 'Найдите надежных исполнителей для квартирного, офисного или межгородского переезда. Быстро, безопасно и с гарантией качества.'
@@ -52,7 +52,7 @@ const HomePage = () => {
           </p>
           
           {user ? (
-            <div className="flex gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-md sm:max-w-none mx-auto">
               {user.role === 'executor' ? (
                 // Кнопки для исполнителей
                 <>
@@ -62,7 +62,7 @@ const HomePage = () => {
                   <Link to="/profile" className="btn btn-secondary btn-lg">
                     👤 Мой профиль
                   </Link>
-                  <Link to="/executors" className="btn btn-secondary btn-lg">
+                  <Link to="/executors" className="btn btn-secondary btn-lg hidden sm:inline-flex">
                     👷 Исполнители
                   </Link>
                 </>
@@ -75,21 +75,21 @@ const HomePage = () => {
                   <Link to="/tasks" className="btn btn-secondary btn-lg">
                     📋 Просмотреть заявки
                   </Link>
-                  <Link to="/executors" className="btn btn-secondary btn-lg">
+                  <Link to="/executors" className="btn btn-secondary btn-lg hidden sm:inline-flex">
                     👷 Исполнители
                   </Link>
                 </>
               )}
             </div>
           ) : (
-            <div className="flex gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-md sm:max-w-none mx-auto">
               <Link to="/register" className="btn btn-primary btn-lg">
                 Начать работу
               </Link>
               <Link to="/tasks" className="btn btn-secondary btn-lg">
                 Просмотреть заявки
               </Link>
-              <Link to="/executors" className="btn btn-secondary btn-lg">
+              <Link to="/executors" className="btn btn-secondary btn-lg hidden sm:inline-flex">
                 👷 Исполнители
               </Link>
             </div>
@@ -217,23 +217,19 @@ const HomePage = () => {
         </div>
       )}
 
-      {/* Преимущества платформы */}
-      <div className="py-20 bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 relative overflow-hidden">
-        {/* Декоративные элементы */}
-        <div className="absolute top-0 left-0 w-72 h-72 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
-        <div className="absolute bottom-0 right-0 w-72 h-72 bg-purple-100 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Почему <span className="text-blue-600">10,000+</span> пользователей выбирают Luggo?
+      {/* Блок преимуществ и статистики */}
+      <div className="py-12 sm:py-20 bg-gradient-to-br from-gray-50 to-blue-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 sm:mb-6">
+              Почему <span className="text-blue-600">Luggo</span> — лучший выбор?
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Мы не просто платформа — мы ваш надёжный партнёр в мире переездов
+            <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto px-4">
+              Мы создали платформу, которая решает все проблемы при поиске исполнителей переезда
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {[
               {
                 icon: '⭐',
@@ -274,35 +270,35 @@ const HomePage = () => {
             ].map((feature, index) => (
               <div 
                 key={index} 
-                className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100 relative overflow-hidden"
+                className="group bg-white rounded-2xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100 relative overflow-hidden"
               >
                 {/* Градиентный фон при hover */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}></div>
                 
                 {/* Иконка */}
                 <div className="relative z-10">
-                  <div className={`w-16 h-16 bg-gradient-to-br ${feature.gradient} rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                  <div className={`w-12 sm:w-16 h-12 sm:h-16 bg-gradient-to-br ${feature.gradient} rounded-xl flex items-center justify-center text-xl sm:text-2xl mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                     {feature.icon}
                   </div>
                   
                   {/* Заголовок */}
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
                     {feature.title}
                   </h3>
                   
                   {/* Подзаголовок */}
-                  <p className="text-sm font-semibold text-blue-600 mb-4">
+                  <p className="text-sm font-semibold text-blue-600 mb-3 sm:mb-4">
                     {feature.subtitle}
                   </p>
                   
                   {/* Описание */}
-                  <p className="text-gray-600 text-sm leading-relaxed mb-6">
+                  <p className="text-gray-600 text-sm leading-relaxed mb-4 sm:mb-6">
                     {feature.description}
                   </p>
                   
                   {/* Статистика */}
-                  <div className="border-t border-gray-100 pt-4">
-                    <div className={`text-2xl font-bold bg-gradient-to-r ${feature.gradient} bg-clip-text text-transparent`}>
+                  <div className="border-t border-gray-100 pt-3 sm:pt-4">
+                    <div className={`text-xl sm:text-2xl font-bold bg-gradient-to-r ${feature.gradient} bg-clip-text text-transparent`}>
                       {feature.highlight}
                     </div>
                     <div className="text-xs text-gray-500 uppercase tracking-wider">
@@ -315,33 +311,25 @@ const HomePage = () => {
           </div>
           
           {/* Дополнительный блок с гарантиями */}
-          <div className="mt-16 bg-white rounded-2xl p-8 md:p-12 shadow-xl border border-gray-100">
-            <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center text-3xl mx-auto mb-6">
-                🛡️
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                Ваша безопасность — наш приоритет
+          <div className="mt-12 sm:mt-16">
+            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-lg border border-gray-100">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6 text-center">
+                🛡️ Ваша безопасность — наш приоритет
               </h3>
-              <p className="text-gray-600 max-w-2xl mx-auto mb-8">
-                Все исполнители проходят проверку документов. Система страхования защищает ваше имущество. 
-                Служба поддержки работает 24/7 для решения любых вопросов.
-              </p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-                <div className="flex flex-col items-center">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 text-center">
+                <div className="flex flex-col items-center p-3">
                   <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-xl mb-2">
                     ✅
                   </div>
                   <span className="text-sm font-semibold text-gray-700">Проверенные документы</span>
                 </div>
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center p-3">
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-xl mb-2">
                     🔒
                   </div>
                   <span className="text-sm font-semibold text-gray-700">Страхование имущества</span>
                 </div>
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center p-3">
                   <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center text-xl mb-2">
                     📞
                   </div>
@@ -351,13 +339,17 @@ const HomePage = () => {
             </div>
           </div>
           
-          {/* CTA в блоке преимуществ */}
-          <div className="mt-12 text-center">
-            <div className="inline-flex items-center gap-3 bg-white rounded-full px-8 py-4 shadow-lg">
-              <span className="text-gray-600">Присоединяйтесь к</span>
-              <span className="font-bold text-blue-600">10,000+</span>
-              <span className="text-gray-600">довольных пользователей</span>
-              <span className="text-2xl">🚀</span>
+          {/* CTA в блоке преимуществ - исправлено для мобильных */}
+          <div className="mt-8 sm:mt-12 text-center">
+            <div className="inline-flex flex-col sm:flex-row items-center gap-2 sm:gap-3 bg-white rounded-2xl px-6 sm:px-8 py-4 shadow-lg max-w-sm sm:max-w-none mx-auto">
+              <div className="flex items-center gap-2 text-center sm:text-left">
+                <span className="text-gray-600 text-sm sm:text-base">Присоединяйтесь к</span>
+                <span className="font-bold text-blue-600 text-lg sm:text-xl">10,000+</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-gray-600 text-sm sm:text-base">довольных пользователей</span>
+                <span className="text-xl sm:text-2xl">🚀</span>
+              </div>
             </div>
           </div>
         </div>

@@ -257,11 +257,11 @@ const TasksPage = () => {
       ) : (
         <div className="space-y-4">
           {tasks.map(task => (
-            <div key={task.id} className="card hover:shadow-md transition-shadow">
-              <div className="flex justify-between items-start mb-3">
+            <div key={task.id} className="task-card">
+              <div className="task-card-header">
                 <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-lg font-semibold">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
+                    <h3 className="task-card-title text-base sm:text-lg">
                       <Link 
                         to={`/tasks/${task.id}`}
                         className="hover:text-blue-600 transition-colors"
@@ -269,43 +269,44 @@ const TasksPage = () => {
                         {task.title}
                       </Link>
                     </h3>
-                    <span className={statusColors[task.status]}>
+                    <span className={`${statusColors[task.status]} w-fit`}>
                       {statusLabels[task.status]}
                     </span>
                   </div>
                   
-                  <div className="text-sm text-gray-600 mb-3">
+                  <div className="task-card-meta">
                     <span className="font-medium">{categoryLabels[task.category]}</span>
-                    <span className="mx-2">•</span>
-                    <span>📅 {formatDate(task.date)}</span>
-                    <span className="mx-2">•</span>
-                    <span>🕒 {formatDateTime(task.createdAt)}</span>
+                    <span className="hidden sm:inline">•</span>
+                    <span className="w-full sm:w-auto">📅 {formatDate(task.date)}</span>
+                    <span className="hidden sm:inline">•</span>
+                    <span className="w-full sm:w-auto text-xs sm:text-sm">🕒 {formatDateTime(task.createdAt)}</span>
                   </div>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-                    <div>
-                      <span className="text-xs text-gray-500">Откуда:</span>
-                      <div className="font-medium">{task.fromAddress}</div>
+                  <div className="task-card-addresses">
+                    <div className="task-card-address">
+                      <span className="task-card-address-label">Откуда:</span>
+                      <div className="task-card-address-value">{task.fromAddress}</div>
                     </div>
-                    <div>
-                      <span className="text-xs text-gray-500">Куда:</span>
-                      <div className="font-medium">{task.toAddress}</div>
+                    <div className="task-card-address">
+                      <span className="task-card-address-label">Куда:</span>
+                      <div className="task-card-address-value">{task.toAddress}</div>
                     </div>
                   </div>
                   
-                  <p className="text-gray-700 line-clamp-2">
+                  <p className="text-gray-700 text-sm leading-relaxed line-clamp-2 mt-3">
                     {task.description}
                   </p>
                 </div>
                 
-                <div className="ml-6 text-right">
+                {/* Информация о заказчике - оптимизировано для мобильных */}
+                <div className="w-full sm:w-auto sm:ml-6 mt-4 sm:mt-0">
                   {task.customer && (
-                    <div className="flex items-center gap-2 mb-2">
-                      <UserAvatar user={task.customer} size="md" />
-                      <div className="text-sm">
-                        <div className="font-medium">{task.customer.name}</div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <UserAvatar user={task.customer} size="sm" />
+                      <div className="text-sm flex-1 min-w-0">
+                        <div className="font-medium truncate">{task.customer.name}</div>
                         {task.customer.role === 'executor' && (
-                          <div className="text-gray-500">
+                          <div className="text-gray-500 text-xs">
                             ⭐ {task.customer.rating || '—'}
                           </div>
                         )}
@@ -313,38 +314,36 @@ const TasksPage = () => {
                     </div>
                   )}
                   
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm text-gray-500 text-center sm:text-right">
                     Откликов: {task.bids?.length || 0}
                   </div>
                 </div>
               </div>
               
-              <div className="flex justify-between items-center pt-3 border-t">
+              <div className="task-card-footer">
                 <Link 
                   to={`/tasks/${task.id}`}
-                  className="text-blue-600 hover:underline text-sm"
+                  className="text-blue-600 hover:underline text-sm font-medium"
                 >
                   Подробнее →
                 </Link>
                 
                 {/* Кнопка отклика или информация о статусе */}
                 {user && user.role === 'executor' && task.status === 'active' && user.id !== task.customer?.id && (
-                  <div>
+                  <div className="w-full sm:w-auto">
                     {task.userBid ? (
-                      <div className="text-right">
-                        <div className="bg-blue-50 border border-blue-200 rounded px-3 py-2">
-                          <div className="flex items-center gap-2 text-blue-800">
-                            <span>✅</span>
-                            <div className="text-sm">
-                              <div className="font-medium">Вы откликнулись</div>
-                              <div className="text-xs">
-                                {task.userBid.price} ₽
-                                {task.userBid.accepted && (
-                                  <span className="ml-1 bg-green-100 text-green-800 px-1 py-0.5 rounded text-xs">
-                                    ✓ Принят
-                                  </span>
-                                )}
-                              </div>
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg px-3 py-2">
+                        <div className="flex items-center gap-2 text-blue-800">
+                          <span>✅</span>
+                          <div className="text-sm">
+                            <div className="font-medium">Вы откликнулись</div>
+                            <div className="text-xs">
+                              {task.userBid.price} ₽
+                              {task.userBid.accepted && (
+                                <span className="ml-1 bg-green-100 text-green-800 px-1 py-0.5 rounded text-xs">
+                                  ✓ Принят
+                                </span>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -352,7 +351,7 @@ const TasksPage = () => {
                     ) : (
                       <button 
                         onClick={() => handleBidClick(task)}
-                        className="btn btn-primary btn-sm"
+                        className="btn btn-primary btn-sm w-full sm:w-auto"
                       >
                         Откликнуться
                       </button>

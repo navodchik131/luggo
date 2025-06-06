@@ -393,15 +393,15 @@ const RouteMap = ({ fromAddress, toAddress }) => {
     <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
       {/* Информационная плашка */}
       {routeInfo && (
-        <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="bg-white bg-opacity-20 rounded-lg p-2">
-                <span className="text-2xl">🚚</span>
+        <div className="route-info-card">
+          <div className="route-info-header">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="route-info-icon">
+                <span className="text-xl sm:text-2xl">🚚</span>
               </div>
-              <div>
-                <h3 className="font-semibold text-lg">Маршрут переезда</h3>
-                <p className="text-blue-100 text-sm">
+              <div className="route-info-details">
+                <h3 className="route-info-title">Маршрут переезда</h3>
+                <p className="route-info-subtitle">
                   {isFallbackMode 
                     ? 'Приблизительное расстояние по прямой' 
                     : 'Ориентировочное время и расстояние'
@@ -409,17 +409,21 @@ const RouteMap = ({ fromAddress, toAddress }) => {
                 </p>
               </div>
             </div>
-            <div className="text-right">
-              <div className="flex items-center gap-6">
-                <div className="text-center">
-                  <div className="text-2xl font-bold">{routeInfo.distance} км</div>
-                  <div className="text-xs text-blue-100">расстояние</div>
+            <div className="route-info-stats">
+              <div className="route-info-stat">
+                <div className="route-info-stat-value">
+                  {routeInfo.distance}
                 </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold">{routeInfo.durationText}</div>
-                  <div className="text-xs text-blue-100">в пути</div>
-                </div>
+                <div className="route-info-stat-label">расстояние</div>
               </div>
+              {routeInfo.duration && (
+                <div className="route-info-stat">
+                  <div className="route-info-stat-value">
+                    {routeInfo.duration}
+                  </div>
+                  <div className="route-info-stat-label">время в пути</div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -427,52 +431,49 @@ const RouteMap = ({ fromAddress, toAddress }) => {
 
       {/* Карта */}
       <div className="relative">
-        {loading && (
-          <div className="absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center z-10">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
-              <p className="text-sm text-gray-600">Загрузка маршрута...</p>
+        <div ref={mapRef} className="w-full h-64 sm:h-80 lg:h-96 bg-gray-100" />
+        
+        {/* Loader */}
+        {(loading || error) && (
+          <div className="absolute inset-0 bg-gray-100 bg-opacity-75 flex items-center justify-center">
+            <div className="flex flex-col items-center gap-2">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              <span className="text-sm text-gray-600">
+                {error ? 'Ошибка загрузки карты' : 'Построение маршрута...'}
+              </span>
             </div>
           </div>
         )}
         
-        {error ? (
-          <div className="h-64 bg-gray-50 flex items-center justify-center">
-            <div className="text-center text-gray-600">
-              <div className="text-4xl mb-2">⚠️</div>
-              <p>{error}</p>
+        {/* Ошибка загрузки карты */}
+        {!loading && error && (
+          <div className="absolute inset-0 bg-gray-50 flex items-center justify-center">
+            <div className="text-center p-4">
+              <div className="text-gray-400 text-3xl sm:text-4xl mb-3">🗺️</div>
+              <h3 className="font-semibold text-gray-700 mb-2 text-sm sm:text-base">Карта недоступна</h3>
+              <p className="text-xs sm:text-sm text-gray-600 max-w-xs mx-auto">
+                Не удалось загрузить интерактивную карту, но информация о маршруте выше доступна
+              </p>
             </div>
           </div>
-        ) : (
-          <div 
-            ref={mapContainerRef}
-            className="h-64 w-full relative route-map-container"
-            style={{ minHeight: '300px' }}
-          />
         )}
       </div>
-
-      {/* Информация под картой */}
-      <div className="p-4 bg-gray-50 border-t">
-        <div className="flex items-center justify-between text-sm">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1">
-              <span className="w-3 h-3 bg-green-500 rounded-full"></span>
-              <span className="text-gray-600">Откуда</span>
+      
+      {/* Дополнительная информация */}
+      {routeInfo && (
+        <div className="p-3 sm:p-4 bg-gray-50 border-t">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-sm">
+            <div className="flex items-center gap-2">
+              <span className="text-gray-400">📍</span>
+              <span className="text-gray-600">Маршрут может отличаться от фактического</span>
             </div>
-            <div className="flex items-center gap-1">
-              <span className="w-3 h-3 bg-red-500 rounded-full"></span>
-              <span className="text-gray-600">Куда</span>
+            <div className="flex items-center gap-2">
+              <span className="text-gray-400">⏱️</span>
+              <span className="text-gray-600">Время указано без учета пробок</span>
             </div>
-          </div>
-          <div className="text-gray-500 text-xs">
-            {isFallbackMode 
-              ? '* Приблизительные данные по прямой линии'
-              : '* Время указано без учета пробок'
-            }
           </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }
