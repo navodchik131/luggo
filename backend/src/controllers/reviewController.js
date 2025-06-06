@@ -1,4 +1,4 @@
-import logger from '../utils/logger.js'
+// Логирование вынесено в отдельные console.log для упрощения
 const { Review, Task, User, Bid } = require('../models');
 const { body, validationResult } = require('express-validator');
 
@@ -91,7 +91,7 @@ const confirmTaskCompletion = async (req, res) => {
           { where: { id: executorId } }
         );
 
-        logger.debug(`✅ Отзыв создан. Новый рейтинг исполнителя: ${avgRating.toFixed(2)}`);
+        console.log(`✅ Отзыв создан. Новый рейтинг исполнителя: ${avgRating.toFixed(2)}`);
       }
 
       // Создаем уведомление для исполнителя
@@ -140,7 +140,7 @@ const confirmTaskCompletion = async (req, res) => {
     }
 
   } catch (error) {
-    logger.error('Ошибка подтверждения завершения:', error);
+    console.error('Ошибка подтверждения завершения:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка подтверждения завершения'
@@ -262,7 +262,7 @@ const createReview = async (req, res) => {
     });
 
   } catch (error) {
-    logger.error('Ошибка создания отзыва:', error);
+    console.error('Ошибка создания отзыва:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка создания отзыва'
@@ -308,7 +308,7 @@ const getUserReviews = async (req, res) => {
     });
 
   } catch (error) {
-    logger.error('Ошибка получения отзывов:', error);
+    console.error('Ошибка получения отзывов:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка получения отзывов'

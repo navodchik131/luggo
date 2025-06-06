@@ -1,4 +1,4 @@
-import logger from '../utils/logger.js'
+// Логирование вынесено в отдельные console.log для упрощения
 const { Bid, Task, User, Notification } = require('../models');
 const { body, validationResult } = require('express-validator');
 const { createNewBidNotification, createBidAcceptedNotification } = require('./notificationController');
@@ -6,10 +6,10 @@ const { createNewBidNotification, createBidAcceptedNotification } = require('./n
 // Создание отклика на заявку
 const createBid = async (req, res) => {
   try {
-    logger.debug('=== СОЗДАНИЕ ОТКЛИКА ===');
-    logger.debug('req.user:', req.user);
-    logger.debug('req.body:', req.body);
-    logger.debug('req.params:', req.params);
+    console.log('=== СОЗДАНИЕ ОТКЛИКА ===');
+    console.log('req.user:', req.user);
+    console.log('req.body:', req.body);
+    console.log('req.params:', req.params);
 
     // Проверяем, что пользователь является исполнителем
     if (req.user.role !== 'executor') {
@@ -22,7 +22,7 @@ const createBid = async (req, res) => {
     // Валидация данных
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      logger.debug('❌ Ошибки валидации:', errors.array());
+      console.log('❌ Ошибки валидации:', errors.array());
       return res.status(400).json({
         success: false,
         message: 'Ошибка валидации данных',
@@ -96,7 +96,7 @@ const createBid = async (req, res) => {
       ]
     });
 
-    logger.debug('✅ Отклик создан:', createdBid.toJSON());
+    console.log('✅ Отклик создан:', createdBid.toJSON());
 
     // Создаем уведомление для заказчика о новом отклике
     try {
@@ -106,9 +106,9 @@ const createBid = async (req, res) => {
         createdBid.executor.name, 
         price
       );
-      logger.debug('✅ Уведомление о новом отклике создано');
+      console.log('✅ Уведомление о новом отклике создано');
     } catch (notificationError) {
-      logger.error('❌ Ошибка создания уведомления:', notificationError);
+      console.error('❌ Ошибка создания уведомления:', notificationError);
       // Не прерываем выполнение из-за ошибки уведомления
     }
 
@@ -119,7 +119,7 @@ const createBid = async (req, res) => {
     });
 
   } catch (error) {
-    logger.error('💥 Ошибка создания отклика:', error);
+    console.error('💥 Ошибка создания отклика:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка создания отклика',
@@ -165,7 +165,7 @@ const getBidsForTask = async (req, res) => {
     });
 
   } catch (error) {
-    logger.error('Ошибка получения откликов:', error);
+    console.error('Ошибка получения откликов:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка получения откликов'
@@ -213,7 +213,7 @@ const getUserBids = async (req, res) => {
     });
 
   } catch (error) {
-    logger.error('Ошибка получения откликов пользователя:', error);
+    console.error('Ошибка получения откликов пользователя:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка получения ваших откликов'
@@ -296,9 +296,9 @@ const acceptBid = async (req, res) => {
         bid.task.title, 
         bid.task.customer.name
       );
-      logger.debug(`✅ Уведомление создано для исполнителя ${bid.executor.name} о принятии отклика`);
+      console.log(`✅ Уведомление создано для исполнителя ${bid.executor.name} о принятии отклика`);
     } catch (notificationError) {
-      logger.error('❌ Ошибка создания уведомления:', notificationError);
+      console.error('❌ Ошибка создания уведомления:', notificationError);
       // Не прерываем выполнение из-за ошибки уведомления
     }
 
@@ -309,7 +309,7 @@ const acceptBid = async (req, res) => {
     });
 
   } catch (error) {
-    logger.error('Ошибка принятия отклика:', error);
+    console.error('Ошибка принятия отклика:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка принятия отклика'
@@ -374,7 +374,7 @@ const updateBid = async (req, res) => {
     });
 
   } catch (error) {
-    logger.error('Ошибка обновления отклика:', error);
+    console.error('Ошибка обновления отклика:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка обновления отклика'

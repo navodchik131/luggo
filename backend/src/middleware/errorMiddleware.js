@@ -1,4 +1,4 @@
-import logger from '../utils/logger.js'
+// Логирование вынесено в отдельные console.log для упрощения
 const errorHandler = (err, req, res, next) => {
   let error = { ...err };
   error.message = err.message;
@@ -32,7 +32,7 @@ const errorHandler = (err, req, res, next) => {
     error = { message, statusCode: 400 };
   }
 
-  logger.error('Ошибка:', {
+  console.error('Ошибка:', {
     message: error.message,
     stack: err.stack,
     url: req.originalUrl,

@@ -1,4 +1,4 @@
-import logger from '../utils/logger.js'
+// Логирование вынесено в отдельные console.log для упрощения
 const adminOnly = (req, res, next) => {
   try {
     // Проверяем, что пользователь авторизован
@@ -19,7 +19,7 @@ const adminOnly = (req, res, next) => {
 
     next();
   } catch (error) {
-    logger.error('Ошибка проверки прав администратора:', error);
+    console.error('Ошибка проверки прав администратора:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка сервера'

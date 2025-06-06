@@ -1,4 +1,4 @@
-import logger from '../utils/logger.js'
+// Логирование вынесено в отдельные console.log для упрощения
 const { User, VehiclePhoto, Review } = require('../models');
 const { SERVICE_TYPES } = require('../config/constants');
 const path = require('path');
@@ -43,7 +43,7 @@ const getMyProfile = async (req, res) => {
       user
     });
   } catch (error) {
-    logger.error('Ошибка получения профиля:', error);
+    console.error('Ошибка получения профиля:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка получения профиля'
@@ -108,7 +108,7 @@ const getPublicProfile = async (req, res) => {
       user: userProfile
     });
   } catch (error) {
-    logger.error('Ошибка получения публичного профиля:', error);
+    console.error('Ошибка получения публичного профиля:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка получения профиля'
@@ -167,7 +167,7 @@ const updateProfile = async (req, res) => {
       user
     });
   } catch (error) {
-    logger.error('Ошибка обновления профиля:', error);
+    console.error('Ошибка обновления профиля:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка обновления профиля'
@@ -214,7 +214,7 @@ const uploadAvatar = async (req, res) => {
       avatar: avatarPath
     });
   } catch (error) {
-    logger.error('Ошибка загрузки аватара:', error);
+    console.error('Ошибка загрузки аватара:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка загрузки аватара'
@@ -276,7 +276,7 @@ const uploadVehiclePhotos = async (req, res) => {
       photos: vehiclePhotos
     });
   } catch (error) {
-    logger.error('Ошибка загрузки фотографий автомобиля:', error);
+    console.error('Ошибка загрузки фотографий автомобиля:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка загрузки фотографий'
@@ -315,7 +315,7 @@ const deleteVehiclePhoto = async (req, res) => {
       message: 'Фотография успешно удалена'
     });
   } catch (error) {
-    logger.error('Ошибка удаления фотографии:', error);
+    console.error('Ошибка удаления фотографии:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка удаления фотографии'
@@ -349,7 +349,7 @@ const updateVehiclePhotoDescription = async (req, res) => {
       photo
     });
   } catch (error) {
-    logger.error('Ошибка обновления описания:', error);
+    console.error('Ошибка обновления описания:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка обновления описания'

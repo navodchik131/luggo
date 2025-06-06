@@ -1,4 +1,4 @@
-import logger from '../utils/logger.js'
+// Логирование вынесено в отдельные console.log для упрощения
 const { Task, User, Bid } = require('../models');
 const { body, validationResult } = require('express-validator');
 const { Op } = require('sequelize');
@@ -91,7 +91,7 @@ const getTasks = async (req, res) => {
       }
     });
   } catch (error) {
-    logger.error('Ошибка получения задач:', error);
+    console.error('Ошибка получения задач:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка получения списка задач'
@@ -138,7 +138,7 @@ const getTaskById = async (req, res) => {
       task
     });
   } catch (error) {
-    logger.error('Ошибка получения задачи:', error);
+    console.error('Ошибка получения задачи:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка получения задачи'
@@ -149,13 +149,13 @@ const getTaskById = async (req, res) => {
 // Создание новой задачи
 const createTask = async (req, res) => {
   try {
-    logger.debug('=== НАЧАЛО СОЗДАНИЯ ЗАДАЧИ ===');
-    logger.debug('req.user:', req.user);
-    logger.debug('req.body:', req.body);
+    console.log('=== НАЧАЛО СОЗДАНИЯ ЗАДАЧИ ===');
+    console.log('req.user:', req.user);
+    console.log('req.body:', req.body);
     
     // Проверка авторизации
     if (!req.user || !req.user.id) {
-      logger.debug('❌ Пользователь не авторизован');
+      console.log('❌ Пользователь не авторизован');
       return res.status(401).json({
         success: false,
         message: 'Пользователь не авторизован'
@@ -164,7 +164,7 @@ const createTask = async (req, res) => {
 
     // Проверка роли - только заказчики могут создавать заявки
     if (req.user.role === 'executor') {
-      logger.debug('❌ Исполнители не могут создавать заявки');
+      console.log('❌ Исполнители не могут создавать заявки');
       return res.status(403).json({
         success: false,
         message: 'Исполнители не могут создавать заявки. Только заказчики.'
@@ -174,7 +174,7 @@ const createTask = async (req, res) => {
     // Валидация данных
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      logger.debug('❌ Ошибки валидации:', errors.array());
+      console.log('❌ Ошибки валидации:', errors.array());
       return res.status(400).json({
         success: false,
         message: 'Ошибка валидации данных',
@@ -185,12 +185,12 @@ const createTask = async (req, res) => {
     const { title, description, fromAddress, toAddress, date, category } = req.body;
     
     const userId = req.user.id;
-    logger.debug('✅ Данные для создания задачи:', {
+    console.log('✅ Данные для создания задачи:', {
       title, description, fromAddress, toAddress, date, category, userId
     });
 
     // Создание задачи
-    logger.debug('📝 Создаю задачу в БД...');
+    console.log('📝 Создаю задачу в БД...');
     const task = await Task.create({
       title,
       description,
@@ -201,10 +201,10 @@ const createTask = async (req, res) => {
       userId,
       status: 'active'
     });
-    logger.debug('✅ Задача создана:', task.toJSON());
+    console.log('✅ Задача создана:', task.toJSON());
 
     // Получение созданной задачи с пользователем
-    logger.debug('📄 Получаю задачу с данными пользователя...');
+    console.log('📄 Получаю задачу с данными пользователя...');
     const createdTask = await Task.findByPk(task.id, {
       include: [
         {
@@ -214,17 +214,17 @@ const createTask = async (req, res) => {
         }
       ]
     });
-    logger.debug('✅ Задача с пользователем:', createdTask ? createdTask.toJSON() : 'null');
+    console.log('✅ Задача с пользователем:', createdTask ? createdTask.toJSON() : 'null');
 
     res.status(201).json({
       success: true,
       message: 'Задача успешно создана',
       task: createdTask
     });
-    logger.debug('=== ЗАДАЧА СОЗДАНА УСПЕШНО ===');
+    console.log('=== ЗАДАЧА СОЗДАНА УСПЕШНО ===');
   } catch (error) {
-    logger.error('💥 Ошибка создания задачи:', error);
-    logger.error('Stack trace:', error.stack);
+    console.error('💥 Ошибка создания задачи:', error);
+    console.error('Stack trace:', error.stack);
     res.status(500).json({
       success: false,
       message: 'Ошибка создания задачи',
@@ -286,7 +286,7 @@ const updateTask = async (req, res) => {
       task: updatedTask
     });
   } catch (error) {
-    logger.error('Ошибка обновления задачи:', error);
+    console.error('Ошибка обновления задачи:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка обновления задачи'
@@ -324,7 +324,7 @@ const deleteTask = async (req, res) => {
       message: 'Задача успешно удалена'
     });
   } catch (error) {
-    logger.error('Ошибка удаления задачи:', error);
+    console.error('Ошибка удаления задачи:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка удаления задачи'
@@ -401,7 +401,7 @@ const getUserTasks = async (req, res) => {
       }
     });
   } catch (error) {
-    logger.error('Ошибка получения заявок пользователя:', error);
+    console.error('Ошибка получения заявок пользователя:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка получения ваших заявок'

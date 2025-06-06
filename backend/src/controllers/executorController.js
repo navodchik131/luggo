@@ -1,4 +1,4 @@
-import logger from '../utils/logger.js'
+// Логирование вынесено в отдельные console.log для упрощения
 const { Task, User, Bid } = require('../models');
 
 // Получение принятых заявок исполнителя
@@ -69,7 +69,7 @@ const getMyJobs = async (req, res) => {
       }
     });
   } catch (error) {
-    logger.error('Ошибка получения работ исполнителя:', error);
+    console.error('Ошибка получения работ исполнителя:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка получения ваших работ'
@@ -122,7 +122,7 @@ const startJob = async (req, res) => {
       task: bid.task
     });
   } catch (error) {
-    logger.error('Ошибка начала работы:', error);
+    console.error('Ошибка начала работы:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка начала выполнения работы'
@@ -200,7 +200,7 @@ const completeJob = async (req, res) => {
       }
     });
 
-    logger.debug(`✅ Уведомление создано для заказчика ${bid.task.customer.name} о завершении работы`);
+    console.log(`✅ Уведомление создано для заказчика ${bid.task.customer.name} о завершении работы`);
 
     res.json({
       success: true,
@@ -208,7 +208,7 @@ const completeJob = async (req, res) => {
       task: bid.task
     });
   } catch (error) {
-    logger.error('Ошибка завершения работы:', error);
+    console.error('Ошибка завершения работы:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка завершения работы'
@@ -280,7 +280,7 @@ const getJobDetails = async (req, res) => {
       job: jobDetails
     });
   } catch (error) {
-    logger.error('Ошибка получения деталей работы:', error);
+    console.error('Ошибка получения деталей работы:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка получения деталей работы'

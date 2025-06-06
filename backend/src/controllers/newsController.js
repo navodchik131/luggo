@@ -1,4 +1,4 @@
-import logger from '../utils/logger.js'
+// Логирование вынесено в отдельные console.log для упрощения
 const { News, User } = require('../models')
 const { Op } = require('sequelize')
 
@@ -47,7 +47,7 @@ const getPublishedNews = async (req, res) => {
       }
     })
   } catch (error) {
-    logger.error('Ошибка получения новостей:', error)
+    console.error('Ошибка получения новостей:', error)
     res.status(500).json({
       success: false,
       message: 'Ошибка получения новостей'
@@ -91,7 +91,7 @@ const getNewsBySlug = async (req, res) => {
       data: news
     })
   } catch (error) {
-    logger.error('Ошибка получения новости:', error)
+    console.error('Ошибка получения новости:', error)
     res.status(500).json({
       success: false,
       message: 'Ошибка получения новости'
@@ -144,7 +144,7 @@ const getAllNews = async (req, res) => {
       }
     })
   } catch (error) {
-    logger.error('Ошибка получения новостей для админки:', error)
+    console.error('Ошибка получения новостей для админки:', error)
     res.status(500).json({
       success: false,
       message: 'Ошибка получения новостей'
@@ -177,7 +177,7 @@ const getNewsById = async (req, res) => {
       data: news
     })
   } catch (error) {
-    logger.error('Ошибка получения новости по ID:', error)
+    console.error('Ошибка получения новости по ID:', error)
     res.status(500).json({
       success: false,
       message: 'Ошибка получения новости'
@@ -244,7 +244,7 @@ const createNews = async (req, res) => {
       data: createdNews
     })
   } catch (error) {
-    logger.error('Ошибка создания новости:', error)
+    console.error('Ошибка создания новости:', error)
     
     if (error.name === 'SequelizeUniqueConstraintError') {
       return res.status(400).json({
@@ -317,7 +317,7 @@ const updateNews = async (req, res) => {
       data: updatedNews
     })
   } catch (error) {
-    logger.error('Ошибка обновления новости:', error)
+    console.error('Ошибка обновления новости:', error)
     
     if (error.name === 'SequelizeUniqueConstraintError') {
       return res.status(400).json({
@@ -362,7 +362,7 @@ const deleteNews = async (req, res) => {
       message: 'Новость удалена'
     })
   } catch (error) {
-    logger.error('Ошибка удаления новости:', error)
+    console.error('Ошибка удаления новости:', error)
     res.status(500).json({
       success: false,
       message: 'Ошибка удаления новости'
@@ -402,7 +402,7 @@ const getPopularTags = async (req, res) => {
       data: popularTags
     })
   } catch (error) {
-    logger.error('Ошибка получения тегов:', error)
+    console.error('Ошибка получения тегов:', error)
     res.status(500).json({
       success: false,
       message: 'Ошибка получения тегов'
