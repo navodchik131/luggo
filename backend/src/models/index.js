@@ -1,3 +1,4 @@
+const { sequelize } = require('../config/database');
 const User = require('./User');
 const Task = require('./Task');
 const Bid = require('./Bid');
@@ -57,6 +58,7 @@ User.hasMany(News, { foreignKey: 'authorId', as: 'news' });
 News.belongsTo(User, { foreignKey: 'authorId', as: 'author' });
 
 module.exports = {
+  sequelize,
   User,
   Task,
   Bid,
