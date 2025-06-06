@@ -4,6 +4,7 @@ import { useAuth } from '../hooks/useAuth'
 import { getPublishedNews } from '../services/newsService'
 import { formatDate } from '../utils/dateHelpers'
 import logger from '../utils/logger'
+import SEO from '../components/SEO'
 
 const HomePage = () => {
   const { user } = useAuth()
@@ -30,6 +31,13 @@ const HomePage = () => {
 
   return (
     <div>
+      <SEO 
+        title="Luggo - Платформа для переездов №1 в России"
+        description="Найдите надёжных исполнителей для квартирного, офисного переезда или межгородской перевозки. 5000+ проверенных грузчиков и водителей. Быстро, безопасно, с гарантией качества."
+        keywords="переезд, грузчики, грузоперевозки, квартирный переезд, офисный переезд, межгородской переезд, вывоз мусора, услуги переезда, найти грузчиков, переезд квартиры, офисный переезд, luggo"
+        url="/"
+      />
+      
       {/* Hero секция */}
       <div className="bg-gradient-to-br from-blue-50 to-indigo-100 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

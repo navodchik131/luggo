@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
+import { HelmetProvider } from 'react-helmet-async'
 import Layout from './components/Layout'
 import { UnreadProvider } from './contexts/UnreadContext'
 
@@ -37,44 +38,46 @@ import AdminTestsPage from './pages/AdminTestsPage'
 
 function App() {
   return (
-    <UnreadProvider>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/tasks" element={<TasksPage />} />
-          <Route path="/tasks/:id" element={<TaskDetailPage />} />
-          <Route path="/create-task" element={<CreateTaskPage />} />
-          <Route path="/edit-task/:id" element={<EditTaskPage />} />
-          <Route path="/my-tasks" element={<MyTasksPage />} />
-          <Route path="/my-jobs" element={<MyJobsPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/executors" element={<ExecutorsPage />} />
-          <Route path="/executor/:userId" element={<ExecutorProfilePage />} />
-          <Route path="/chat/:taskId" element={<ChatPage />} />
-          <Route path="/chats" element={<ChatsPage />} />
-          <Route path="/notifications" element={<NotificationsPage />} />
-          <Route path="/news" element={<NewsPage />} />
-          <Route path="/news/:slug" element={<NewsDetailPage />} />
-          <Route path="/support" element={<SupportPage />} />
-          <Route path="/privacy" element={<PrivacyPage />} />
-          <Route path="/terms" element={<TermsPage />} />
-          <Route path="/for-executors" element={<ExecutorsGuidePage />} />
-          <Route path="/for-customers" element={<CustomersGuidePage />} />
-          
-          {/* Admin Routes */}
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/users" element={<AdminUsersPage />} />
-          <Route path="/admin/tasks" element={<AdminTasksPage />} />
-          <Route path="/admin/reports" element={<AdminReportsPage />} />
-          <Route path="/admin/news" element={<AdminNewsPage />} />
-          <Route path="/admin/news/create" element={<AdminNewsFormPage />} />
-          <Route path="/admin/news/edit/:id" element={<AdminNewsFormPage />} />
-          <Route path="/admin/tests" element={<AdminTestsPage />} />
-        </Routes>
-      </Layout>
-    </UnreadProvider>
+    <HelmetProvider>
+      <UnreadProvider>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/tasks" element={<TasksPage />} />
+            <Route path="/tasks/:id" element={<TaskDetailPage />} />
+            <Route path="/create-task" element={<CreateTaskPage />} />
+            <Route path="/edit-task/:id" element={<EditTaskPage />} />
+            <Route path="/my-tasks" element={<MyTasksPage />} />
+            <Route path="/my-jobs" element={<MyJobsPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/executors" element={<ExecutorsPage />} />
+            <Route path="/executor/:userId" element={<ExecutorProfilePage />} />
+            <Route path="/chat/:taskId" element={<ChatPage />} />
+            <Route path="/chats" element={<ChatsPage />} />
+            <Route path="/notifications" element={<NotificationsPage />} />
+            <Route path="/news" element={<NewsPage />} />
+            <Route path="/news/:slug" element={<NewsDetailPage />} />
+            <Route path="/support" element={<SupportPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/terms" element={<TermsPage />} />
+            <Route path="/for-executors" element={<ExecutorsGuidePage />} />
+            <Route path="/for-customers" element={<CustomersGuidePage />} />
+            
+            {/* Admin Routes */}
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/users" element={<AdminUsersPage />} />
+            <Route path="/admin/tasks" element={<AdminTasksPage />} />
+            <Route path="/admin/reports" element={<AdminReportsPage />} />
+            <Route path="/admin/news" element={<AdminNewsPage />} />
+            <Route path="/admin/news/create" element={<AdminNewsFormPage />} />
+            <Route path="/admin/news/edit/:id" element={<AdminNewsFormPage />} />
+            <Route path="/admin/tests" element={<AdminTestsPage />} />
+          </Routes>
+        </Layout>
+      </UnreadProvider>
+    </HelmetProvider>
   )
 }
 

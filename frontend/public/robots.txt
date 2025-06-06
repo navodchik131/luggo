@@ -1,0 +1,40 @@
+# Robots.txt для Luggo - платформа переездов
+
+User-agent: *
+Allow: /
+
+# Основные страницы для индексации
+Allow: /tasks
+Allow: /news
+Allow: /for-customers
+Allow: /for-executors
+Allow: /about
+
+# Страницы которые не нужно индексировать
+Disallow: /admin/
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /create-task
+Disallow: /edit-task/
+Disallow: /chat/
+Disallow: /login
+Disallow: /register
+
+# Файлы и директории
+Disallow: /src/
+Disallow: /*.json$
+Disallow: /*?*
+Disallow: /assets/
+
+# Специальные боты
+User-agent: Yandex
+Allow: /
+Crawl-delay: 1
+
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+# Sitemap
+Sitemap: https://luggo.ru/sitemap.xml 
