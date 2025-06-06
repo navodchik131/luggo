@@ -1,56 +1,55 @@
-import logger from '../utils/logger'
 // Безопасная утилита логирования для продакшена
 const isDevelopment = import.meta.env.MODE === 'development'
 
 // Безопасное логирование, работает только в development
-export const logger = {
+const logger = {
   log: (...args) => {
     if (isDevelopment) {
-      logger.log(...args)
+      console.log(...args)
     }
   },
   
   error: (...args) => {
     if (isDevelopment) {
-      logger.error(...args)
+      console.error(...args)
     }
   },
   
   warn: (...args) => {
     if (isDevelopment) {
-      logger.warn(...args)
+      console.warn(...args)
     }
   },
   
   info: (...args) => {
     if (isDevelopment) {
-      logger.info(...args)
+      console.info(...args)
     }
   },
 
   // Для критических ошибок, которые нужно видеть в продакшене
   critical: (...args) => {
-    logger.error('[CRITICAL]', ...args)
+    console.error('[CRITICAL]', ...args)
   },
 
   // Безопасное логирование пользовательских данных (только ID)
   userAction: (action, userId) => {
     if (isDevelopment) {
-      logger.log(`🔵 User Action: ${action}`, `User ID: ${userId}`)
+      console.log(`🔵 User Action: ${action}`, `User ID: ${userId}`)
     }
   },
 
   // Логирование API запросов (без чувствительных данных)
   apiCall: (method, url, status) => {
     if (isDevelopment) {
-      logger.log(`🌐 API ${method.toUpperCase()} ${url} - Status: ${status}`)
+      console.log(`🌐 API ${method.toUpperCase()} ${url} - Status: ${status}`)
     }
   },
 
   // WebSocket события
   websocket: (event, data = '') => {
     if (isDevelopment) {
-      logger.log(`🔌 WebSocket: ${event}`, data)
+      console.log(`🔌 WebSocket: ${event}`, data)
     }
   }
 }
@@ -61,7 +60,7 @@ export const reportError = (error, context = {}) => {
   if (!isDevelopment) {
     // TODO: Интеграция с системой мониторинга
     // Пока просто консоль для критических ошибок
-    logger.error('[ERROR REPORT]', {
+    console.error('[ERROR REPORT]', {
       message: error.message,
       timestamp: new Date().toISOString(),
       context: {
@@ -71,7 +70,7 @@ export const reportError = (error, context = {}) => {
       }
     })
   } else {
-    logger.error('Development Error:', error, context)
+    console.error('Development Error:', error, context)
   }
 }
 

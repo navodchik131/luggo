@@ -1,4 +1,3 @@
-import logger from '../utils/logger.js'
 // Безопасная утилита логирования для backend
 const isDevelopment = process.env.NODE_ENV === 'development'
 const isProduction = process.env.NODE_ENV === 'production'
@@ -25,61 +24,61 @@ const formatLog = (level, ...args) => {
 }
 
 // Безопасное логирование
-export const logger = {
+const logger = {
   // Только для development
   debug: (...args) => {
     if (isDevelopment) {
-      logger.debug(...formatLog('blue', ...args))
+      console.log(...formatLog('blue', ...args))
     }
   },
 
   // Информационные сообщения (development + некритичные в production)
   info: (...args) => {
     if (isDevelopment) {
-      logger.info(...formatLog('cyan', ...args))
+      console.log(...formatLog('cyan', ...args))
     } else if (isProduction) {
       // В продакшене логируем только важную информацию
-      logger.info(`[INFO] ${new Date().toISOString()}:`, ...args)
+      console.log(`[INFO] ${new Date().toISOString()}:`, ...args)
     }
   },
 
   // Предупреждения (всегда логируем)
   warn: (...args) => {
     if (isDevelopment) {
-      logger.warn(...formatLog('yellow', ...args))
+      console.warn(...formatLog('yellow', ...args))
     } else {
-      logger.warn(`[WARN] ${new Date().toISOString()}:`, ...args)
+      console.warn(`[WARN] ${new Date().toISOString()}:`, ...args)
     }
   },
 
   // Ошибки (всегда логируем)
   error: (...args) => {
     if (isDevelopment) {
-      logger.error(...formatLog('red', ...args))
+      console.error(...formatLog('red', ...args))
     } else {
-      logger.error(`[ERROR] ${new Date().toISOString()}:`, ...args)
+      console.error(`[ERROR] ${new Date().toISOString()}:`, ...args)
     }
   },
 
   // Критические ошибки (всегда логируем с полной информацией)
   critical: (...args) => {
-    logger.error(`[CRITICAL] ${new Date().toISOString()}:`, ...args)
+    console.error(`[CRITICAL] ${new Date().toISOString()}:`, ...args)
   },
 
   // Безопасное логирование пользовательских действий
   userAction: (action, userId, additionalData = {}) => {
     if (isDevelopment) {
-      logger.debug(...formatLog('green', `User Action: ${action}`, `UserID: ${userId}`, additionalData))
+      console.log(...formatLog('green', `User Action: ${action}`, `UserID: ${userId}`, additionalData))
     } else {
       // В продакшене логируем только ID пользователя, без чувствительных данных
-      logger.debug(`[USER_ACTION] ${new Date().toISOString()}: ${action} by user ${userId}`)
+      console.log(`[USER_ACTION] ${new Date().toISOString()}: ${action} by user ${userId}`)
     }
   },
 
   // Логирование API запросов
   apiRequest: (method, url, userId, status) => {
     if (isDevelopment) {
-      logger.debug(...formatLog('magenta', `API ${method} ${url} - User: ${userId} - Status: ${status}`))
+      console.log(...formatLog('magenta', `API ${method} ${url} - User: ${userId} - Status: ${status}`))
     }
     // В продакшене не логируем обычные API запросы
   },
@@ -87,7 +86,7 @@ export const logger = {
   // Логирование работы с базой данных
   database: (operation, table, recordId = null) => {
     if (isDevelopment) {
-      logger.debug(...formatLog('cyan', `DB ${operation} on ${table}`, recordId ? `ID: ${recordId}` : ''))
+      console.log(...formatLog('cyan', `DB ${operation} on ${table}`, recordId ? `ID: ${recordId}` : ''))
     }
     // В продакшене не логируем обычные операции БД
   },
@@ -95,20 +94,20 @@ export const logger = {
   // Логирование WebSocket событий
   websocket: (event, socketId, userId = null) => {
     if (isDevelopment) {
-      logger.debug(...formatLog('blue', `WebSocket ${event}`, `Socket: ${socketId}`, userId ? `User: ${userId}` : ''))
+      console.log(...formatLog('blue', `WebSocket ${event}`, `Socket: ${socketId}`, userId ? `User: ${userId}` : ''))
     }
     // В продакшене логируем только важные WebSocket события
   },
 
   // Логирование запуска сервера
   startup: (message) => {
-    logger.debug(`[STARTUP] ${new Date().toISOString()}: ${message}`)
+    console.log(`[STARTUP] ${new Date().toISOString()}: ${message}`)
   },
 
   // Логирование аутентификации (всегда важно для безопасности)
   auth: (event, userId, ip, success) => {
     const statusText = success ? 'SUCCESS' : 'FAILED'
-    logger.debug(`[AUTH] ${new Date().toISOString()}: ${event} - User: ${userId} - IP: ${ip} - Status: ${statusText}`)
+    console.log(`[AUTH] ${new Date().toISOString()}: ${event} - User: ${userId} - IP: ${ip} - Status: ${statusText}`)
   }
 }
 
@@ -129,11 +128,11 @@ export const logError = (error, context = {}) => {
   }
 
   if (isDevelopment) {
-    logger.error('[ERROR_REPORT]', errorInfo)
+    console.error('[ERROR_REPORT]', errorInfo)
   } else {
     // В продакшене логируем минимум информации
-    logger.error(`[ERROR] ${errorInfo.timestamp}: ${errorInfo.message}`)
+    console.error(`[ERROR] ${errorInfo.timestamp}: ${errorInfo.message}`)
   }
 }
 
-export default logger 
+module.exports = logger 
