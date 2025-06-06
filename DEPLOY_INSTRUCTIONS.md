@@ -185,3 +185,26 @@ require('./src/config/init').initializeDatabase().then(async () => {
 ---
 *Деплой от: ${new Date().toISOString()}*
 *Версия: Production v1.2 - Security & Logging Optimization* 
+
+Как обновлять на сервере
+
+# 1. Обновляем код
+ssh root@luggo.ru
+cd /var/www/luggo
+git pull origin main
+
+# 2. Устанавливаем зависимости
+cd frontend && npm install
+cd ../backend && npm install
+
+# 3. Добавляем SEO роуты в backend/server.js
+# Нужно добавить: app.use('/', require('./src/routes/seoRoutes'))
+
+# 4. Пересобираем frontend
+cd frontend && npm run build
+
+# 5. Перезапускаем backend
+pm2 restart luggo-backend
+
+# 6. Устанавливаем SSL
+sudo certbot --nginx -d luggo.ru -d www.luggo.ru

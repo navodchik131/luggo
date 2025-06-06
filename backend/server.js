@@ -20,6 +20,7 @@ const profileRoutes = require('./src/routes/profileRoutes');
 const notificationRoutes = require('./src/routes/notificationRoutes');
 const adminRoutes = require('./src/routes/adminRoutes');
 const newsRoutes = require('./src/routes/newsRoutes');
+const seoRoutes = require('./src/routes/seoRoutes');
 
 const { errorHandler } = require('./src/middleware/errorMiddleware');
 const { notFound } = require('./src/middleware/notFoundMiddleware');
@@ -119,6 +120,7 @@ app.use('/api/profile', profileRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/news', newsRoutes);
+app.use('/', seoRoutes);
 
 // API info route
 app.get('/api', (req, res) => {

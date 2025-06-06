@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
-    open: true,
+    host: true,
     proxy: {
       '/api': {
         target: 'http://localhost:5000',
@@ -23,5 +23,8 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: true
+  },
+  esbuild: {
+    logOverride: { 'this-is-undefined-in-esm': 'silent' }
   }
 }) 
