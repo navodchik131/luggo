@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { useSocket } from '../hooks/useSocket'
 import api from '../services/api'
+import logger from '../utils/logger'
 
 const UnreadContext = createContext()
 
@@ -53,7 +54,7 @@ export const UnreadProvider = ({ children }) => {
         setUnreadCount(response.data.unreadCount)
       }
     } catch (error) {
-      console.error('Ошибка загрузки счетчика непрочитанных сообщений:', error)
+      logger.error('Ошибка загрузки счетчика непрочитанных сообщений:', error)
     }
   }
 

@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import api from '../services/api'
 import AddressAutocomplete from '../components/AddressAutocomplete'
+import logger from '../utils/logger'
 
 const CreateTaskPage = () => {
   const navigate = useNavigate()
@@ -98,12 +99,12 @@ const CreateTaskPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     
-    console.log('🚀 Начинаем создание заявки...')
-    console.log('📝 Данные формы:', formData)
-    console.log('👤 Пользователь:', user)
+    logger.log('🚀 Начинаем создание заявки...')
+    logger.log('📝 Данные формы:', formData)
+    logger.log('👤 Пользователь:', user)
     
     if (!validateForm()) {
-      console.log('❌ Валидация не прошла')
+      logger.log('❌ Валидация не прошла')
       return
     }
     
@@ -111,20 +112,20 @@ const CreateTaskPage = () => {
     setError('')
     
     try {
-      console.log('📡 Отправляем запрос на:', '/api/tasks')
+      logger.log('📡 Отправляем запрос на:', '/api/tasks')
       const response = await api.post('/tasks', formData)
-      console.log('✅ Ответ сервера:', response.data)
+      logger.log('✅ Ответ сервера:', response.data)
       
       if (response.data.success) {
-        console.log('🎉 Задача создана успешно, перенаправляем...')
+        logger.log('🎉 Задача создана успешно, перенаправляем...')
         navigate(`/tasks/${response.data.task.id}`)
       } else {
-        console.log('⚠️ Сервер вернул success: false')
+        logger.log('⚠️ Сервер вернул success: false')
         setError(response.data.message || 'Неизвестная ошибка')
       }
     } catch (err) {
-      console.error('💥 Ошибка создания заявки:', err)
-      console.error('📄 Детали ошибки:', {
+      logger.error('💥 Ошибка создания заявки:', err)
+      logger.error('📄 Детали ошибки:', {
         status: err.response?.status,
         statusText: err.response?.statusText,
         data: err.response?.data,

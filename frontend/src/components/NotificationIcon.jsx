@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Bell } from 'lucide-react'
 import api from '../services/api'
 import { useAuth } from '../hooks/useAuth'
+import logger from '../utils/logger'
 
 const NotificationIcon = () => {
   const { user } = useAuth()
@@ -22,7 +23,7 @@ const NotificationIcon = () => {
         setUnreadCount(response.data.count)
       }
     } catch (error) {
-      console.error('Ошибка загрузки счетчика уведомлений:', error)
+      logger.error('Ошибка загрузки счетчика уведомлений:', error)
     }
   }
 
@@ -37,7 +38,7 @@ const NotificationIcon = () => {
         setNotifications(response.data.notifications)
       }
     } catch (error) {
-      console.error('Ошибка загрузки уведомлений:', error)
+      logger.error('Ошибка загрузки уведомлений:', error)
     } finally {
       setLoading(false)
     }
@@ -56,7 +57,7 @@ const NotificationIcon = () => {
       )
       setUnreadCount(prev => Math.max(0, prev - 1))
     } catch (error) {
-      console.error('Ошибка отметки уведомления:', error)
+      logger.error('Ошибка отметки уведомления:', error)
     }
   }
 

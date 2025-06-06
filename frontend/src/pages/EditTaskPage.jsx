@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import api from '../services/api'
 import AddressAutocomplete from '../components/AddressAutocomplete'
+import logger from '../utils/logger'
 
 const EditTaskPage = () => {
   const navigate = useNavigate()
@@ -40,10 +41,10 @@ const EditTaskPage = () => {
   const loadTask = async () => {
     try {
       setLoadingTask(true)
-      console.log('Загружаю заявку для редактирования:', id)
+      logger.log('Загружаю заявку для редактирования:', id)
       
       const response = await api.get(`/tasks/${id}`)
-      console.log('Данные заявки:', response.data)
+      logger.log('Данные заявки:', response.data)
       
       if (response.data.success) {
         const task = response.data.task
@@ -73,7 +74,7 @@ const EditTaskPage = () => {
         setError('Заявка не найдена')
       }
     } catch (err) {
-      console.error('Ошибка загрузки заявки:', err)
+      logger.error('Ошибка загрузки заявки:', err)
       setError(err.response?.data?.message || 'Ошибка загрузки заявки')
     } finally {
       setLoadingTask(false)
@@ -138,12 +139,12 @@ const EditTaskPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     
-    console.log('🚀 Начинаем обновление заявки...')
-    console.log('📝 Данные формы:', formData)
-    console.log('🆔 ID заявки:', id)
+    logger.log('🚀 Начинаем обновление заявки...')
+    logger.log('📝 Данные формы:', formData)
+    logger.log('🆔 ID заявки:', id)
     
     if (!validateForm()) {
-      console.log('❌ Валидация не прошла')
+      logger.log('❌ Валидация не прошла')
       return
     }
     
@@ -151,20 +152,20 @@ const EditTaskPage = () => {
     setError('')
     
     try {
-      console.log('📡 Отправляем запрос на обновление:', `/api/tasks/${id}`)
+      logger.log('📡 Отправляем запрос на обновление:', `/api/tasks/${id}`)
       const response = await api.put(`/tasks/${id}`, formData)
-      console.log('✅ Ответ сервера:', response.data)
+      logger.log('✅ Ответ сервера:', response.data)
       
       if (response.data.success) {
-        console.log('🎉 Заявка обновлена успешно, перенаправляем...')
+        logger.log('🎉 Заявка обновлена успешно, перенаправляем...')
         navigate(`/tasks/${id}`)
       } else {
-        console.log('⚠️ Сервер вернул success: false')
+        logger.log('⚠️ Сервер вернул success: false')
         setError(response.data.message || 'Неизвестная ошибка')
       }
     } catch (err) {
-      console.error('💥 Ошибка обновления заявки:', err)
-      console.error('📄 Детали ошибки:', {
+      logger.error('💥 Ошибка обновления заявки:', err)
+      logger.error('📄 Детали ошибки:', {
         status: err.response?.status,
         statusText: err.response?.statusText,
         data: err.response?.data,

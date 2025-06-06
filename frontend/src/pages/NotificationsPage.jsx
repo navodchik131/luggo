@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../services/api'
 import { useAuth } from '../hooks/useAuth'
+import logger from '../utils/logger'
 
 const NotificationsPage = () => {
   const { user } = useAuth()
@@ -42,7 +43,7 @@ const NotificationsPage = () => {
         setError('Ошибка загрузки уведомлений')
       }
     } catch (err) {
-      console.error('Ошибка загрузки уведомлений:', err)
+      logger.error('Ошибка загрузки уведомлений:', err)
       setError(err.response?.data?.message || 'Ошибка загрузки уведомлений')
     } finally {
       setLoading(false)
@@ -61,7 +62,7 @@ const NotificationsPage = () => {
         )
       )
     } catch (error) {
-      console.error('Ошибка отметки уведомления:', error)
+      logger.error('Ошибка отметки уведомления:', error)
     }
   }
 
@@ -73,7 +74,7 @@ const NotificationsPage = () => {
         prev.map(notif => ({ ...notif, isRead: true }))
       )
     } catch (error) {
-      console.error('Ошибка отметки всех уведомлений:', error)
+      logger.error('Ошибка отметки всех уведомлений:', error)
     }
   }
 
@@ -87,7 +88,7 @@ const NotificationsPage = () => {
         prev.filter(notif => notif.id !== notificationId)
       )
     } catch (error) {
-      console.error('Ошибка удаления уведомления:', error)
+      logger.error('Ошибка удаления уведомления:', error)
     }
   }
 

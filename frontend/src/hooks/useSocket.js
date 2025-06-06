@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { io } from 'socket.io-client'
 import { useAuth } from './useAuth'
+import logger from '../utils/logger'
 
 export const useSocket = () => {
   const { user } = useAuth()
@@ -43,32 +44,32 @@ export const useSocket = () => {
       })
 
       socketRef.current.on('connect', () => {
-        console.log('🟢 WebSocket подключен к:', socketUrl)
-        console.log('🔗 Transport:', socketRef.current.io.engine.transport.name)
+        logger.websocket('Подключен к серверу', socketUrl)
+        logger.websocket('Transport:', socketRef.current.io.engine.transport.name)
         // Регистрируем пользователя в Socket.IO
         socketRef.current.emit('registerUser', user.id)
       })
 
       socketRef.current.on('disconnect', (reason) => {
-        console.log('🔴 WebSocket отключен. Причина:', reason)
+        logger.websocket('Отключен от сервера. Причина:', reason)
       })
 
       socketRef.current.on('connect_error', (error) => {
-        console.error('❌ Ошибка WebSocket подключения:', error)
-        console.log('🔄 Попытка переподключения...')
+        logger.error('Ошибка WebSocket подключения:', error.message)
+        logger.websocket('Попытка переподключения...')
       })
 
       socketRef.current.on('reconnect', (attemptNumber) => {
-        console.log('🔄 WebSocket переподключен после', attemptNumber, 'попыток')
+        logger.websocket('Переподключен после попыток:', attemptNumber)
       })
 
       socketRef.current.on('reconnect_error', (error) => {
-        console.error('❌ Ошибка переподключения WebSocket:', error)
+        logger.error('Ошибка переподключения WebSocket:', error.message)
       })
 
       // Логируем смену транспорта
       socketRef.current.io.on('upgrade', () => {
-        console.log('⬆️ Upgraded to', socketRef.current.io.engine.transport.name)
+        logger.websocket('Upgraded to', socketRef.current.io.engine.transport.name)
       })
     }
 
@@ -83,14 +84,14 @@ export const useSocket = () => {
   const joinTaskRoom = (taskId) => {
     if (socketRef.current && socketRef.current.connected) {
       socketRef.current.emit('joinTask', taskId)
-      console.log('🚪 Подключились к комнате задачи:', taskId)
+      logger.websocket('Подключились к комнате задачи:', taskId)
     }
   }
 
   const leaveTaskRoom = (taskId) => {
     if (socketRef.current && socketRef.current.connected) {
       socketRef.current.emit('leaveTask', taskId)
-      console.log('🚪 Покинули комнату задачи:', taskId)
+      logger.websocket('Покинули комнату задачи:', taskId)
     }
   }
 

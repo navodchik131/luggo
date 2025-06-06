@@ -10,6 +10,7 @@ import {
   BarChart3
 } from 'lucide-react'
 import api from '../services/api'
+import logger from '../utils/logger'
 
 const AdminReportsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -31,7 +32,7 @@ const AdminReportsPage = () => {
       const response = await api.get(`/admin/reports?period=${selectedPeriod}`)
       setReports(response.data.reports)
     } catch (error) {
-      console.error('Ошибка загрузки отчетов:', error)
+      logger.error('Ошибка загрузки отчетов:', error)
       setError('Ошибка загрузки отчетов')
     } finally {
       setLoading(false)

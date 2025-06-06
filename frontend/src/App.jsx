@@ -17,7 +17,6 @@ import ExecutorsPage from './pages/ExecutorsPage'
 import ExecutorProfilePage from './pages/ExecutorProfilePage'
 import ChatPage from './pages/ChatPage'
 import ChatsPage from './pages/ChatsPage'
-import TestAPIPage from './pages/TestAPIPage'
 import NotificationsPage from './pages/NotificationsPage'
 import NewsPage from './pages/NewsPage'
 import NewsDetailPage from './pages/NewsDetailPage'
@@ -34,6 +33,7 @@ import AdminTasksPage from './pages/AdminTasksPage'
 import AdminReportsPage from './pages/AdminReportsPage'
 import AdminNewsPage from './pages/AdminNewsPage'
 import AdminNewsFormPage from './pages/AdminNewsFormPage'
+import AdminTestsPage from './pages/AdminTestsPage'
 
 function App() {
   return (
@@ -54,7 +54,6 @@ function App() {
           <Route path="/executor/:userId" element={<ExecutorProfilePage />} />
           <Route path="/chat/:taskId" element={<ChatPage />} />
           <Route path="/chats" element={<ChatsPage />} />
-          <Route path="/test-api" element={<TestAPIPage />} />
           <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/news" element={<NewsPage />} />
           <Route path="/news/:slug" element={<NewsDetailPage />} />
@@ -72,6 +71,7 @@ function App() {
           <Route path="/admin/news" element={<AdminNewsPage />} />
           <Route path="/admin/news/create" element={<AdminNewsFormPage />} />
           <Route path="/admin/news/edit/:id" element={<AdminNewsFormPage />} />
+          <Route path="/admin/tests" element={<AdminTestsPage />} />
         </Routes>
       </Layout>
     </UnreadProvider>

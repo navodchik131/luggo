@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { YANDEX_CONFIG, hasValidApiKey } from '../config/yandex'
+import logger from '../utils/logger'
 
 // Добавляем стили для контроля Yandex карт
 const mapStyles = `
@@ -67,7 +68,7 @@ const RouteMap = ({ fromAddress, toAddress }) => {
       try {
         mapInstance.destroy()
       } catch (err) {
-        console.log('Error destroying map:', err)
+        logger.log('Error destroying map:', err)
       }
       setMapInstance(null)
     }
@@ -86,7 +87,7 @@ const RouteMap = ({ fromAddress, toAddress }) => {
             el.parentNode.removeChild(el)
           }
         } catch (err) {
-          console.log('Error removing element:', err)
+          logger.log('Error removing element:', err)
         }
       })
     }, 100)
@@ -153,7 +154,7 @@ const RouteMap = ({ fromAddress, toAddress }) => {
       }
     } catch (err) {
       window.ymapsLoading = false
-      console.error('Ошибка загрузки карт:', err)
+      logger.error('Ошибка загрузки карт:', err)
       setError('Ошибка загрузки карт')
       setLoading(false)
     }
@@ -226,7 +227,7 @@ const RouteMap = ({ fromAddress, toAddress }) => {
       buildRoute(map, fromCoords, toCoords)
 
     } catch (err) {
-      console.error('Ошибка инициализации карты:', err)
+      logger.error('Ошибка инициализации карты:', err)
       setError('Ошибка инициализации карты')
       setLoading(false)
     }
@@ -245,7 +246,7 @@ const RouteMap = ({ fromAddress, toAddress }) => {
       }
       return null
     } catch (err) {
-      console.error('Ошибка геокодирования:', err)
+      logger.error('Ошибка геокодирования:', err)
       return null
     }
   }
@@ -289,7 +290,7 @@ const RouteMap = ({ fromAddress, toAddress }) => {
             }
             setLoading(false)
           } catch (err) {
-            console.error('Ошибка обработки маршрута:', err)
+            logger.error('Ошибка обработки маршрута:', err)
             setError('Ошибка обработки маршрута')
             setLoading(false)
           }
@@ -330,7 +331,7 @@ const RouteMap = ({ fromAddress, toAddress }) => {
       }
 
     } catch (err) {
-      console.error('Ошибка построения маршрута:', err)
+      logger.error('Ошибка построения маршрута:', err)
       setError('Не удалось построить маршрут')
       setLoading(false)
     }

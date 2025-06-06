@@ -4,6 +4,7 @@ import { useSocket } from '../hooks/useSocket'
 import { useUnread } from '../contexts/UnreadContext'
 import api from '../services/api'
 import UserAvatar from './UserAvatar'
+import logger from '../utils/logger'
 
 const ChatModal = ({ isOpen, onClose, task, executor, otherUser }) => {
   const { user } = useAuth()
@@ -39,7 +40,7 @@ const ChatModal = ({ isOpen, onClose, task, executor, otherUser }) => {
       
       // Слушаем новые сообщения
       const handleNewMessage = (messageData) => {
-        console.log('🔥 Получено новое сообщение через WebSocket:', messageData)
+        logger.log('🔥 Получено новое сообщение через WebSocket:', messageData)
         
         // Проверяем, что сообщение относится к текущему чату
         if (messageData.taskId === task.id) {
@@ -47,10 +48,10 @@ const ChatModal = ({ isOpen, onClose, task, executor, otherUser }) => {
             // Простая проверка дублирования по ID
             const exists = prev.some(msg => msg.id === messageData.id)
             if (!exists) {
-              console.log('✅ Добавляем новое сообщение через WebSocket')
+              logger.log('✅ Добавляем новое сообщение через WebSocket')
               return [...prev, messageData]
             } else {
-              console.log('⚠️ Дублирование предотвращено')
+              logger.log('⚠️ Дублирование предотвращено')
               return prev
             }
           })
@@ -89,7 +90,7 @@ const ChatModal = ({ isOpen, onClose, task, executor, otherUser }) => {
         }
       }
       
-      console.log('🔍 ChatModal Debug:', {
+      logger.log('🔍 ChatModal Debug:', {
         userId: user.id,
         userRole: user.role,
         taskId: task.id,
@@ -102,7 +103,7 @@ const ChatModal = ({ isOpen, onClose, task, executor, otherUser }) => {
       })
       
       if (!otherUserId) {
-        console.error('❌ otherUserId is undefined!', {
+        logger.error('❌ otherUserId is undefined!', {
           user,
           task,
           executor,
@@ -111,11 +112,11 @@ const ChatModal = ({ isOpen, onClose, task, executor, otherUser }) => {
         return
       }
       
-      console.log('📨 Loading messages for task:', task.id, 'otherUser:', otherUserId, 'currentUser:', user.id)
+      logger.log('📨 Loading messages for task:', task.id, 'otherUser:', otherUserId, 'currentUser:', user.id)
       
       const response = await api.get(`/messages/task/${task.id}/user/${otherUserId}`)
       
-      console.log('📨 Messages response:', response.data)
+      logger.log('📨 Messages response:', response.data)
       
       if (response.data.success) {
         setMessages(response.data.messages || [])
@@ -126,9 +127,9 @@ const ChatModal = ({ isOpen, onClose, task, executor, otherUser }) => {
         }
       }
     } catch (error) {
-      console.error('❌ Ошибка загрузки сообщений:', error)
+      logger.error('❌ Ошибка загрузки сообщений:', error)
       if (error.response) {
-        console.error('❌ Error response:', error.response.data)
+        logger.error('❌ Error response:', error.response.data)
       }
     } finally {
       setLoading(false)
@@ -158,7 +159,7 @@ const ChatModal = ({ isOpen, onClose, task, executor, otherUser }) => {
         }
       }
       
-      console.log('Sending message to:', receiverId, 'from:', user.id)
+      logger.log('Sending message to:', receiverId, 'from:', user.id)
       
       const messageData = {
         taskId: task.id,
@@ -188,7 +189,7 @@ const ChatModal = ({ isOpen, onClose, task, executor, otherUser }) => {
         setNewMessage('')
       }
     } catch (error) {
-      console.error('Ошибка отправки сообщения:', error)
+      logger.error('Ошибка отправки сообщения:', error)
       alert('Ошибка отправки сообщения')
     } finally {
       setSendingMessage(false)

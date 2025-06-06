@@ -3,6 +3,7 @@ import { Link, Navigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { Eye, EyeOff } from 'lucide-react'
 import api from '../services/api'
+import logger from '../utils/logger'
 
 const RegisterPage = () => {
   const { register, registerLoading, isAuthenticated } = useAuth()
@@ -29,7 +30,7 @@ const RegisterPage = () => {
         setServices(response.data.services)
       }
     } catch (error) {
-      console.error('Ошибка загрузки услуг:', error)
+      logger.error('Ошибка загрузки услуг:', error)
     }
   }
 

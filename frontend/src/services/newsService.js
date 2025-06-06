@@ -1,4 +1,5 @@
 import axios from 'axios'
+import logger from '../utils/logger'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 
@@ -11,7 +12,7 @@ export const getPublishedNews = async (page = 1, limit = 10, tag = null) => {
     const response = await axios.get(`${API_URL}/news`, { params })
     return response.data
   } catch (error) {
-    console.error('Ошибка получения новостей:', error)
+    logger.error('Ошибка получения новостей:', error)
     throw error
   }
 }
@@ -22,7 +23,7 @@ export const getNewsBySlug = async (slug) => {
     const response = await axios.get(`${API_URL}/news/${slug}`)
     return response.data
   } catch (error) {
-    console.error('Ошибка получения новости:', error)
+    logger.error('Ошибка получения новости:', error)
     throw error
   }
 }
@@ -33,7 +34,7 @@ export const getPopularTags = async () => {
     const response = await axios.get(`${API_URL}/news/tags`)
     return response.data
   } catch (error) {
-    console.error('Ошибка получения тегов:', error)
+    logger.error('Ошибка получения тегов:', error)
     throw error
   }
 }
@@ -56,7 +57,7 @@ export const getAllNewsForAdmin = async (page = 1, limit = 20, status = null, se
     })
     return response.data
   } catch (error) {
-    console.error('Ошибка получения новостей для админки:', error)
+    logger.error('Ошибка получения новостей для админки:', error)
     throw error
   }
 }
@@ -72,7 +73,7 @@ export const getNewsById = async (id) => {
     })
     return response.data
   } catch (error) {
-    console.error('Ошибка получения новости по ID:', error)
+    logger.error('Ошибка получения новости по ID:', error)
     throw error
   }
 }
@@ -89,7 +90,7 @@ export const createNews = async (newsData) => {
     })
     return response.data
   } catch (error) {
-    console.error('Ошибка создания новости:', error)
+    logger.error('Ошибка создания новости:', error)
     throw error
   }
 }
@@ -106,7 +107,7 @@ export const updateNews = async (id, newsData) => {
     })
     return response.data
   } catch (error) {
-    console.error('Ошибка обновления новости:', error)
+    logger.error('Ошибка обновления новости:', error)
     throw error
   }
 }
@@ -122,7 +123,7 @@ export const deleteNews = async (id) => {
     })
     return response.data
   } catch (error) {
-    console.error('Ошибка удаления новости:', error)
+    logger.error('Ошибка удаления новости:', error)
     throw error
   }
 } 

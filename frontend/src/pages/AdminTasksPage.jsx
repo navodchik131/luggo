@@ -11,6 +11,7 @@ import {
   ExternalLink
 } from 'lucide-react'
 import api from '../services/api'
+import logger from '../utils/logger'
 
 const AdminTasksPage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -47,7 +48,7 @@ const AdminTasksPage = () => {
       setTasks(response.data.tasks)
       setPagination(response.data.pagination)
     } catch (error) {
-      console.error('Ошибка загрузки заявок:', error)
+      logger.error('Ошибка загрузки заявок:', error)
       setError('Ошибка загрузки заявок')
     } finally {
       setLoading(false)
@@ -81,7 +82,7 @@ const AdminTasksPage = () => {
       await api.patch(`/admin/tasks/${taskId}/status`, { status: newStatus })
       await fetchTasks() // Перезагружаем список
     } catch (error) {
-      console.error('Ошибка изменения статуса заявки:', error)
+      logger.error('Ошибка изменения статуса заявки:', error)
       alert('Ошибка изменения статуса заявки')
     }
   }
@@ -95,7 +96,7 @@ const AdminTasksPage = () => {
       await api.delete(`/admin/tasks/${taskId}`)
       await fetchTasks() // Перезагружаем список
     } catch (error) {
-      console.error('Ошибка удаления заявки:', error)
+      logger.error('Ошибка удаления заявки:', error)
       alert('Ошибка удаления заявки')
     }
   }

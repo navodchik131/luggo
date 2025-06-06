@@ -1,3 +1,4 @@
+import logger from '../utils/logger.js'
 const errorHandler = (err, req, res, next) => {
   let error = { ...err };
   error.message = err.message;
@@ -31,7 +32,7 @@ const errorHandler = (err, req, res, next) => {
     error = { message, statusCode: 400 };
   }
 
-  console.error('Ошибка:', {
+  logger.error('Ошибка:', {
     message: error.message,
     stack: err.stack,
     url: req.originalUrl,

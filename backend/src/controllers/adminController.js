@@ -1,3 +1,4 @@
+import logger from '../utils/logger.js'
 const { User, Task, Bid, Message, Review, Notification } = require('../models');
 const { Op } = require('sequelize');
 const { sequelize } = require('../config/database');
@@ -78,7 +79,7 @@ const getDashboardStats = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Ошибка получения статистики админки:', error);
+    logger.error('Ошибка получения статистики админки:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка получения статистики'
@@ -134,7 +135,7 @@ const getAllUsers = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Ошибка получения пользователей:', error);
+    logger.error('Ошибка получения пользователей:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка получения списка пользователей'
@@ -177,7 +178,7 @@ const toggleUserBlock = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Ошибка блокировки пользователя:', error);
+    logger.error('Ошибка блокировки пользователя:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка изменения статуса пользователя'
@@ -255,7 +256,7 @@ const getAllTasks = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Ошибка получения заявок:', error);
+    logger.error('Ошибка получения заявок:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка получения списка заявок'
@@ -284,7 +285,7 @@ const deleteTask = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Ошибка удаления заявки:', error);
+    logger.error('Ошибка удаления заявки:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка удаления заявки'
@@ -327,7 +328,7 @@ const updateTaskStatus = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Ошибка обновления статуса заявки:', error);
+    logger.error('Ошибка обновления статуса заявки:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка обновления статуса заявки'
@@ -413,7 +414,7 @@ const getReports = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Ошибка получения отчетов:', error);
+    logger.error('Ошибка получения отчетов:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка получения отчетов'
@@ -450,7 +451,7 @@ const deleteUser = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Ошибка удаления пользователя:', error);
+    logger.error('Ошибка удаления пользователя:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка удаления пользователя'

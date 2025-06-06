@@ -11,6 +11,7 @@ import {
   AlertCircle
 } from 'lucide-react'
 import api from '../services/api'
+import logger from '../utils/logger'
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null)
@@ -27,7 +28,7 @@ const AdminDashboard = () => {
       const response = await api.get('/admin/dashboard')
       setStats(response.data.stats)
     } catch (error) {
-      console.error('Ошибка загрузки статистики:', error)
+      logger.error('Ошибка загрузки статистики:', error)
       setError('Ошибка загрузки данных')
     } finally {
       setLoading(false)
@@ -215,6 +216,12 @@ const AdminDashboard = () => {
               className="block p-2 text-sm text-blue-600 hover:bg-blue-50 rounded"
             >
               Управление новостями
+            </Link>
+            <Link 
+              to="/admin/tests" 
+              className="block p-2 text-sm text-blue-600 hover:bg-blue-50 rounded"
+            >
+              Тестирование системы
             </Link>
           </div>
         </div>

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import api from '../services/api'
 import UserAvatar from '../components/UserAvatar'
+import logger from '../utils/logger'
 
 const ExecutorProfilePage = () => {
   const { userId } = useParams()
@@ -24,7 +25,7 @@ const ExecutorProfilePage = () => {
         setError('Профиль не найден')
       }
     } catch (err) {
-      console.error('Ошибка загрузки профиля:', err)
+      logger.error('Ошибка загрузки профиля:', err)
       setError(err.response?.data?.message || 'Ошибка загрузки профиля')
     } finally {
       setLoading(false)

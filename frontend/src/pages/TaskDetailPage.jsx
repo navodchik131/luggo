@@ -7,6 +7,7 @@ import TaskCompletionConfirmation from '../components/TaskCompletionConfirmation
 import UserAvatar from '../components/UserAvatar'
 import ChatModal from '../components/ChatModal'
 import RouteMap from '../components/RouteMap'
+import logger from '../utils/logger'
 
 const TaskDetailPage = () => {
   const { id } = useParams()
@@ -52,10 +53,10 @@ const TaskDetailPage = () => {
   const loadTask = async () => {
     try {
       setLoading(true)
-      console.log('Загружаю заявку ID:', id)
+      logger.log('Загружаю заявку ID:', id)
       
       const response = await api.get(`/tasks/${id}`)
-      console.log('Ответ API:', response.data)
+      logger.log('Ответ API:', response.data)
       
       if (response.data.success) {
         setTask(response.data.task)
@@ -63,7 +64,7 @@ const TaskDetailPage = () => {
         setError('Заявка не найдена')
       }
     } catch (err) {
-      console.error('Ошибка загрузки заявки:', err)
+      logger.error('Ошибка загрузки заявки:', err)
       setError(err.response?.data?.message || 'Ошибка загрузки заявки')
     } finally {
       setLoading(false)
@@ -89,7 +90,7 @@ const TaskDetailPage = () => {
   }
 
   const handleBidCreated = (newBid) => {
-    console.log('Новый отклик создан:', newBid)
+    logger.log('Новый отклик создан:', newBid)
     // Обновляем список откликов в task
     setTask(prev => ({
       ...prev,
@@ -100,10 +101,10 @@ const TaskDetailPage = () => {
   const handleAcceptBid = async (bidId) => {
     try {
       setAcceptingBid(bidId)
-      console.log('Принимаю отклик:', bidId)
+      logger.log('Принимаю отклик:', bidId)
       
       const response = await api.patch(`/bids/${bidId}/accept`)
-      console.log('Ответ принятия отклика:', response.data)
+      logger.log('Ответ принятия отклика:', response.data)
       
       if (response.data.success) {
         // Перезагружаем заявку для получения актуальных данных
@@ -112,7 +113,7 @@ const TaskDetailPage = () => {
         alert(response.data.message || 'Ошибка принятия отклика')
       }
     } catch (err) {
-      console.error('Ошибка принятия отклика:', err)
+      logger.error('Ошибка принятия отклика:', err)
       alert(err.response?.data?.message || 'Ошибка принятия отклика')
     } finally {
       setAcceptingBid(null)
@@ -120,7 +121,7 @@ const TaskDetailPage = () => {
   }
 
   const handleTaskConfirmation = async (confirmationData) => {
-    console.log('Подтверждение завершения:', confirmationData)
+    logger.log('Подтверждение завершения:', confirmationData)
     // Перезагружаем заявку для получения актуального статуса
     await loadTask()
   }

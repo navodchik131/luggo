@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import api from '../services/api'
+import logger from '../utils/logger'
 
 const MyTasksPage = () => {
   const { user } = useAuth()
@@ -57,10 +58,10 @@ const MyTasksPage = () => {
         params.status = statusFilter
       }
       
-      console.log('Загружаю мои заявки с параметрами:', params)
+      logger.log('Загружаю мои заявки с параметрами:', params)
       
       const response = await api.get('/tasks/my', { params })
-      console.log('Ответ API моих заявок:', response.data)
+      logger.log('Ответ API моих заявок:', response.data)
       
       if (response.data.success) {
         setTasks(response.data.tasks)
@@ -72,7 +73,7 @@ const MyTasksPage = () => {
         setError('Ошибка загрузки ваших заявок')
       }
     } catch (err) {
-      console.error('Ошибка загрузки моих заявок:', err)
+      logger.error('Ошибка загрузки моих заявок:', err)
       setError(err.response?.data?.message || 'Ошибка загрузки ваших заявок')
     } finally {
       setLoading(false)

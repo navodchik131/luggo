@@ -1,3 +1,4 @@
+import logger from '../utils/logger.js'
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 
@@ -21,7 +22,7 @@ const protect = async (req, res, next) => {
 
       next();
     } catch (error) {
-      console.error('Ошибка аутентификации:', error);
+      logger.error('Ошибка аутентификации:', error);
       return res.status(401).json({ message: 'Недействительный токен' });
     }
   }

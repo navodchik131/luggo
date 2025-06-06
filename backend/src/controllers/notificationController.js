@@ -1,3 +1,4 @@
+import logger from '../utils/logger.js'
 const { Notification, User, Task, Bid } = require('../models');
 const { Op } = require('sequelize');
 
@@ -33,7 +34,7 @@ const getNotifications = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Ошибка получения уведомлений:', error);
+    logger.error('Ошибка получения уведомлений:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка получения уведомлений'
@@ -58,7 +59,7 @@ const getUnreadCount = async (req, res) => {
       count
     });
   } catch (error) {
-    console.error('Ошибка получения количества уведомлений:', error);
+    logger.error('Ошибка получения количества уведомлений:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка получения количества уведомлений'
@@ -93,7 +94,7 @@ const markAsRead = async (req, res) => {
       message: 'Уведомление отмечено как прочитанное'
     });
   } catch (error) {
-    console.error('Ошибка отметки уведомления:', error);
+    logger.error('Ошибка отметки уведомления:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка отметки уведомления'
@@ -121,7 +122,7 @@ const markAllAsRead = async (req, res) => {
       message: 'Все уведомления отмечены как прочитанные'
     });
   } catch (error) {
-    console.error('Ошибка отметки всех уведомлений:', error);
+    logger.error('Ошибка отметки всех уведомлений:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка отметки всех уведомлений'
@@ -156,7 +157,7 @@ const deleteNotification = async (req, res) => {
       message: 'Уведомление удалено'
     });
   } catch (error) {
-    console.error('Ошибка удаления уведомления:', error);
+    logger.error('Ошибка удаления уведомления:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка удаления уведомления'
@@ -168,10 +169,10 @@ const deleteNotification = async (req, res) => {
 const createNotification = async (data) => {
   try {
     const notification = await Notification.create(data);
-    console.log('✅ Уведомление создано:', notification.toJSON());
+    logger.debug('✅ Уведомление создано:', notification.toJSON());
     return notification;
   } catch (error) {
-    console.error('❌ Ошибка создания уведомления:', error);
+    logger.error('❌ Ошибка создания уведомления:', error);
     throw error;
   }
 };
@@ -202,7 +203,7 @@ const createNewBidNotification = async (taskId, bidId, executorName, price) => {
       }
     });
   } catch (error) {
-    console.error('Ошибка создания уведомления о новом отклике:', error);
+    logger.error('Ошибка создания уведомления о новом отклике:', error);
   }
 };
 
@@ -230,7 +231,7 @@ const createBidAcceptedNotification = async (bidId, taskTitle, customerName) => 
       }
     });
   } catch (error) {
-    console.error('Ошибка создания уведомления о принятии отклика:', error);
+    logger.error('Ошибка создания уведомления о принятии отклика:', error);
   }
 };
 
@@ -265,7 +266,7 @@ const createTaskStatusChangeNotification = async (taskId, newStatus, userId) => 
       }
     });
   } catch (error) {
-    console.error('Ошибка создания уведомления о изменении статуса:', error);
+    logger.error('Ошибка создания уведомления о изменении статуса:', error);
   }
 };
 
@@ -286,7 +287,7 @@ const createNewMessageNotification = async (messageId, receiverId, senderName, t
       }
     });
   } catch (error) {
-    console.error('Ошибка создания уведомления о сообщении:', error);
+    logger.error('Ошибка создания уведомления о сообщении:', error);
   }
 };
 

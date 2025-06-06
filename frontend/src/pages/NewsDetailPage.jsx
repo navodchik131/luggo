@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { getNewsBySlug } from '../services/newsService'
 import { formatDate, formatDateTime } from '../utils/dateHelpers'
+import logger from '../utils/logger'
 
 const NewsDetailPage = () => {
   const { slug } = useParams()
@@ -25,7 +26,7 @@ const NewsDetailPage = () => {
         setError('Новость не найдена')
       }
     } catch (err) {
-      console.error('Ошибка загрузки новости:', err)
+      logger.error('Ошибка загрузки новости:', err)
       if (err.response?.status === 404) {
         setError('Новость не найдена')
       } else {
@@ -245,7 +246,7 @@ const RelatedNews = ({ currentSlug, tags }) => {
         setRelatedNews(filtered.slice(0, 3))
       }
     } catch (err) {
-      console.error('Ошибка загрузки рекомендуемых новостей:', err)
+      logger.error('Ошибка загрузки рекомендуемых новостей:', err)
     } finally {
       setLoading(false)
     }

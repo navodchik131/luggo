@@ -1,3 +1,4 @@
+import logger from '../utils/logger.js'
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
@@ -22,14 +23,14 @@ const sequelize = new Sequelize(
 const connectDB = async () => {
   try {
     await sequelize.authenticate();
-    console.log('✅ Подключение к PostgreSQL установлено успешно');
+    logger.debug('✅ Подключение к PostgreSQL установлено успешно');
     
     if (process.env.NODE_ENV === 'development') {
       await sequelize.sync({ alter: true });
-      console.log('📊 Синхронизация моделей завершена');
+      logger.debug('📊 Синхронизация моделей завершена');
     }
   } catch (error) {
-    console.error('❌ Ошибка подключения к базе данных:', error);
+    logger.error('❌ Ошибка подключения к базе данных:', error);
     process.exit(1);
   }
 };

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import api from '../services/api'
 import CompleteJobModal from '../components/CompleteJobModal'
+import logger from '../utils/logger'
 
 const MyJobsPage = () => {
   const { user } = useAuth()
@@ -60,10 +61,10 @@ const MyJobsPage = () => {
         params.status = statusFilter
       }
       
-      console.log('Загружаю мои работы с параметрами:', params)
+      logger.log('Загружаю мои работы с параметрами:', params)
       
       const response = await api.get('/executor/jobs', { params })
-      console.log('Ответ API моих работ:', response.data)
+      logger.log('Ответ API моих работ:', response.data)
       
       if (response.data.success) {
         setJobs(response.data.jobs)
@@ -75,7 +76,7 @@ const MyJobsPage = () => {
         setError('Ошибка загрузки ваших работ')
       }
     } catch (err) {
-      console.error('Ошибка загрузки моих работ:', err)
+      logger.error('Ошибка загрузки моих работ:', err)
       setError(err.response?.data?.message || 'Ошибка загрузки ваших работ')
     } finally {
       setLoading(false)
@@ -109,7 +110,7 @@ const MyJobsPage = () => {
         loadMyJobs() // Перезагружаем список - пользователь увидит обновленный статус
       }
     } catch (err) {
-      console.error('Ошибка завершения работы:', err)
+      logger.error('Ошибка завершения работы:', err)
       alert(err.response?.data?.message || 'Ошибка завершения работы')
       throw err // Пробрасываем ошибку для обработки в модальном окне
     }

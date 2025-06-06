@@ -4,6 +4,7 @@ import { useAuth } from '../hooks/useAuth'
 import api from '../services/api'
 import BidModal from '../components/BidModal'
 import UserAvatar from '../components/UserAvatar'
+import logger from '../utils/logger'
 
 const TasksPage = () => {
   const { user } = useAuth()
@@ -65,10 +66,10 @@ const TasksPage = () => {
         if (!params[key]) delete params[key]
       })
       
-      console.log('Загружаю заявки с параметрами:', params)
+      logger.log('Загружаю заявки с параметрами:', params)
       
       const response = await api.get('/tasks', { params })
-      console.log('Ответ API:', response.data)
+      logger.log('Ответ API:', response.data)
       
       if (response.data.success) {
         setTasks(response.data.tasks)
@@ -80,7 +81,7 @@ const TasksPage = () => {
         setError('Ошибка загрузки заявок')
       }
     } catch (err) {
-      console.error('Ошибка загрузки заявок:', err)
+      logger.error('Ошибка загрузки заявок:', err)
       setError(err.response?.data?.message || 'Ошибка загрузки заявок')
     } finally {
       setLoading(false)
@@ -128,7 +129,7 @@ const TasksPage = () => {
   }
 
   const handleBidCreated = (newBid) => {
-    console.log('Новый отклик создан:', newBid)
+    logger.log('Новый отклик создан:', newBid)
     // Обновляем заявку в списке - добавляем отклик и помечаем как userBid
     setTasks(prev => prev.map(task => 
       task.id === selectedTask.id 

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import logger from '../utils/logger'
 
 const CompleteJobModal = ({ isOpen, onClose, job, onComplete }) => {
   const [completionComment, setCompletionComment] = useState('')
@@ -14,7 +15,7 @@ const CompleteJobModal = ({ isOpen, onClose, job, onComplete }) => {
       setCompletionComment('')
       onClose()
     } catch (error) {
-      console.error('Ошибка завершения работы:', error)
+      logger.error('Ошибка завершения работы:', error)
     } finally {
       setLoading(false)
     }

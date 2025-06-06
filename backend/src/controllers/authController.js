@@ -1,3 +1,4 @@
+import logger from '../utils/logger.js'
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 const { validateRegister, validateLogin } = require('../utils/validation');
@@ -71,7 +72,7 @@ const register = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Ошибка регистрации:', error);
+    logger.error('Ошибка регистрации:', error);
     res.status(500).json({ 
       message: 'Ошибка при регистрации пользователя' 
     });
@@ -129,7 +130,7 @@ const login = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Ошибка входа:', error);
+    logger.error('Ошибка входа:', error);
     res.status(500).json({ 
       message: 'Ошибка при входе в систему' 
     });

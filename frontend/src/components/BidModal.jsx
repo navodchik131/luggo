@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import api from '../services/api'
+import logger from '../utils/logger'
 
 const BidModal = ({ isOpen, onClose, task, onBidCreated }) => {
   const [formData, setFormData] = useState({
@@ -22,15 +23,15 @@ const BidModal = ({ isOpen, onClose, task, onBidCreated }) => {
       setLoading(true)
       setError('')
       
-      console.log('Отправляю отклик:', formData)
-      console.log('Task ID:', task.id)
+      logger.log('Отправляю отклик:', formData)
+      logger.log('Task ID:', task.id)
       
       const response = await api.post(`/tasks/${task.id}/bids`, {
         price: parseFloat(formData.price),
         comment: formData.comment
       })
       
-      console.log('Ответ создания отклика:', response.data)
+      logger.log('Ответ создания отклика:', response.data)
       
       if (response.data.success) {
         // Сброс формы
@@ -47,7 +48,7 @@ const BidModal = ({ isOpen, onClose, task, onBidCreated }) => {
         setError(response.data.message || 'Ошибка создания отклика')
       }
     } catch (err) {
-      console.error('Ошибка создания отклика:', err)
+      logger.error('Ошибка создания отклика:', err)
       setError(err.response?.data?.message || 'Ошибка создания отклика')
     } finally {
       setLoading(false)

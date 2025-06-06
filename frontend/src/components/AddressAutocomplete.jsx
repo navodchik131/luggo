@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { YANDEX_CONFIG, hasValidApiKey, getGeocoderUrl } from '../config/yandex'
+import logger from '../utils/logger'
 
 const AddressAutocomplete = ({ 
   label, 
@@ -56,7 +57,7 @@ const AddressAutocomplete = ({
 
       setSuggestions(addresses)
     } catch (error) {
-      console.error('Ошибка поиска адресов:', error)
+      logger.error('Ошибка поиска адресов:', error)
       setSuggestions([])
     } finally {
       setIsLoading(false)

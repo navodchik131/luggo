@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { getPublishedNews, getPopularTags } from '../services/newsService'
 import { formatDate } from '../utils/dateHelpers'
+import logger from '../utils/logger'
 
 const NewsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -35,7 +36,7 @@ const NewsPage = () => {
         setError('Ошибка загрузки новостей')
       }
     } catch (err) {
-      console.error('Ошибка загрузки новостей:', err)
+      logger.error('Ошибка загрузки новостей:', err)
       setError('Ошибка загрузки новостей')
     } finally {
       setLoading(false)
@@ -49,7 +50,7 @@ const NewsPage = () => {
         setTags(response.data.slice(0, 10)) // Показываем только топ-10 тегов
       }
     } catch (err) {
-      console.error('Ошибка загрузки тегов:', err)
+      logger.error('Ошибка загрузки тегов:', err)
     }
   }
 

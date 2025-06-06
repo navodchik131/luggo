@@ -3,6 +3,7 @@ import { useAuth } from '../hooks/useAuth'
 import api from '../services/api'
 import ImageUpload from '../components/ImageUpload'
 import UserAvatar from '../components/UserAvatar'
+import logger from '../utils/logger'
 
 const ProfilePage = () => {
   const { user, updateUser } = useAuth()
@@ -30,7 +31,7 @@ const ProfilePage = () => {
         setServices(response.data.services)
       }
     } catch (error) {
-      console.error('Ошибка загрузки услуг:', error)
+      logger.error('Ошибка загрузки услуг:', error)
     }
   }
 
@@ -50,7 +51,7 @@ const ProfilePage = () => {
         })
       }
     } catch (error) {
-      console.error('Ошибка загрузки профиля:', error)
+      logger.error('Ошибка загрузки профиля:', error)
     } finally {
       setLoading(false)
     }
@@ -92,7 +93,7 @@ const ProfilePage = () => {
         alert('Профиль успешно обновлен')
       }
     } catch (error) {
-      console.error('Ошибка обновления профиля:', error)
+      logger.error('Ошибка обновления профиля:', error)
       alert(error.response?.data?.message || 'Ошибка обновления профиля')
     }
   }
@@ -112,7 +113,7 @@ const ProfilePage = () => {
         alert('Аватар успешно загружен')
       }
     } catch (error) {
-      console.error('Ошибка загрузки аватара:', error)
+      logger.error('Ошибка загрузки аватара:', error)
       alert(error.response?.data?.message || 'Ошибка загрузки аватара')
     }
   }
@@ -133,7 +134,7 @@ const ProfilePage = () => {
         alert(`Загружено ${response.data.photos.length} фотографий`)
       }
     } catch (error) {
-      console.error('Ошибка загрузки фотографий:', error)
+      logger.error('Ошибка загрузки фотографий:', error)
       alert(error.response?.data?.message || 'Ошибка загрузки фотографий')
     }
   }
@@ -149,7 +150,7 @@ const ProfilePage = () => {
         alert('Фотография удалена')
       }
     } catch (error) {
-      console.error('Ошибка удаления фотографии:', error)
+      logger.error('Ошибка удаления фотографии:', error)
       alert(error.response?.data?.message || 'Ошибка удаления фотографии')
     }
   }

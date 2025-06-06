@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import logger from '../utils/logger'
 
 const ImageUpload = ({ 
   type = 'single', // 'single' для аватара, 'multiple' для фото автомобилей
@@ -50,7 +51,7 @@ const ImageUpload = ({
       await onUpload(selectedFiles)
       setSelectedFiles([])
     } catch (error) {
-      console.error('Ошибка загрузки:', error)
+      logger.error('Ошибка загрузки:', error)
     } finally {
       setUploading(false)
     }

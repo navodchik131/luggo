@@ -12,6 +12,7 @@ import {
   ChevronRight
 } from 'lucide-react'
 import api from '../services/api'
+import logger from '../utils/logger'
 
 const AdminUsersPage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -47,7 +48,7 @@ const AdminUsersPage = () => {
       setUsers(response.data.users)
       setPagination(response.data.pagination)
     } catch (error) {
-      console.error('Ошибка загрузки пользователей:', error)
+      logger.error('Ошибка загрузки пользователей:', error)
       setError('Ошибка загрузки пользователей')
     } finally {
       setLoading(false)
@@ -81,7 +82,7 @@ const AdminUsersPage = () => {
       await api.patch(`/admin/users/${userId}/toggle-block`)
       await fetchUsers() // Перезагружаем список
     } catch (error) {
-      console.error('Ошибка изменения статуса пользователя:', error)
+      logger.error('Ошибка изменения статуса пользователя:', error)
       alert('Ошибка изменения статуса пользователя')
     }
   }
@@ -95,7 +96,7 @@ const AdminUsersPage = () => {
       await api.delete(`/admin/users/${userId}`)
       await fetchUsers() // Перезагружаем список
     } catch (error) {
-      console.error('Ошибка удаления пользователя:', error)
+      logger.error('Ошибка удаления пользователя:', error)
       alert('Ошибка удаления пользователя')
     }
   }

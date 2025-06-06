@@ -5,6 +5,7 @@ import { useSocket } from '../hooks/useSocket'
 import api from '../services/api'
 import UserAvatar from '../components/UserAvatar'
 import ChatModal from '../components/ChatModal'
+import logger from '../utils/logger'
 
 const ChatsPage = () => {
   const { user } = useAuth()
@@ -46,7 +47,7 @@ const ChatsPage = () => {
         setError('Ошибка загрузки чатов')
       }
     } catch (err) {
-      console.error('Ошибка загрузки чатов:', err)
+      logger.error('Ошибка загрузки чатов:', err)
       setError(err.response?.data?.message || 'Ошибка загрузки чатов')
     } finally {
       setLoading(false)

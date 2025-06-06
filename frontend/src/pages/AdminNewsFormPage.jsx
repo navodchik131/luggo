@@ -3,6 +3,7 @@ import { useNavigate, useParams, Link } from 'react-router-dom'
 import { ArrowLeft, Save, Eye, Plus, X } from 'lucide-react'
 import { createNews, updateNews, getNewsById } from '../services/newsService'
 import toast from 'react-hot-toast'
+import logger from '../utils/logger'
 
 const AdminNewsFormPage = () => {
   const navigate = useNavigate()
@@ -53,7 +54,7 @@ const AdminNewsFormPage = () => {
         navigate('/admin/news')
       }
     } catch (err) {
-      console.error('Ошибка загрузки новости:', err)
+      logger.error('Ошибка загрузки новости:', err)
       toast.error('Ошибка загрузки новости')
       navigate('/admin/news')
     } finally {
@@ -178,7 +179,7 @@ const AdminNewsFormPage = () => {
         toast.error(response.message || 'Ошибка сохранения новости')
       }
     } catch (err) {
-      console.error('Ошибка сохранения:', err)
+      logger.error('Ошибка сохранения:', err)
       
       if (err.response?.status === 400 && err.response?.data?.message?.includes('slug')) {
         setErrors(prev => ({

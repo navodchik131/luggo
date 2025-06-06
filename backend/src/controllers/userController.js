@@ -1,3 +1,4 @@
+import logger from '../utils/logger.js'
 const { User, Review, VehiclePhoto } = require('../models');
 const { SERVICE_NAMES } = require('../config/constants');
 const { Op } = require('sequelize');
@@ -136,7 +137,7 @@ const getExecutors = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Ошибка получения списка исполнителей:', error);
+    logger.error('Ошибка получения списка исполнителей:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка получения списка исполнителей'
@@ -182,7 +183,7 @@ const getExecutorStats = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Ошибка получения статистики исполнителей:', error);
+    logger.error('Ошибка получения статистики исполнителей:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка получения статистики'
@@ -198,7 +199,7 @@ const getServices = async (req, res) => {
       services: SERVICE_NAMES
     });
   } catch (error) {
-    console.error('Ошибка получения списка услуг:', error);
+    logger.error('Ошибка получения списка услуг:', error);
     res.status(500).json({
       success: false,
       message: 'Ошибка получения списка услуг'

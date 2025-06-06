@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { getPublishedNews } from '../services/newsService'
 import { formatDate } from '../utils/dateHelpers'
+import logger from '../utils/logger'
 
 const HomePage = () => {
   const { user } = useAuth()
@@ -21,7 +22,7 @@ const HomePage = () => {
         setLatestNews(response.data.news)
       }
     } catch (error) {
-      console.error('Ошибка загрузки новостей:', error)
+      logger.error('Ошибка загрузки новостей:', error)
     } finally {
       setNewsLoading(false)
     }

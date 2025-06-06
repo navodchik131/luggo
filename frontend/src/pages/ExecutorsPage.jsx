@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../services/api'
 import UserAvatar from '../components/UserAvatar'
+import logger from '../utils/logger'
 
 const ExecutorsPage = () => {
   const [executors, setExecutors] = useState([])
@@ -39,7 +40,7 @@ const ExecutorsPage = () => {
         setServices(response.data.services)
       }
     } catch (err) {
-      console.error('Ошибка загрузки услуг:', err)
+      logger.error('Ошибка загрузки услуг:', err)
     }
   }
 
@@ -60,10 +61,10 @@ const ExecutorsPage = () => {
         if (!params[key]) delete params[key]
       })
       
-      console.log('Загружаю исполнителей с параметрами:', params)
+      logger.log('Загружаю исполнителей с параметрами:', params)
       
       const response = await api.get('/users/executors', { params })
-      console.log('Ответ API:', response.data)
+      logger.log('Ответ API:', response.data)
       
       if (response.data.success) {
         setExecutors(response.data.executors)
@@ -75,7 +76,7 @@ const ExecutorsPage = () => {
         setError('Ошибка загрузки исполнителей')
       }
     } catch (err) {
-      console.error('Ошибка загрузки исполнителей:', err)
+      logger.error('Ошибка загрузки исполнителей:', err)
       setError(err.response?.data?.message || 'Ошибка загрузки исполнителей')
     } finally {
       setLoading(false)
@@ -89,7 +90,7 @@ const ExecutorsPage = () => {
         setStats(response.data.stats)
       }
     } catch (err) {
-      console.error('Ошибка загрузки статистики:', err)
+      logger.error('Ошибка загрузки статистики:', err)
     }
   }
 

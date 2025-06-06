@@ -1,3 +1,4 @@
+import logger from '../utils/logger.js'
 const { Message, User, Task, Bid } = require('../models')
 const { validationResult } = require('express-validator')
 const { Op } = require('sequelize')
@@ -8,7 +9,7 @@ const getMessagesByTaskAndUser = async (req, res) => {
     const { taskId, userId: otherUserId } = req.params
     const currentUserId = req.user.id
 
-    console.log('🔍 getMessagesByTaskAndUser Debug:', {
+    logger.debug('🔍 getMessagesByTaskAndUser Debug:', {
       taskId,
       otherUserId,
       currentUserId,
@@ -27,14 +28,14 @@ const getMessagesByTaskAndUser = async (req, res) => {
     })
 
     if (!task) {
-      console.log('❌ Task not found:', taskId)
+      logger.debug('❌ Task not found:', taskId)
       return res.status(404).json({
         success: false,
         message: 'Заявка не найдена'
       })
     }
 
-    console.log('📋 Task found:', {
+    logger.debug('📋 Task found:', {
       taskId: task.id,
       customerId: task.customer?.id,
       customerName: task.customer?.name
@@ -43,14 +44,14 @@ const getMessagesByTaskAndUser = async (req, res) => {
     // Проверяем существование другого пользователя
     const otherUser = await User.findByPk(otherUserId)
     if (!otherUser) {
-      console.log('❌ Other user not found:', otherUserId)
+      logger.debug('❌ Other user not found:', otherUserId)
       return res.status(404).json({
         success: false,
         message: 'Пользователь не найден'
       })
     }
 
-    console.log('👤 Other user found:', {
+    logger.debug('👤 Other user found:', {
       id: otherUser.id,
       name: otherUser.name,
       role: otherUser.role
@@ -75,7 +76,7 @@ const getMessagesByTaskAndUser = async (req, res) => {
       }
     })
 
-    console.log('🔐 Access check:', {
+    logger.debug('🔐 Access check:', {
       isCustomer,
       isOtherUserCustomer,
       hasCurrentUserBid: !!currentUserBid,
@@ -90,7 +91,7 @@ const getMessagesByTaskAndUser = async (req, res) => {
                      (isCustomer && isOtherUserCustomer) // оба могут быть заказчиками в разных заявках
 
     if (!hasAccess) {
-      console.log('❌ Access denied')
+      logger.debug('❌ Access denied')
       return res.status(403).json({
         success: false,
         message: 'Нет прав для просмотра переписки'
@@ -127,7 +128,7 @@ const getMessagesByTaskAndUser = async (req, res) => {
       order: [['createdAt', 'ASC']]
     })
 
-    console.log('📨 Messages found:', {
+    logger.debug('📨 Messages found:', {
       count: messages.length,
       messages: messages.map(m => ({
         id: m.id,
@@ -156,7 +157,7 @@ const getMessagesByTaskAndUser = async (req, res) => {
       messages: messages
     })
   } catch (error) {
-    console.error('❌ Ошибка получения сообщений:', error)
+    logger.error('❌ Ошибка получения сообщений:', error)
     res.status(500).json({
       success: false,
       message: 'Ошибка получения сообщений'
@@ -261,7 +262,7 @@ const sendMessage = async (req, res) => {
           }
         })
         
-        console.log(`📡 Сообщение отправлено через WebSocket в комнату task_${taskId}, исключая отправителя ${senderId}`)
+        logger.debug(`📡 Сообщение отправлено через WebSocket в комнату task_${taskId}, исключая отправителя ${senderId}`)
       }
     }
 
@@ -270,7 +271,7 @@ const sendMessage = async (req, res) => {
       message: createdMessage
     })
   } catch (error) {
-    console.error('Ошибка отправки сообщения:', error)
+    logger.error('Ошибка отправки сообщения:', error)
     res.status(500).json({
       success: false,
       message: 'Ошибка отправки сообщения'
@@ -350,7 +351,7 @@ const getUserChats = async (req, res) => {
       chats: chats
     })
   } catch (error) {
-    console.error('Ошибка получения чатов:', error)
+    logger.error('Ошибка получения чатов:', error)
     res.status(500).json({
       success: false,
       message: 'Ошибка получения чатов'
@@ -381,7 +382,7 @@ const markMessagesAsRead = async (req, res) => {
       message: 'Сообщения отмечены как прочитанные'
     })
   } catch (error) {
-    console.error('Ошибка отметки сообщений:', error)
+    logger.error('Ошибка отметки сообщений:', error)
     res.status(500).json({
       success: false,
       message: 'Ошибка отметки сообщений'
@@ -406,7 +407,7 @@ const getUnreadCount = async (req, res) => {
       unreadCount: unreadCount
     })
   } catch (error) {
-    console.error('Ошибка получения количества непрочитанных сообщений:', error)
+    logger.error('Ошибка получения количества непрочитанных сообщений:', error)
     res.status(500).json({
       success: false,
       message: 'Ошибка получения количества непрочитанных сообщений'

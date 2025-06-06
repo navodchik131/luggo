@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../services/api'
 import UserAvatar from './UserAvatar'
+import logger from '../utils/logger'
 
 const TaskCompletionConfirmation = ({ task, onConfirmation }) => {
   const [loading, setLoading] = useState(false)
@@ -33,7 +34,7 @@ const TaskCompletionConfirmation = ({ task, onConfirmation }) => {
         }
       }
     } catch (err) {
-      console.error('Ошибка подтверждения:', err)
+      logger.error('Ошибка подтверждения:', err)
       alert(err.response?.data?.message || 'Ошибка подтверждения завершения')
     } finally {
       setLoading(false)

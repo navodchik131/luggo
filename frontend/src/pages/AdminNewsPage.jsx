@@ -4,6 +4,7 @@ import { Plus, Edit, Trash2, Eye, Search, Filter } from 'lucide-react'
 import { getAllNewsForAdmin, deleteNews } from '../services/newsService'
 import { formatDateTime } from '../utils/dateHelpers'
 import toast from 'react-hot-toast'
+import logger from '../utils/logger'
 
 const AdminNewsPage = () => {
   const [news, setNews] = useState([])
@@ -42,7 +43,7 @@ const AdminNewsPage = () => {
         setError('Ошибка загрузки новостей')
       }
     } catch (err) {
-      console.error('Ошибка загрузки новостей:', err)
+      logger.error('Ошибка загрузки новостей:', err)
       setError('Ошибка загрузки новостей')
     } finally {
       setLoading(false)
@@ -63,7 +64,7 @@ const AdminNewsPage = () => {
         toast.error(response.message || 'Ошибка удаления новости')
       }
     } catch (err) {
-      console.error('Ошибка удаления новости:', err)
+      logger.error('Ошибка удаления новости:', err)
       toast.error('Ошибка удаления новости')
     }
   }
