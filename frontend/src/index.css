@@ -655,4 +655,42 @@
   .cards-grid {
     grid-template-columns: repeat(4, 1fr);
   }
+}
+
+/* Специальные стили для header */
+@layer components {
+  .header-container {
+    @apply flex justify-between items-center h-16;
+    /* Принудительное выравнивание элементов по центру */
+    align-items: center !important;
+    min-height: 4rem;
+  }
+  
+  .header-logo {
+    @apply text-2xl font-bold text-blue-600;
+    /* Убираем любые дополнительные отступы */
+    margin: 0;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+  }
+  
+  .mobile-actions {
+    @apply md:hidden flex items-center space-x-3;
+    /* Принудительное выравнивание */
+    align-items: center !important;
+    height: 100%;
+    display: flex !important;
+  }
+  
+  .mobile-menu-button {
+    @apply p-2 text-gray-700 hover:text-blue-600 rounded-lg hover:bg-gray-100 transition-colors;
+    /* Обеспечиваем правильные размеры */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin: 0;
+  }
 } 

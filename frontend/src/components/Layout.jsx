@@ -55,8 +55,8 @@ const Layout = ({ children }) => {
     <div className="min-h-screen bg-gray-50 no-overflow">
       <header className="bg-white shadow-sm border-b relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link to="/" className="text-2xl font-bold text-blue-600">
+          <div className="header-container">
+            <Link to="/" className="header-logo">
               Luggo
             </Link>
             
@@ -191,7 +191,7 @@ const Layout = ({ children }) => {
             </div>
 
             {/* Мобильные кнопки */}
-            <div className="md:hidden flex items-center space-x-3">
+            <div className="mobile-actions">
               {isAuthenticated && (
                 <>
                   {/* Чаты */}
@@ -216,7 +216,7 @@ const Layout = ({ children }) => {
               {/* Гамбургер меню */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 text-gray-700 hover:text-blue-600 rounded-lg hover:bg-gray-100 transition-colors mobile-menu"
+                className="mobile-menu-button"
               >
                 {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
