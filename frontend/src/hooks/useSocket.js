@@ -9,7 +9,9 @@ export const useSocket = () => {
   useEffect(() => {
     if (user && !socketRef.current) {
       // Создаем подключение только если пользователь авторизован
-      const socketUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+      // Извлекаем базовый домен из API URL
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+      const socketUrl = apiUrl.replace('/api', '') // Убираем /api из URL
       
       socketRef.current = io(socketUrl, {
         // Поддержка различных транспортов для лучшей совместимости
