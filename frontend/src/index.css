@@ -683,6 +683,21 @@
     display: flex !important;
   }
   
+  /* Принудительное скрытие на больших экранах */
+  @media (min-width: 768px) {
+    .mobile-actions {
+      display: none !important;
+    }
+    
+    .mobile-menu-button {
+      display: none !important;
+    }
+    
+    .mobile-menu {
+      display: none !important;
+    }
+  }
+  
   .mobile-menu-button {
     @apply p-2 text-gray-700 hover:text-blue-600 rounded-lg hover:bg-gray-100 transition-colors;
     /* Обеспечиваем правильные размеры */
