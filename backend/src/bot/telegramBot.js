@@ -96,6 +96,12 @@ async function showAuthMessage(chatId) {
 
 // Показать главное меню
 async function showMainMenu(chatId, telegramUser) {
+  if (!telegramUser || !telegramUser.user) {
+    console.error('❌ telegramUser или user отсутствует в showMainMenu');
+    await bot.sendMessage(chatId, '❌ Ошибка загрузки данных пользователя');
+    return;
+  }
+  
   const categories = telegramUser.subscribedCategories || [];
   
   const keyboard = {
@@ -234,6 +240,12 @@ bot.on('message', async (msg) => {
         where: { telegramId },
         include: [{ model: User, as: 'user' }]
       });
+      
+      if (!telegramUser) {
+        console.error('❌ Не удалось найти telegramUser после авторизации');
+        await bot.sendMessage(chatId, '❌ Произошла ошибка при авторизации.');
+        return;
+      }
       
       await bot.sendMessage(chatId, '✅ Авторизация успешна!');
       await showMainMenu(chatId, telegramUser);
