@@ -124,6 +124,7 @@ app.use('/api/profile', profileRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/news', newsRoutes);
+app.use('/api/subscription', require('./src/routes/subscription'));
 app.use('/', seoRoutes);
 
 // API info route
@@ -316,16 +317,23 @@ const startServer = async () => {
       }
       */
       
-      console.log('✅ Telegram бот инициализирован');
+      console.log('🤖 Telegram бот подключен успешно');
     } catch (error) {
-      console.error('❌ Ошибка запуска Telegram бота:', error);
+      console.error('❌ Ошибка подключения Telegram бота:', error);
     }
+  } else if (process.env.TELEGRAM_BOT_DISABLED) {
+    console.log('🔇 Telegram бот отключен (TELEGRAM_BOT_DISABLED=true)');
   } else {
-    if (process.env.TELEGRAM_BOT_DISABLED) {
-      console.log('🔇 Telegram бот отключен (TELEGRAM_BOT_DISABLED=true)');
-    } else {
-      console.log('⚠️ TELEGRAM_BOT_TOKEN не установлен, бот не запущен');
-    }
+    console.log('⚠️ TELEGRAM_BOT_TOKEN не установлен, бот не запущен');
+  }
+
+  // Запускаем cron задачи для подписок
+  try {
+    const { scheduleSubscriptionCheck } = require('./src/jobs/subscriptionCron');
+    scheduleSubscriptionCheck();
+    console.log('📅 Cron задачи для подписок запущены');
+  } catch (error) {
+    console.error('❌ Ошибка запуска cron задач:', error);
   }
 
   server.listen(PORT, () => {
