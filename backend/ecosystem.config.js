@@ -3,7 +3,7 @@ module.exports = {
     name: 'luggo-backend',
     script: 'server.js',
     cwd: '/home/luggo/luggo/backend',
-    interpreter: 'node',
+    interpreter: '/home/luggo/.nvm/versions/node/v18.20.8/bin/node',
     interpreter_args: '',
     instances: 1,
     autorestart: true,
