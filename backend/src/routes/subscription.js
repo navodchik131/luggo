@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/auth');
+const { protect } = require('../middleware/authMiddleware');
 const {
   getUserSubscription,
   createSubscriptionPayment,
@@ -15,9 +15,9 @@ router.get('/plans', getSubscriptionPlans);
 router.post('/webhook/yookassa', handlePaymentWebhook);
 
 // Защищенные роуты (требуют авторизации)
-router.get('/me', auth, getUserSubscription);
-router.post('/create-payment', auth, createSubscriptionPayment);
-router.get('/payment/:paymentId/status', auth, checkPaymentStatus);
-router.post('/cancel', auth, cancelSubscription);
+router.get('/me', protect, getUserSubscription);
+router.post('/create-payment', protect, createSubscriptionPayment);
+router.get('/payment/:paymentId/status', protect, checkPaymentStatus);
+router.post('/cancel', protect, cancelSubscription);
 
 module.exports = router; 
