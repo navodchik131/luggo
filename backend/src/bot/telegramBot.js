@@ -16,25 +16,10 @@ const WEBHOOK_URL = process.env.FRONTEND_URL ? `${process.env.FRONTEND_URL}/webh
 
 let bot;
 
-if (isProduction && WEBHOOK_URL) {
-  // В продакшене используем webhook
-  bot = new TelegramBot(BOT_TOKEN, { polling: false });
-  
-  // Устанавливаем webhook
-  bot.setWebHook(WEBHOOK_URL)
-    .then(() => {
-      console.log(`✅ Telegram webhook установлен: ${WEBHOOK_URL}`);
-    })
-    .catch(error => {
-      console.error('❌ Ошибка установки webhook:', error);
-    });
-} else {
-  // В разработке используем polling
-  bot = new TelegramBot(BOT_TOKEN, { polling: true });
-  console.log('🔄 Telegram бот запущен в режиме polling (разработка)');
-}
-
-console.log('🤖 Telegram бот запущен');
+// ВРЕМЕННО: принудительно используем polling для отладки
+console.log('🔧 ОТЛАДКА: Принудительно включен polling режим');
+bot = new TelegramBot(BOT_TOKEN, { polling: true });
+console.log('🔄 Telegram бот запущен в режиме polling (отладка)');
 
 // Категории заявок
 const CATEGORIES = {
