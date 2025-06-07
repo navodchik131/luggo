@@ -1,5 +1,4 @@
 const path = require('path');
-require('dotenv').config();
 
 const environments = {
   development: {
@@ -41,10 +40,18 @@ const environments = {
   }
 };
 
-const currentEnv = process.env.NODE_ENV || 'development';
+const currentEnv = (process.env.NODE_ENV || 'development').trim();
 const config = environments[currentEnv];
 
+console.log(`🔧 Environments.js:`);
+console.log(`   NODE_ENV raw: "${process.env.NODE_ENV}"`);
+console.log(`   currentEnv: "${currentEnv}"`);
+console.log(`   currentEnv length: ${currentEnv.length}`);
+console.log(`   config найден: ${!!config}`);
+console.log(`   доступные ключи: [${Object.keys(environments).join(', ')}]`);
+
 if (!config) {
+  console.error(`❌ Доступные окружения: ${Object.keys(environments).join(', ')}`);
   throw new Error(`Неизвестное окружение: ${currentEnv}`);
 }
 

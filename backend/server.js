@@ -6,7 +6,15 @@ const rateLimit = require('express-rate-limit');
 const http = require('http');
 const socketIo = require('socket.io');
 const path = require('path');
-require('dotenv').config();
+
+// NODE_ENV может быть установлен извне (npm скрипт), поэтому проверяем его первым
+const nodeEnv = process.env.NODE_ENV ? process.env.NODE_ENV.trim() : 'production';
+const envFile = nodeEnv === 'development' ? '.env.development' : '.env';
+
+// Загружаем правильный .env файл
+require('dotenv').config({ path: envFile });
+
+console.log(`🔧 Загружен конфиг: ${envFile} (NODE_ENV: ${nodeEnv})`);
 
 const { initializeDatabase } = require('./src/config/init');
 const authRoutes = require('./src/routes/authRoutes');

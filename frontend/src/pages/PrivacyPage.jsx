@@ -154,9 +154,10 @@ const PrivacyPage = () => {
                 По вопросам конфиденциальности обращайтесь:
               </p>
               <div className="space-y-2">
-                <p><strong>Email:</strong> privacy@luggo.ru</p>
-                <p><strong>Телефон:</strong> 8 (800) 123-45-67</p>
-                <p><strong>Адрес:</strong> г. Москва, ул. Примерная, д. 123</p>
+                <p><strong>Email:</strong> support@luggo.ru</p>
+                <p><strong>Телефон:</strong> 8 (964) 185-42-46</p>
+                <p><strong>Самозанятый:</strong> Уточкин Ренат Михайлович</p>
+                <p><strong>ИНН:</strong> 590313258640</p>
               </div>
             </div>
           </section>

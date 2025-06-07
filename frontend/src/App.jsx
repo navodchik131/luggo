@@ -26,6 +26,7 @@ import PrivacyPage from './pages/PrivacyPage'
 import TermsPage from './pages/TermsPage'
 import ExecutorsGuidePage from './pages/ExecutorsGuidePage'
 import CustomersGuidePage from './pages/CustomersGuidePage'
+import SubscriptionPage from './pages/SubscriptionPage'
 
 // Admin Pages
 import AdminDashboard from './pages/AdminDashboard'
@@ -64,6 +65,7 @@ function App() {
             <Route path="/terms" element={<TermsPage />} />
             <Route path="/for-executors" element={<ExecutorsGuidePage />} />
             <Route path="/for-customers" element={<CustomersGuidePage />} />
+            <Route path="/subscription" element={<SubscriptionPage />} />
             
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminDashboard />} />

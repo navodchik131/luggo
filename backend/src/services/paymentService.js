@@ -1,16 +1,53 @@
-const { YooCheckout } = require('@a2seven/yoo-checkout');
 const SubscriptionService = require('./subscriptionService');
 
 class PaymentService {
   constructor() {
+    this.yooCheckout = null;
+    this.initialized = false;
+  }
+
+  // Ленивая инициализация - создается только при первом обращении
+  _initializeYooKassa() {
+    if (this.initialized) return;
+
+    const { YooCheckout } = require('@a2seven/yoo-checkout');
+    const shopId = process.env.YOOKASSA_SHOP_ID;
+    const secretKey = process.env.YOOKASSA_SECRET_KEY;
+
+    // Проверяем наличие ключей
+    if (!shopId || !secretKey) {
+      throw new Error('❌ YooKassa credentials не настроены! Добавьте YOOKASSA_SHOP_ID и YOOKASSA_SECRET_KEY в .env файл');
+    }
+
+    // Проверяем, что это не placeholder значения
+    if (shopId === 'your_shop_id' || secretKey === 'your_secret_key') {
+      throw new Error(`
+❌ YooKassa ключи не настроены!
+
+Для работы платежей нужно:
+1. Зарегистрироваться в YooKassa (yookassa.ru)
+2. Получить SHOP_ID и SECRET_KEY
+3. Добавить их в .env файл:
+   YOOKASSA_SHOP_ID=ваш_shop_id
+   YOOKASSA_SECRET_KEY=ваш_secret_key
+
+Текущие значения: SHOP_ID="${shopId}", SECRET_KEY="${secretKey}"
+      `);
+    }
+
     this.yooCheckout = new YooCheckout({
-      shopId: process.env.YOOKASSA_SHOP_ID,
-      secretKey: process.env.YOOKASSA_SECRET_KEY,
+      shopId: shopId,
+      secretKey: secretKey,
     });
+    
+    this.initialized = true;
+    console.log('✅ YooKassa инициализирована с реальными ключами');
   }
 
   // Создание платежа для ПРО подписки
   async createSubscriptionPayment(userId, subscriptionType = 'pro') {
+    this._initializeYooKassa(); // Инициализируем только при использовании
+    
     try {
       // Определяем стоимость подписки
       const subscriptionPrices = {
@@ -44,7 +81,7 @@ class PaymentService {
         },
         confirmation: {
           type: 'redirect',
-          return_url: `${process.env.FRONTEND_URL}/subscription/success`
+          return_url: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/subscription/success`
         },
         capture: true
       });
@@ -92,7 +129,6 @@ class PaymentService {
 
       } else if (payment.status === 'canceled') {
         console.log(`❌ Платеж ${payment.id} отменен`);
-        // Можно добавить логику обработки отмененных платежей
         return false;
       }
 
@@ -105,6 +141,8 @@ class PaymentService {
 
   // Получение информации о платеже
   async getPaymentInfo(paymentId) {
+    this._initializeYooKassa();
+    
     try {
       const payment = await this.yooCheckout.getPayment(paymentId);
       return payment;
@@ -114,8 +152,10 @@ class PaymentService {
     }
   }
 
-  // Создание возврата (если нужно)
+  // Создание возврата
   async createRefund(paymentId, amount, reason = 'Возврат по запросу клиента') {
+    this._initializeYooKassa();
+    
     try {
       const refund = await this.yooCheckout.createRefund({
         payment_id: paymentId,
@@ -136,6 +176,8 @@ class PaymentService {
 
   // Проверка статуса платежа
   async checkPaymentStatus(paymentId) {
+    this._initializeYooKassa();
+    
     try {
       const payment = await this.getPaymentInfo(paymentId);
       return {

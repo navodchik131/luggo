@@ -30,8 +30,8 @@ const SupportPage = () => {
       icon: Phone,
       title: "Телефон",
       subtitle: "Круглосуточная поддержка",
-      value: "8 (800) 123-45-67",
-      link: "tel:+78001234567",
+      value: "8 (964) 185-42-46",
+      link: "tel:+79641854246",
       description: "Звоните в любое время - наши операторы всегда готовы помочь"
     },
     {
@@ -144,14 +144,14 @@ const SupportPage = () => {
       </div>
 
       {/* CTA */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg p-8 text-center text-white">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg p-8 text-center text-white mb-16">
         <h2 className="text-2xl font-bold mb-4">Не нашли ответ на свой вопрос?</h2>
         <p className="mb-6 opacity-90">
           Наша команда поддержки всегда готова помочь вам решить любую проблему
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <a 
-            href="tel:+78001234567"
+            href="tel:+79641854246"
             className="bg-white text-blue-600 px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors"
           >
             📞 Позвонить сейчас
@@ -162,6 +162,120 @@ const SupportPage = () => {
           >
             💬 Написать в чат
           </Link>
+        </div>
+      </div>
+
+      {/* Реквизиты и процесс получения услуг */}
+      <div className="space-y-8">
+        {/* Процесс получения услуг */}
+        <div className="bg-white rounded-lg border border-gray-200 p-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+            🚚 Как происходит оказание услуг переезда
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-blue-600 font-bold text-xl">1</span>
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">Подача заявки</h3>
+              <p className="text-sm text-gray-600">Клиент создает заявку на переезд с указанием адресов и требований</p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-green-600 font-bold text-xl">2</span>
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">Выбор исполнителя</h3>
+              <p className="text-sm text-gray-600">Исполнители присылают отклики, клиент выбирает подходящего</p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-yellow-600 font-bold text-xl">3</span>
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">Выполнение</h3>
+              <p className="text-sm text-gray-600">Исполнитель приезжает по адресу и выполняет переезд</p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-purple-600 font-bold text-xl">4</span>
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">Оплата и отзыв</h3>
+              <p className="text-sm text-gray-600">Клиент оплачивает услугу исполнителю и оставляет отзыв</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Примерные цены на услуги */}
+        <div className="bg-gray-50 rounded-lg p-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+            💰 Примерная стоимость услуг переезда
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white rounded-lg p-6 border border-gray-200">
+              <h3 className="font-semibold text-gray-900 mb-4">🏠 Квартирный переезд</h3>
+              <ul className="space-y-2 text-sm text-gray-700">
+                <li>• 1-комнатная: от 3 000 ₽</li>
+                <li>• 2-комнатная: от 5 000 ₽</li>
+                <li>• 3-комнатная: от 7 000 ₽</li>
+                <li>• Упаковка: +1 000 ₽</li>
+              </ul>
+            </div>
+            <div className="bg-white rounded-lg p-6 border border-gray-200">
+              <h3 className="font-semibold text-gray-900 mb-4">🏢 Офисный переезд</h3>
+              <ul className="space-y-2 text-sm text-gray-700">
+                <li>• Малый офис: от 8 000 ₽</li>
+                <li>• Средний офис: от 15 000 ₽</li>
+                <li>• Большой офис: от 30 000 ₽</li>
+                <li>• Демонтаж: +20% к стоимости</li>
+              </ul>
+            </div>
+            <div className="bg-white rounded-lg p-6 border border-gray-200">
+              <h3 className="font-semibold text-gray-900 mb-4">🚛 Дополнительно</h3>
+              <ul className="space-y-2 text-sm text-gray-700">
+                <li>• Грузчик: от 500 ₽/час</li>
+                <li>• Газель: от 1 000 ₽/час</li>
+                <li>• Фура: от 2 000 ₽/час</li>
+                <li>• Вывоз мусора: от 2 000 ₽</li>
+              </ul>
+            </div>
+          </div>
+          <p className="text-sm text-gray-600 text-center mt-4">
+            * Цены указаны ориентировочно и зависят от сложности, расстояния и других факторов
+          </p>
+        </div>
+
+        {/* Реквизиты */}
+        <div className="bg-white rounded-lg border border-gray-200 p-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+            📋 Реквизиты и правовая информация
+          </h2>
+          <div className="max-w-2xl mx-auto space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-2">Самозанятый</h3>
+                <p className="text-gray-700">Уточкин Ренат Михайлович</p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-2">ИНН</h3>
+                <p className="text-gray-700">590313258640</p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-2">Статус</h3>
+                <p className="text-gray-700">Плательщик налога на профессиональный доход</p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-2">Дата регистрации</h3>
+                <p className="text-gray-700">15.03.2024</p>
+              </div>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-2">Контакты</h3>
+              <p className="text-gray-700">
+                Телефон: +7 (964) 185-42-46<br/>
+                Email: support@luggo.ru<br/>
+                Сайт: luggo.ru
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

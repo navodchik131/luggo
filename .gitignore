@@ -7,6 +7,7 @@ yarn-error.log*
 # Environment variables
 .env
 .env.local
+.env.development
 .env.development.local
 .env.test.local
 .env.production.local
@@ -76,4 +77,50 @@ uploads/
 
 # Database
 *.sqlite
-*.db 
+*.db
+
+# Documentation and instructions (exclude from production)
+*.md
+!README.md
+DEPLOY_INSTRUCTIONS.md
+DEPLOYMENT*.md
+DOMAIN_SETUP.md
+IPv6_SOLUTION.md
+LOGGING_GUIDE.md
+PRODUCTION_ENV.md
+QUICK_START_RUSSIA.md
+SECURITY_REPORT.md
+SEO_STRATEGY.md
+TROUBLESHOOTING.md
+UPDATE_PRODUCTION.md
+WEBSOCKET_FIX.md
+WINDOWS_COMMANDS.md
+YANDEX_API_SETUP.md
+
+# Development scripts and configs
+deploy-websocket-fix.sh
+nginx-websocket.conf
+setup.bat
+setup.sh
+start-dev.bat
+backend/DATABASE_SETUP.md
+backend/DEV_SETUP.md
+backend/PRODUCTION_SETUP.md
+backend/QUICK_TELEGRAM_SETUP.md
+backend/README_DEPLOY.md
+backend/TELEGRAM_BOT_SETUP.md
+backend/YOOKASSA_ENV_EXAMPLE.md
+backend/deploy.sh
+backend/env.example
+backend/production.env
+backend/server-simple.js
+backend/ecosystem.config.js
+frontend/TROUBLESHOOTING.md
+frontend/env.example
+
+# Deployment configs
+railway.json
+vercel.json
+
+# Development database
+backend/database.sqlite 

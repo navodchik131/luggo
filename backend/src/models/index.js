@@ -8,7 +8,7 @@ const Notification = require('./Notification');
 const VehiclePhoto = require('./VehiclePhoto');
 const News = require('./News');
 const TelegramUser = require('./TelegramUser');
-const Subscription = require('./Subscription')(sequelize);
+const Subscription = require('./Subscription');
 
 // Связи между моделями
 

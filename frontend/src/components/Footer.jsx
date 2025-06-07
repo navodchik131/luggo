@@ -116,8 +116,8 @@ const Footer = () => {
                 <Phone size={16} className="text-blue-400 flex-shrink-0" />
                 <div>
                   <div className="text-gray-300">Поддержка 24/7</div>
-                  <a href="tel:+78001234567" className="text-white hover:text-blue-400 transition-colors">
-                    8 (800) 123-45-67
+                  <a href="tel:+79641854246" className="text-white hover:text-blue-400 transition-colors">
+                    8 (964) 185-42-46
                   </a>
                 </div>
               </div>
@@ -129,17 +129,6 @@ const Footer = () => {
                   <a href="mailto:support@luggo.ru" className="text-white hover:text-blue-400 transition-colors">
                     support@luggo.ru
                   </a>
-                </div>
-              </div>
-              
-              <div className="flex items-start gap-3 text-sm">
-                <MapPin size={16} className="text-blue-400 flex-shrink-0 mt-0.5" />
-                <div>
-                  <div className="text-gray-300">Адрес</div>
-                  <div className="text-white">
-                    г. Москва,<br />
-                    ул. Примерная, д. 123
-                  </div>
                 </div>
               </div>
             </div>
