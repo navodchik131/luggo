@@ -75,16 +75,19 @@ const User = sequelize.define('User', {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
     allowNull: false,
+    field: 'haspro',
     comment: 'Есть ли активная ПРО подписка'
   },
   proExpiresAt: {
     type: DataTypes.DATE,
     allowNull: true,
+    field: 'proexpiresat',
     comment: 'Дата окончания ПРО подписки'
   },
   proType: {
     type: DataTypes.ENUM('pro', 'pro_plus'),
     allowNull: true,
+    field: 'protype',
     comment: 'Тип активной ПРО подписки'
   }
 }, {
