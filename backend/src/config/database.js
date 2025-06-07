@@ -1,30 +1,43 @@
 const { Sequelize } = require('sequelize');
-require('dotenv').config();
+const envConfig = require('./environments');
 
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
-  {
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    dialect: 'postgres',
-    logging: process.env.NODE_ENV === 'development' ? console.log : false,
-    pool: {
-      max: 5,
-      min: 0,
-      acquire: 30000,
-      idle: 10000
+const config = envConfig.current;
+
+// Для PostgreSQL используем правильную конфигурацию
+let sequelizeConfig;
+
+if (config.database.dialect === 'postgres') {
+  sequelizeConfig = new Sequelize(
+    config.database.name,
+    config.database.user,
+    config.database.password,
+    {
+      host: config.database.host,
+      port: config.database.port,
+      dialect: 'postgres',
+      logging: config.features.logging ? console.log : false,
+      pool: {
+        max: 5,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
+      }
     }
-  }
-);
+  );
+} else {
+  // Для других баз данных
+  sequelizeConfig = new Sequelize(config.database);
+}
+
+const sequelize = sequelizeConfig;
 
 const connectDB = async () => {
   try {
     await sequelize.authenticate();
-    console.log('✅ Подключение к PostgreSQL установлено успешно');
+    console.log(`✅ Подключение к ${config.database.dialect.toUpperCase()} установлено успешно (${envConfig.environment})`);
     
-    if (process.env.NODE_ENV === 'development') {
+    // Автосинхронизация отключена для всех окружений
+    if (config.features.autoSync) {
       await sequelize.sync({ alter: true });
       console.log('📊 Синхронизация моделей завершена');
     }
