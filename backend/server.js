@@ -299,6 +299,10 @@ const startServer = async () => {
     try {
       const { bot } = require('./src/bot/telegramBot');
       
+      // ВРЕМЕННО: отключаем webhook для отладки
+      console.log('🔧 ОТЛАДКА: Webhook код в server.js отключен');
+      
+      /* ЗАКОММЕНТИРОВАНО ДЛЯ ОТЛАДКИ:
       // Настройка webhook для продакшена
       if (process.env.NODE_ENV === 'production') {
         const WEBHOOK_URL = `${process.env.FRONTEND_URL}/webhook/telegram`;
@@ -310,6 +314,7 @@ const startServer = async () => {
         });
         console.log('🔗 Webhook обработчик зарегистрирован: /webhook/telegram');
       }
+      */
       
       console.log('✅ Telegram бот инициализирован');
     } catch (error) {
@@ -322,7 +327,7 @@ const startServer = async () => {
   server.listen(PORT, () => {
     console.log(`🚀 Сервер запущен на порту ${PORT}`);
     console.log(`📱 Frontend URL: ${process.env.FRONTEND_URL || "http://localhost:5173"}`);
-    console.log(`🤖 Telegram режим: ${process.env.NODE_ENV === 'production' ? 'webhook' : 'polling'}`);
+    console.log(`🤖 Telegram режим: polling (отладка)`);
   });
 };
 
