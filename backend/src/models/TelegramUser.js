@@ -43,18 +43,11 @@ const TelegramUser = sequelize.define('TelegramUser', {
     defaultValue: true
   },
   
-  // Подписки на категории заявок (JSON массив)
+  // Подписки на категории заявок (PostgreSQL массив)
   subscribedCategories: {
-    type: DataTypes.TEXT,
+    type: DataTypes.ARRAY(DataTypes.TEXT),
     allowNull: true,
-    defaultValue: '[]',
-    get() {
-      const value = this.getDataValue('subscribedCategories');
-      return value ? JSON.parse(value) : [];
-    },
-    set(value) {
-      this.setDataValue('subscribedCategories', JSON.stringify(value || []));
-    }
+    defaultValue: []
   },
   
   // Последний раз был активен
