@@ -295,7 +295,7 @@ const startServer = async () => {
   }
 
   // Запускаем Telegram бота если есть токен
-  if (process.env.TELEGRAM_BOT_TOKEN) {
+  if (process.env.TELEGRAM_BOT_TOKEN && !process.env.TELEGRAM_BOT_DISABLED) {
     try {
       const { bot } = require('./src/bot/telegramBot');
       
@@ -321,7 +321,11 @@ const startServer = async () => {
       console.error('❌ Ошибка запуска Telegram бота:', error);
     }
   } else {
-    console.log('⚠️ TELEGRAM_BOT_TOKEN не установлен, бот не запущен');
+    if (process.env.TELEGRAM_BOT_DISABLED) {
+      console.log('🔇 Telegram бот отключен (TELEGRAM_BOT_DISABLED=true)');
+    } else {
+      console.log('⚠️ TELEGRAM_BOT_TOKEN не установлен, бот не запущен');
+    }
   }
 
   server.listen(PORT, () => {
