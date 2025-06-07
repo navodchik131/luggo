@@ -299,18 +299,12 @@ const startServer = async () => {
       if (process.env.NODE_ENV === 'production') {
         const WEBHOOK_URL = `${process.env.FRONTEND_URL}/webhook/telegram`;
         
-        // Устанавливаем webhook
-        await bot.setWebHook(WEBHOOK_URL);
-        console.log('✅ Telegram webhook установлен:', WEBHOOK_URL);
-        
-        // Обработка webhook запросов
-        app.use(bot.webhookCallback('/webhook/telegram'));
-      } else {
-        // Для разработки используем polling
-        console.log('🤖 Telegram бот запущен в режиме polling');
+        // Обработка webhook запросов (webhook устанавливается в telegramBot.js)
+        app.use('/webhook/telegram', bot.webhookCallback('/webhook/telegram'));
+        console.log('🔗 Webhook обработчик зарегистрирован: /webhook/telegram');
       }
       
-      console.log('✅ Telegram бот запущен');
+      console.log('✅ Telegram бот инициализирован');
     } catch (error) {
       console.error('❌ Ошибка запуска Telegram бота:', error);
     }
