@@ -28,6 +28,9 @@ const { notFound } = require('./src/middleware/notFoundMiddleware');
 const app = express();
 const server = http.createServer(app);
 
+// Настройка trust proxy для работы за nginx
+app.set('trust proxy', true);
+
 // Улучшенная конфигурация Socket.IO для продакшена
 const io = socketIo(server, {
   cors: {
@@ -293,14 +296,17 @@ const startServer = async () => {
   // Запускаем Telegram бота если есть токен
   if (process.env.TELEGRAM_BOT_TOKEN) {
     try {
-      const { bot } = require('./src/bot/index');
+      const { bot } = require('./src/bot/telegramBot');
       
       // Настройка webhook для продакшена
       if (process.env.NODE_ENV === 'production') {
         const WEBHOOK_URL = `${process.env.FRONTEND_URL}/webhook/telegram`;
         
         // Обработка webhook запросов (webhook устанавливается в telegramBot.js)
-        app.use('/webhook/telegram', bot.webhookCallback('/webhook/telegram'));
+        app.use('/webhook/telegram', express.json(), (req, res) => {
+          bot.processUpdate(req.body);
+          res.sendStatus(200);
+        });
         console.log('🔗 Webhook обработчик зарегистрирован: /webhook/telegram');
       }
       
