@@ -29,7 +29,18 @@ if (!document.querySelector('#route-map-styles')) {
   document.head.appendChild(styleElement)
 }
 
+// Временный режим отладки - можно включить если карты не работают
+const DEBUG_MODE = false // Поменяйте на true для отладки
+
 const RouteMap = ({ fromAddress, toAddress }) => {
+  // Логирование при каждом рендере компонента
+  logger.log('🔥 RouteMap рендерится с пропсами:', { 
+    fromAddress: fromAddress || 'НЕТ',
+    toAddress: toAddress || 'НЕТ',
+    fromAddressLength: fromAddress?.length || 0,
+    toAddressLength: toAddress?.length || 0
+  })
+
   const mapContainerRef = useRef(null)
   const mapRef = useRef(null)
   const [mapInstance, setMapInstance] = useState(null)
@@ -42,17 +53,31 @@ const RouteMap = ({ fromAddress, toAddress }) => {
   const isDestroying = useRef(false)
 
   useEffect(() => {
+    logger.log('🚀 RouteMap useEffect запущен:', { fromAddress, toAddress, hasApiKey: hasValidApiKey() })
+    
     if (!hasValidApiKey() || !fromAddress || !toAddress) {
+      logger.log('⚠️ Условия не выполнены:', {
+        hasApiKey: hasValidApiKey(),
+        hasFromAddress: !!fromAddress,
+        hasToAddress: !!toAddress,
+        fromAddress,
+        toAddress
+      })
       setLoading(false)
       return
     }
 
     // Защита от повторной инициализации 
     if (isInitialized.current || isDestroying.current) {
+      logger.log('⚠️ Блокировка повторной инициализации:', {
+        isInitialized: isInitialized.current,
+        isDestroying: isDestroying.current
+      })
       return
     }
     isInitialized.current = true
 
+    logger.log('✅ Все условия выполнены, запускаю загрузку карт...')
     loadYandexMaps()
 
     // Cleanup function
@@ -98,17 +123,26 @@ const RouteMap = ({ fromAddress, toAddress }) => {
 
   const loadYandexMaps = async () => {
     try {
+      logger.log('🗺️ Начинаю загрузку Яндекс карт...')
+      logger.log('🔑 API ключ есть:', !!YANDEX_CONFIG.MAPS_API_KEY)
+      logger.log('📍 Адреса:', { fromAddress, toAddress })
+      
       // Проверяем, не загружен ли уже API
       if (!window.ymaps) {
+        logger.log('📦 Яндекс карты не загружены, загружаю...')
+        
         // Проверяем не идет ли уже загрузка
         if (window.ymapsLoading) {
+          logger.log('⏳ Ожидаю завершения текущей загрузки...')
           // Ждем завершения загрузки
           const checkLoaded = () => {
             if (window.ymaps) {
+              logger.log('✅ Яндекс карты загружены, инициализирую...')
               window.ymaps.ready(initMap)
             } else if (window.ymapsLoading) {
               setTimeout(checkLoaded, 100)
             } else {
+              logger.error('❌ Ошибка загрузки Яндекс.Карт')
               setError('Ошибка загрузки Яндекс.Карт')
               setLoading(false)
             }
@@ -122,10 +156,12 @@ const RouteMap = ({ fromAddress, toAddress }) => {
         
         // Удаляем старые скрипты если есть
         const existingScripts = document.querySelectorAll('script[src*="api-maps.yandex.ru"]')
+        logger.log('🧹 Удаляю старые скрипты:', existingScripts.length)
         existingScripts.forEach(script => script.remove())
         
         // Удаляем старые элементы карт если есть
         const existingMaps = document.querySelectorAll('[class*="ymaps"]')
+        logger.log('🧹 Удаляю старые карты:', existingMaps.length)
         existingMaps.forEach(mapEl => {
           if (mapEl !== mapRef.current) {
             mapEl.remove()
@@ -133,18 +169,24 @@ const RouteMap = ({ fromAddress, toAddress }) => {
         })
         
         const script = document.createElement('script')
-        script.src = `https://api-maps.yandex.ru/2.1/?apikey=${YANDEX_CONFIG.MAPS_API_KEY}&lang=ru_RU`
+        const scriptUrl = `https://api-maps.yandex.ru/2.1/?apikey=${YANDEX_CONFIG.MAPS_API_KEY}&lang=ru_RU`
+        script.src = scriptUrl
+        logger.log('🔗 Загружаю скрипт:', scriptUrl)
+        
         script.onload = () => {
+          logger.log('✅ Скрипт Яндекс карт загружен успешно')
           window.ymapsLoading = false
           window.ymaps.ready(initMap)
         }
-        script.onerror = () => {
+        script.onerror = (error) => {
+          logger.error('❌ Ошибка загрузки скрипта Яндекс карт:', error)
           window.ymapsLoading = false
-          setError('Ошибка загрузки Яндекс.Карт')
+          setError('Ошибка загрузки Яндекс.Карт - проверьте интернет-соединение')
           setLoading(false)
         }
         document.head.appendChild(script)
       } else {
+        logger.log('✅ Яндекс карты уже загружены, инициализирую...')
         // API уже загружен, просто инициализируем карту
         if (window.ymaps.ready) {
           window.ymaps.ready(initMap)
@@ -154,16 +196,19 @@ const RouteMap = ({ fromAddress, toAddress }) => {
       }
     } catch (err) {
       window.ymapsLoading = false
-      logger.error('Ошибка загрузки карт:', err)
-      setError('Ошибка загрузки карт')
+      logger.error('💥 Критическая ошибка загрузки карт:', err)
+      setError(`Ошибка загрузки карт: ${err.message}`)
       setLoading(false)
     }
   }
 
   const initMap = async () => {
     try {
+      logger.log('🚀 Начинаю инициализацию карты...')
+      
       // Проверяем готовность к инициализации
       if (isDestroying.current || !mapContainerRef.current) {
+        logger.log('⚠️ Отменяю инициализацию - компонент уничтожается или нет контейнера')
         setLoading(false)
         return
       }
@@ -178,20 +223,26 @@ const RouteMap = ({ fromAddress, toAddress }) => {
       mapContainerRef.current.appendChild(mapElement)
       
       mapRef.current = mapElement
+      logger.log('📦 Создан контейнер карты:', mapId.current)
 
       // Геокодируем адреса
+      logger.log('🔍 Начинаю геокодирование адресов...')
       const [fromCoords, toCoords] = await Promise.all([
         geocodeAddress(fromAddress),
         geocodeAddress(toAddress)
       ])
 
       if (!fromCoords || !toCoords) {
+        logger.error('❌ Не удалось найти координаты:', { fromCoords, toCoords })
         setError('Не удалось найти адреса на карте')
         setLoading(false)
         return
       }
 
+      logger.log('📍 Координаты получены:', { fromCoords, toCoords })
+
       // Создаем карту с отключением ненужных элементов
+      logger.log('🗺️ Создаю карту...')
       const map = new window.ymaps.Map(mapElement, {
         center: fromCoords,
         zoom: 12,
@@ -235,18 +286,24 @@ const RouteMap = ({ fromAddress, toAddress }) => {
 
   const geocodeAddress = async (address) => {
     try {
+      logger.log('🔍 Геокодирую адрес:', address)
       const result = await window.ymaps.geocode(address, {
         results: 1
       })
       
+      logger.log('📊 Результат геокодирования:', result)
       const firstGeoObject = result.geoObjects.get(0)
       
       if (firstGeoObject) {
-        return firstGeoObject.geometry.getCoordinates()
+        const coords = firstGeoObject.geometry.getCoordinates()
+        logger.log('✅ Координаты найдены:', coords)
+        return coords
       }
+      
+      logger.warn('⚠️ Адрес не найден:', address)
       return null
     } catch (err) {
-      logger.error('Ошибка геокодирования:', err)
+      logger.error('❌ Ошибка геокодирования:', err)
       return null
     }
   }
@@ -365,6 +422,40 @@ const RouteMap = ({ fromAddress, toAddress }) => {
     }
   }
 
+  // Если включен режим отладки - показываем простую информацию без карты
+  if (DEBUG_MODE) {
+    return (
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 sm:p-6">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="text-blue-500 text-2xl">🗺️</div>
+          <div>
+            <h3 className="font-semibold text-blue-800 text-sm sm:text-base">Режим отладки</h3>
+            <p className="text-blue-600 text-xs sm:text-sm">Карта отключена для диагностики</p>
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-lg p-3 sm:p-4 border border-blue-200">
+          <div className="space-y-2 text-sm">
+            <div className="flex items-start gap-2">
+              <span className="text-green-600 mt-0.5">📍</span>
+              <div>
+                <span className="font-medium text-gray-700">Откуда:</span>
+                <div className="text-gray-600">{fromAddress || 'Не указано'}</div>
+              </div>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="text-red-600 mt-0.5">📍</span>
+              <div>
+                <span className="font-medium text-gray-700">Куда:</span>
+                <div className="text-gray-600">{toAddress || 'Не указано'}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   if (!hasValidApiKey()) {
     return (
       <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
@@ -385,6 +476,52 @@ const RouteMap = ({ fromAddress, toAddress }) => {
         <p className="text-sm text-gray-600">
           Не указаны адреса для построения маршрута
         </p>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-lg p-4 sm:p-6">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="text-red-500 text-2xl">⚠️</div>
+          <div>
+            <h3 className="font-semibold text-red-800 text-sm sm:text-base">Карта недоступна</h3>
+            <p className="text-red-600 text-xs sm:text-sm">{error}</p>
+          </div>
+        </div>
+        
+        {/* Простая информация о маршруте без карты */}
+        <div className="bg-white rounded-lg p-3 sm:p-4 border border-red-200">
+          <div className="space-y-2 text-sm">
+            <div className="flex items-start gap-2">
+              <span className="text-green-600 mt-0.5">📍</span>
+              <div>
+                <span className="font-medium text-gray-700">Откуда:</span>
+                <div className="text-gray-600">{fromAddress}</div>
+              </div>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="text-red-600 mt-0.5">📍</span>
+              <div>
+                <span className="font-medium text-gray-700">Куда:</span>
+                <div className="text-gray-600">{toAddress}</div>
+              </div>
+            </div>
+          </div>
+          <div className="mt-3 pt-3 border-t border-gray-200">
+            <button 
+              onClick={() => {
+                setError(null)
+                setLoading(true)
+                loadYandexMaps()
+              }}
+              className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+            >
+              🔄 Попробовать снова
+            </button>
+          </div>
+        </div>
       </div>
     )
   }

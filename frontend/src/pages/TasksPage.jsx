@@ -51,9 +51,16 @@ const TasksPage = () => {
     loadTasks()
   }, [filters, pagination.page])
 
-  const loadTasks = async (params = {}) => {
+  const loadTasks = async () => {
     setLoading(true)
     try {
+      // Формируем параметры для API запроса
+      const params = {
+        page: pagination.page,
+        limit: pagination.limit,
+        ...filters
+      }
+      
       logger.debug('Загружаю заявки с параметрами:', params)
       const response = await api.get('/tasks', { params })
       logger.debug('Ответ API:', response.data)
@@ -147,24 +154,24 @@ const TasksPage = () => {
   }
 
   return (
-    <div>
+    <div className="fade-in-mobile">
       {/* Заголовок и кнопка создания */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Заявки на переезд</h1>
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 gap-3">
+        <h1 className="responsive-title text-2xl sm:text-3xl font-bold">Заявки на переезд</h1>
         {user && (
-          <Link to="/create-task" className="btn btn-primary">
+          <Link to="/create-task" className="btn btn-primary sm:btn-sm">
             + Создать заявку
           </Link>
         )}
       </div>
 
       {/* Фильтры */}
-      <div className="card mb-6">
-        <h3 className="font-semibold mb-4">🔍 Фильтры</h3>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="card mb-4 sm:mb-6">
+        <h3 className="responsive-subtitle font-semibold mb-3 sm:mb-4">🔍 Фильтры</h3>
+        <div className="grid-responsive grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {/* Поиск */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="form-group-mobile">
+            <label className="form-label">
               Поиск
             </label>
             <input
@@ -172,19 +179,19 @@ const TasksPage = () => {
               placeholder="Поиск по заголовку..."
               value={filters.search}
               onChange={(e) => handleFilterChange('search', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="form-input"
             />
           </div>
 
           {/* Категория */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="form-group-mobile">
+            <label className="form-label">
               Тип переезда
             </label>
             <select
               value={filters.category}
               onChange={(e) => handleFilterChange('category', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="form-select"
             >
               <option value="">Все типы</option>
               <option value="flat">Квартирный</option>
@@ -195,30 +202,31 @@ const TasksPage = () => {
           </div>
 
           {/* Статус */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="form-group-mobile">
+            <label className="form-label">
               Статус
             </label>
             <select
               value={filters.status}
               onChange={(e) => handleFilterChange('status', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="form-select"
             >
               <option value="">Все статусы</option>
-              <option value="active">Активные</option>
+              <option value="draft">Черновик</option>
+              <option value="active">Активная</option>
               <option value="in_progress">В процессе</option>
-              <option value="completed">Завершенные</option>
+              <option value="completed">Завершена</option>
             </select>
           </div>
 
-          {/* Сброс фильтров */}
-          <div className="flex items-end">
+          {/* Кнопка сброса фильтров */}
+          <div className="form-group-mobile sm:flex sm:items-end">
             <button
               onClick={() => {
                 setFilters({ category: '', status: '', search: '' })
                 setPagination(prev => ({ ...prev, page: 1 }))
               }}
-              className="btn btn-secondary w-full"
+              className="btn btn-secondary w-full sm:w-auto"
             >
               Сбросить
             </button>

@@ -59,7 +59,16 @@ const TaskDetailPage = () => {
       logger.log('Ответ API:', response.data)
       
       if (response.data.success) {
-        setTask(response.data.task)
+        const taskData = response.data.task
+        logger.log('📋 Данные задачи загружены:', {
+          id: taskData.id,
+          title: taskData.title,
+          fromAddress: taskData.fromAddress || 'НЕТ',
+          toAddress: taskData.toAddress || 'НЕТ',
+          hasFromAddress: !!taskData.fromAddress,
+          hasToAddress: !!taskData.toAddress
+        })
+        setTask(taskData)
       } else {
         setError('Заявка не найдена')
       }

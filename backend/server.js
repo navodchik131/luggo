@@ -290,9 +290,38 @@ const startServer = async () => {
     process.exit(1);
   }
 
+  // Запускаем Telegram бота если есть токен
+  if (process.env.TELEGRAM_BOT_TOKEN) {
+    try {
+      const { bot } = require('./src/bot/index');
+      
+      // Настройка webhook для продакшена
+      if (process.env.NODE_ENV === 'production') {
+        const WEBHOOK_URL = `${process.env.FRONTEND_URL}/webhook/telegram`;
+        
+        // Устанавливаем webhook
+        await bot.setWebHook(WEBHOOK_URL);
+        console.log('✅ Telegram webhook установлен:', WEBHOOK_URL);
+        
+        // Обработка webhook запросов
+        app.use(bot.webhookCallback('/webhook/telegram'));
+      } else {
+        // Для разработки используем polling
+        console.log('🤖 Telegram бот запущен в режиме polling');
+      }
+      
+      console.log('✅ Telegram бот запущен');
+    } catch (error) {
+      console.error('❌ Ошибка запуска Telegram бота:', error);
+    }
+  } else {
+    console.log('⚠️ TELEGRAM_BOT_TOKEN не установлен, бот не запущен');
+  }
+
   server.listen(PORT, () => {
     console.log(`🚀 Сервер запущен на порту ${PORT}`);
     console.log(`📱 Frontend URL: ${process.env.FRONTEND_URL || "http://localhost:5173"}`);
+    console.log(`🤖 Telegram режим: ${process.env.NODE_ENV === 'production' ? 'webhook' : 'polling'}`);
   });
 };
 

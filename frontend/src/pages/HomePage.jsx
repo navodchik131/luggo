@@ -39,12 +39,12 @@ const HomePage = () => {
       />
       
       {/* Hero section */}
-      <div className="bg-gradient-to-br from-blue-50 to-indigo-100 py-12 sm:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-100 py-8 sm:py-12 lg:py-16 hero-mobile">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 text-center">
+          <h1 className="responsive-title text-2xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-6">
             Переезды стали проще с <span className="text-blue-600">Luggo</span>
           </h1>
-          <p className="text-base sm:text-lg lg:text-xl text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto px-4">
+          <p className="responsive-text text-sm sm:text-lg lg:text-xl text-gray-600 mb-4 sm:mb-8 max-w-2xl mx-auto px-2">
             {user?.role === 'executor' 
               ? 'Найдите выгодные заказы по переезду. Работайте с проверенными заказчиками и развивайте свой бизнес.'
               : 'Найдите надежных исполнителей для квартирного, офисного или межгородского переезда. Быстро, безопасно и с гарантией качества.'
@@ -52,44 +52,44 @@ const HomePage = () => {
           </p>
           
           {user ? (
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-md sm:max-w-none mx-auto">
+            <div className="hero-buttons btn-group-mobile flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-md sm:max-w-none mx-auto">
               {user.role === 'executor' ? (
                 // Кнопки для исполнителей
                 <>
-                  <Link to="/tasks" className="btn btn-primary btn-lg">
+                  <Link to="/tasks" className="btn btn-primary">
                     🔍 Найти заказы
                   </Link>
-                  <Link to="/profile" className="btn btn-secondary btn-lg">
+                  <Link to="/profile" className="btn btn-secondary">
                     👤 Мой профиль
                   </Link>
-                  <Link to="/executors" className="btn btn-secondary btn-lg hidden sm:inline-flex">
+                  <Link to="/executors" className="btn btn-secondary hidden sm:inline-flex">
                     👷 Исполнители
                   </Link>
                 </>
               ) : (
                 // Кнопки для заказчиков
                 <>
-                  <Link to="/create-task" className="btn btn-primary btn-lg">
+                  <Link to="/create-task" className="btn btn-primary">
                     🚚 Создать заявку
                   </Link>
-                  <Link to="/tasks" className="btn btn-secondary btn-lg">
+                  <Link to="/tasks" className="btn btn-secondary">
                     📋 Просмотреть заявки
                   </Link>
-                  <Link to="/executors" className="btn btn-secondary btn-lg hidden sm:inline-flex">
+                  <Link to="/executors" className="btn btn-secondary hidden sm:inline-flex">
                     👷 Исполнители
                   </Link>
                 </>
               )}
             </div>
           ) : (
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-md sm:max-w-none mx-auto">
-              <Link to="/register" className="btn btn-primary btn-lg">
+            <div className="hero-buttons btn-group-mobile flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-md sm:max-w-none mx-auto">
+              <Link to="/register" className="btn btn-primary">
                 Начать работу
               </Link>
-              <Link to="/tasks" className="btn btn-secondary btn-lg">
+              <Link to="/tasks" className="btn btn-secondary">
                 Просмотреть заявки
               </Link>
-              <Link to="/executors" className="btn btn-secondary btn-lg hidden sm:inline-flex">
+              <Link to="/executors" className="btn btn-secondary hidden sm:inline-flex">
                 👷 Исполнители
               </Link>
             </div>
@@ -99,12 +99,14 @@ const HomePage = () => {
 
       {/* Быстрое создание заявки - только для заказчиков */}
       {user && user.role !== 'executor' && (
-        <div className="py-12 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="py-8 sm:py-12 bg-white">
+          <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold text-center mb-8">Создайте заявку за минуту</h2>
+              <h2 className="responsive-title text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8">
+                Создайте заявку за минуту
+              </h2>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div className="grid-responsive grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 mb-6 sm:mb-8">
                 {[
                   {
                     category: 'flat',
@@ -138,11 +140,11 @@ const HomePage = () => {
                   <Link
                     key={item.category}
                     to={`/create-task?category=${item.category}`}
-                    className={`${item.color} border-2 rounded-lg p-6 text-center hover:shadow-md transition-shadow`}
+                    className={`${item.color} border-2 rounded-lg p-4 sm:p-6 text-center hover:shadow-md transition-shadow interactive-element`}
                   >
-                    <div className="text-4xl mb-3">{item.icon}</div>
-                    <h3 className="font-semibold mb-2">{item.title}</h3>
-                    <p className="text-sm text-gray-600">{item.description}</p>
+                    <div className="text-3xl sm:text-4xl mb-2 sm:mb-3">{item.icon}</div>
+                    <h3 className="responsive-subtitle font-semibold mb-1 sm:mb-2">{item.title}</h3>
+                    <p className="responsive-text text-xs sm:text-sm text-gray-600">{item.description}</p>
                   </Link>
                 ))}
               </div>
@@ -159,12 +161,14 @@ const HomePage = () => {
 
       {/* Секция для исполнителей - заменяет создание заявки */}
       {user && user.role === 'executor' && (
-        <div className="py-12 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="py-8 sm:py-12 bg-white">
+          <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold text-center mb-8">Найдите подходящие заказы</h2>
+              <h2 className="responsive-title text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8">
+                Найдите подходящие заказы
+              </h2>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div className="grid-responsive grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 mb-6 sm:mb-8">
                 {[
                   {
                     title: 'Активные заявки',
@@ -198,19 +202,13 @@ const HomePage = () => {
                   <Link
                     key={index}
                     to={item.link}
-                    className={`${item.color} border-2 rounded-lg p-6 text-center hover:shadow-md transition-shadow`}
+                    className={`${item.color} border-2 rounded-lg p-4 sm:p-6 text-center hover:shadow-md transition-shadow interactive-element`}
                   >
-                    <div className="text-4xl mb-3">{item.icon}</div>
-                    <h3 className="font-semibold mb-2">{item.title}</h3>
-                    <p className="text-sm text-gray-600">{item.description}</p>
+                    <div className="text-3xl sm:text-4xl mb-2 sm:mb-3">{item.icon}</div>
+                    <h3 className="responsive-subtitle font-semibold mb-1 sm:mb-2">{item.title}</h3>
+                    <p className="responsive-text text-xs sm:text-sm text-gray-600">{item.description}</p>
                   </Link>
                 ))}
-              </div>
-              
-              <div className="text-center">
-                <Link to="/tasks" className="btn btn-primary btn-lg">
-                  Найти заказы сейчас
-                </Link>
               </div>
             </div>
           </div>

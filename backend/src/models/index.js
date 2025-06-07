@@ -7,6 +7,7 @@ const Review = require('./Review');
 const Notification = require('./Notification');
 const VehiclePhoto = require('./VehiclePhoto');
 const News = require('./News');
+const TelegramUser = require('./TelegramUser');
 
 // Связи между моделями
 
@@ -57,6 +58,10 @@ VehiclePhoto.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 User.hasMany(News, { foreignKey: 'authorId', as: 'news' });
 News.belongsTo(User, { foreignKey: 'authorId', as: 'author' });
 
+// User - TelegramUser (пользователь может быть связан с Telegram аккаунтом)
+User.hasOne(TelegramUser, { foreignKey: 'userId', as: 'telegramUser' });
+TelegramUser.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+
 module.exports = {
   sequelize,
   User,
@@ -66,5 +71,6 @@ module.exports = {
   Review,
   Notification,
   VehiclePhoto,
-  News
+  News,
+  TelegramUser
 }; 

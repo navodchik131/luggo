@@ -2,6 +2,7 @@
 const { Task, User, Bid } = require('../models');
 const { body, validationResult } = require('express-validator');
 const { Op } = require('sequelize');
+const { sendTaskNotification } = require('../bot/telegramBot');
 
 // Получение всех задач с пагинацией и фильтрацией
 const getTasks = async (req, res) => {
@@ -215,6 +216,16 @@ const createTask = async (req, res) => {
       ]
     });
     console.log('✅ Задача с пользователем:', createdTask ? createdTask.toJSON() : 'null');
+
+    // Отправляем уведомления в Telegram
+    try {
+      console.log('📲 Отправляю уведомления в Telegram...');
+      await sendTaskNotification(createdTask.toJSON());
+      console.log('✅ Уведомления отправлены');
+    } catch (notificationError) {
+      console.error('⚠️ Ошибка отправки уведомлений в Telegram:', notificationError);
+      // Не прерываем выполнение, просто логируем ошибку
+    }
 
     res.status(201).json({
       success: true,

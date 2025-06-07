@@ -4,6 +4,8 @@ import { User, LogOut, Plus, MessageCircle, FileText, ChevronDown, Menu, X } fro
 import NotificationIcon from './NotificationIcon'
 import UserAvatar from './UserAvatar'
 import Footer from './Footer'
+import MobileBottomNav from './MobileBottomNav'
+import ResponsiveDebugger from './ResponsiveDebugger'
 import { useState, useEffect } from 'react'
 import { useUnread } from '../contexts/UnreadContext'
 
@@ -52,11 +54,11 @@ const Layout = ({ children }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 no-overflow">
-      <header className="bg-white shadow-sm border-b relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="header-container">
-            <Link to="/" className="header-logo">
+    <div className="min-h-screen bg-gray-50 no-overflow ios-safe-area">
+      <header className="bg-white shadow-sm border-b relative ios-header">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-14 sm:h-16">
+            <Link to="/" className="text-xl sm:text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors">
               Luggo
             </Link>
             
@@ -121,7 +123,7 @@ const Layout = ({ children }) => {
                     <>
                       <Link
                         to="/my-tasks"
-                        className="btn btn-secondary flex items-center space-x-2"
+                        className="btn btn-secondary btn-sm flex items-center space-x-2"
                       >
                         <FileText size={16} />
                         <span className="hidden lg:inline">Мои заявки</span>
@@ -129,7 +131,7 @@ const Layout = ({ children }) => {
                       
                       <Link
                         to="/create-task"
-                        className="btn btn-primary flex items-center space-x-2"
+                        className="btn btn-primary btn-sm flex items-center space-x-2"
                       >
                         <Plus size={16} />
                         <span className="hidden lg:inline">Создать</span>
@@ -140,7 +142,7 @@ const Layout = ({ children }) => {
                   {user?.role === 'executor' && (
                     <Link
                       to="/my-jobs"
-                      className="btn btn-primary flex items-center space-x-2"
+                      className="btn btn-primary btn-sm flex items-center space-x-2"
                     >
                       <FileText size={16} />
                       <span className="hidden lg:inline">Мои работы</span>
@@ -154,7 +156,7 @@ const Layout = ({ children }) => {
                     {/* Чаты */}
                     <button
                       onClick={handleChatsClick}
-                      className="p-2 text-gray-700 hover:text-blue-600 rounded-full hover:bg-gray-100 transition-colors relative"
+                      className="touch-target p-2 text-gray-700 hover:text-blue-600 rounded-full hover:bg-gray-100 transition-colors relative"
                       title="Мои чаты"
                     >
                       <MessageCircle size={20} />
@@ -172,7 +174,7 @@ const Layout = ({ children }) => {
                     
                     <button
                       onClick={logout}
-                      className="text-gray-700 hover:text-red-600"
+                      className="touch-target text-gray-700 hover:text-red-600"
                     >
                       <LogOut size={20} />
                     </button>
@@ -183,7 +185,7 @@ const Layout = ({ children }) => {
                   <Link to="/login" className="text-gray-700 hover:text-blue-600">
                     Войти
                   </Link>
-                  <Link to="/register" className="btn btn-primary">
+                  <Link to="/register" className="btn btn-primary btn-sm">
                     Регистрация
                   </Link>
                 </div>
@@ -191,13 +193,13 @@ const Layout = ({ children }) => {
             </div>
 
             {/* Мобильные кнопки */}
-            <div className="mobile-actions">
+            <div className="flex md:hidden items-center space-x-2">
               {isAuthenticated && (
                 <>
                   {/* Чаты */}
                   <button
                     onClick={handleChatsClick}
-                    className="p-2 text-gray-700 hover:text-blue-600 rounded-full hover:bg-gray-100 transition-colors relative"
+                    className="touch-target p-2 text-gray-700 hover:text-blue-600 rounded-full hover:bg-gray-100 transition-colors relative interactive-element"
                     title="Мои чаты"
                   >
                     <MessageCircle size={20} />
@@ -216,7 +218,7 @@ const Layout = ({ children }) => {
               {/* Гамбургер меню */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="mobile-menu-button"
+                className="touch-target p-2 text-gray-700 hover:text-blue-600 rounded-full hover:bg-gray-100 transition-colors interactive-element"
               >
                 {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
@@ -226,73 +228,121 @@ const Layout = ({ children }) => {
 
         {/* Мобильное меню */}
         {mobileMenuOpen && (
-          <div className="md:hidden mobile-menu">
-            <div className="mobile-menu-content">
+          <div className="md:hidden bg-white border-t border-gray-200 slide-up">
+            <div className="max-w-7xl mx-auto px-3 py-3 space-y-1">
               {/* Навигационные ссылки */}
-              <Link to="/tasks" className="mobile-nav-link">
+              <Link 
+                to="/tasks" 
+                className="block py-3 px-4 text-base text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition-colors interactive-element"
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 📋 Заявки
               </Link>
-              <Link to="/executors" className="mobile-nav-link">
+              <Link 
+                to="/executors" 
+                className="block py-3 px-4 text-base text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition-colors interactive-element"
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 👷 Исполнители
               </Link>
-              <Link to="/for-customers" className="mobile-nav-link">
+              <Link 
+                to="/for-customers" 
+                className="block py-3 px-4 text-base text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition-colors interactive-element"
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 🏠 Для заказчиков
               </Link>
-              <Link to="/for-executors" className="mobile-nav-link">
+              <Link 
+                to="/for-executors" 
+                className="block py-3 px-4 text-base text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition-colors interactive-element"
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 🔧 Для исполнителей
               </Link>
-              <Link to="/news" className="mobile-nav-link">
+              <Link 
+                to="/news" 
+                className="block py-3 px-4 text-base text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition-colors interactive-element"
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 📰 Новости
               </Link>
 
               {isAuthenticated ? (
                 <>
-                  <div className="mobile-nav-divider"></div>
+                  <hr className="my-3 border-gray-200" />
                   
                   {/* Пользовательские ссылки */}
-                  <Link to="/profile" className="mobile-nav-link flex items-center">
+                  <Link 
+                    to="/profile" 
+                    className="flex items-center py-3 px-4 text-base text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition-colors interactive-element"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
                     <UserAvatar user={user} size="sm" className="mr-3" />
                     <span>{user?.name}</span>
                   </Link>
                   
                   {user?.role === 'customer' && (
                     <>
-                      <Link to="/my-tasks" className="mobile-nav-link">
+                      <Link 
+                        to="/my-tasks" 
+                        className="block py-3 px-4 text-base text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition-colors interactive-element"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
                         📂 Мои заявки
                       </Link>
-                      <Link to="/create-task" className="mobile-nav-link text-blue-600 font-medium">
+                      <Link 
+                        to="/create-task" 
+                        className="block py-3 px-4 text-base text-blue-600 hover:bg-blue-50 font-medium rounded-lg transition-colors interactive-element"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
                         ➕ Создать заявку
                       </Link>
                     </>
                   )}
                   
                   {user?.role === 'executor' && (
-                    <Link to="/my-jobs" className="mobile-nav-link text-blue-600 font-medium">
+                    <Link 
+                      to="/my-jobs" 
+                      className="block py-3 px-4 text-base text-blue-600 hover:bg-blue-50 font-medium rounded-lg transition-colors interactive-element"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
                       💼 Мои работы
                     </Link>
                   )}
 
                   {user?.role === 'admin' && (
-                    <Link to="/admin" className="mobile-nav-link text-red-600 font-medium">
+                    <Link 
+                      to="/admin" 
+                      className="block py-3 px-4 text-base text-red-600 hover:bg-red-50 font-medium rounded-lg transition-colors interactive-element"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
                       🛡️ Админ панель
                     </Link>
                   )}
                   
-                  <div className="mobile-nav-divider"></div>
+                  <hr className="my-3 border-gray-200" />
                   <button
                     onClick={handleLogout}
-                    className="mobile-nav-link w-full text-left text-red-600"
+                    className="w-full text-left py-3 px-4 text-base text-red-600 hover:bg-red-50 rounded-lg transition-colors interactive-element"
                   >
                     🚪 Выйти
                   </button>
                 </>
               ) : (
                 <>
-                  <div className="mobile-nav-divider"></div>
-                  <Link to="/login" className="mobile-nav-link">
+                  <hr className="my-3 border-gray-200" />
+                  <Link 
+                    to="/login" 
+                    className="block py-3 px-4 text-base text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition-colors interactive-element"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
                     🔑 Войти
                   </Link>
-                  <Link to="/register" className="mobile-nav-link text-blue-600 font-medium">
+                  <Link 
+                    to="/register" 
+                    className="block py-3 px-4 text-base text-blue-600 hover:bg-blue-50 font-medium rounded-lg transition-colors interactive-element"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
                     👤 Регистрация
                   </Link>
                 </>
@@ -302,13 +352,15 @@ const Layout = ({ children }) => {
         )}
       </header>
 
-      <main className="flex-1">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-1 mobile-scroll">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 pb-20 md:pb-8">
           {children}
         </div>
       </main>
 
+      <MobileBottomNav />
       <Footer />
+      <ResponsiveDebugger />
     </div>
   )
 }
