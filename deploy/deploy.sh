@@ -8,6 +8,28 @@ set -e  # Остановить при любой ошибке
 
 echo "🚀 Начинаем развертывание Luggo Production..."
 
+# Проверка и установка Node.js 18
+echo "🔍 Проверка версии Node.js..."
+NODE_VERSION=$(node -v 2>/dev/null | cut -d'v' -f2 | cut -d'.' -f1 || echo "0")
+
+if [ "$NODE_VERSION" -lt "18" ]; then
+    echo "⚠️ Node.js версии $NODE_VERSION устарела. Устанавливаем Node.js 18..."
+    
+    # Удаляем старые версии
+    sudo apt remove -y nodejs npm || true
+    sudo snap remove node || true
+    
+    # Устанавливаем NodeSource repository
+    curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+    sudo apt-get install -y nodejs
+    
+    # Проверяем установку
+    echo "✅ Установлен Node.js: $(node -v)"
+    echo "✅ Установлен npm: $(npm -v)"
+else
+    echo "✅ Node.js версии $NODE_VERSION подходит"
+fi
+
 # Переменные
 PROJECT_DIR="/home/luggo/luggo"
 BACKUP_DIR="/home/luggo/backups/$(date +%Y%m%d_%H%M%S)"
@@ -64,6 +86,11 @@ cd $PROJECT_DIR
 # Установка зависимостей
 echo "📦 Установка зависимостей backend..."
 cd backend
+
+# Очистка npm cache на всякий случай
+npm cache clean --force
+
+# Установка зависимостей
 npm install --production
 
 # Создание .env файла
