@@ -10,6 +10,18 @@ if (!BOT_TOKEN) {
   process.exit(1);
 }
 
+// Проверяем, отключен ли бот
+if (process.env.TELEGRAM_BOT_DISABLED) {
+  console.log('🔇 Telegram бот отключен (TELEGRAM_BOT_DISABLED=true) в telegramBot.js');
+  
+  // Экспортируем пустые заглушки
+  module.exports = {
+    bot: null,
+    sendTaskNotification: () => console.log('🔇 Telegram уведомления отключены')
+  };
+  return;
+}
+
 // Выбор режима в зависимости от окружения
 const isProduction = process.env.NODE_ENV === 'production';
 const WEBHOOK_URL = process.env.FRONTEND_URL ? `${process.env.FRONTEND_URL}/webhook/telegram` : null;
