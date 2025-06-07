@@ -190,7 +190,7 @@ require('./src/config/init').initializeDatabase().then(async () => {
 
 # 1. Обновляем код
 ssh root@luggo.ru
-cd /var/www/luggo
+cd /home/luggo/luggo
 git pull origin main
 
 # 2. Устанавливаем зависимости
@@ -208,3 +208,9 @@ pm2 restart luggo-backend
 
 # 6. Устанавливаем SSL
 sudo certbot --nginx -d luggo.ru -d www.luggo.ru
+
+на локальном сервере
+git add -A
+git commit -m "🌱 FEAT: Система наполнения платформы демо-данными"
+git status
+git push origin main

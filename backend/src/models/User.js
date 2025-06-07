@@ -70,6 +70,22 @@ const User = sequelize.define('User', {
     defaultValue: true,
     allowNull: false,
     comment: 'Показывать ли email и телефон другим пользователям'
+  },
+  hasPro: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+    allowNull: false,
+    comment: 'Есть ли активная ПРО подписка'
+  },
+  proExpiresAt: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    comment: 'Дата окончания ПРО подписки'
+  },
+  proType: {
+    type: DataTypes.ENUM('pro', 'pro_plus'),
+    allowNull: true,
+    comment: 'Тип активной ПРО подписки'
   }
 }, {
   tableName: 'users',
@@ -142,6 +158,21 @@ User.associate = (models) => {
   User.hasMany(models.VehiclePhoto, {
     foreignKey: 'userId',
     as: 'vehiclePhotos'
+  });
+
+  // Пользователь может иметь много подписок
+  User.hasMany(models.Subscription, {
+    foreignKey: 'userId',
+    as: 'subscriptions'
+  });
+
+  // Связь с активной подпиской
+  User.hasOne(models.Subscription, {
+    foreignKey: 'userId',
+    as: 'activeSubscription',
+    scope: {
+      status: 'active'
+    }
   });
 };
 

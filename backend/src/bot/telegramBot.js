@@ -1,6 +1,7 @@
 const TelegramBot = require('node-telegram-bot-api');
 const { TelegramUser, User } = require('../models');
 const bcrypt = require('bcryptjs');
+const { Op } = require('sequelize');
 
 // Токен бота (нужно будет добавить в .env)
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
@@ -356,58 +357,78 @@ async function logoutUser(chatId, telegramId) {
   await showAuthMessage(chatId);
 }
 
-// Функция для отправки уведомления о новой заявке
+// Отправка уведомления о новой заявке
 async function sendTaskNotification(task) {
   try {
-    console.log('📲 Отправка Telegram уведомлений о новой заявке:', task.id);
+    console.log('📤 Начинаем отправку уведомлений о заявке:', task.id);
     
+    // Находим всех исполнителей с активными подписками на эту категорию и ПРО аккаунтом
     const telegramUsers = await TelegramUser.findAll({
-      where: { 
+      where: {
         isActive: true,
-        userId: { [require('sequelize').Op.not]: null }
+        subscribedCategories: {
+          [Op.contains]: [task.category]
+        }
       },
-      include: [{ model: User, as: 'user' }]
+      include: [{
+        model: User,
+        as: 'user',
+        where: {
+          role: 'executor',
+          hasPro: true,  // 🎯 Только ПРО пользователи!
+          proExpiresAt: {
+            [Op.gt]: new Date()  // ПРО подписка не истекла
+          }
+        }
+      }]
     });
-    
-    console.log(`👥 Найдено ${telegramUsers.length} активных пользователей Telegram`);
-    
+
     if (telegramUsers.length === 0) {
-      console.log('⚠️ Нет активных пользователей Telegram');
+      console.log('📭 Нет исполнителей с ПРО подпиской для категории:', task.category);
       return;
     }
-    
+
+    console.log(`📤 Найдено ${telegramUsers.length} ПРО исполнителей для уведомления`);
+
+    // Формируем сообщение
+    const categoryNames = {
+      'flat': '🏠 Квартирный переезд',
+      'office': '🏢 Офисный переезд', 
+      'intercity': '🚚 Межгородской переезд',
+      'garbage': '🗑️ Вывоз мусора'
+    };
+
+    const message = `🔥 *Новая заявка!*\n\n` +
+      `📋 *${task.title}*\n` +
+      `📍 Откуда: ${task.fromAddress}\n` +
+      `📍 Куда: ${task.toAddress}\n` +
+      `📅 Дата: ${new Date(task.date).toLocaleDateString('ru-RU')}\n` +
+      `🏷️ Категория: ${categoryNames[task.category] || task.category}\n\n` +
+      `💰 *Только для ПРО пользователей!*\n\n` +
+      `👀 [Посмотреть заявку](${process.env.FRONTEND_URL}/tasks/${task.id})`;
+
+    // Отправляем уведомления
     for (const telegramUser of telegramUsers) {
-      const subscribedCategories = telegramUser.subscribedCategories || [];
-      
-      // Проверяем, подписан ли пользователь на эту категорию
-      if (subscribedCategories.includes(task.category)) {
-        console.log(`✅ Отправляю уведомление пользователю ${telegramUser.user.name} (категория: ${task.category})`);
-        
-        // Создаем кнопку с боевым доменом
-        const taskUrl = `https://luggo.ru/tasks/${task.id}`;
-        const keyboard = {
-          inline_keyboard: [
-            [{ text: '👀 Посмотреть заявку', url: taskUrl }]
-          ]
-        };
-        
-        const message = 
-          `🔔 Новая заявка: ${CATEGORIES[task.category]}\n\n` +
-          `📝 ${task.title}\n` +
-          `📅 Дата: ${new Date(task.date).toLocaleDateString('ru-RU')}\n` +
-          `📍 Откуда: ${task.fromAddress}\n` +
-          `📍 Куда: ${task.toAddress}\n\n` +
-          `💬 ${task.description.substring(0, 150)}${task.description.length > 150 ? '...' : ''}\n\n` +
-          `💰 Откликнитесь первым и получите заказ!`;
-        
-        await bot.sendMessage(telegramUser.telegramId, message, { reply_markup: keyboard });
-        console.log(`✅ Уведомление отправлено пользователю ${telegramUser.user.name}`);
+      try {
+        await bot.sendMessage(telegramUser.telegramId, message, {
+          parse_mode: 'Markdown',
+          disable_web_page_preview: true,
+          reply_markup: {
+            inline_keyboard: [[
+              { text: '👀 Посмотреть', url: `${process.env.FRONTEND_URL}/tasks/${task.id}` },
+              { text: '💼 Откликнуться', url: `${process.env.FRONTEND_URL}/tasks/${task.id}#bid` }
+            ]]
+          }
+        });
+        console.log(`✅ Уведомление отправлено: @${telegramUser.user.name}`);
+      } catch (error) {
+        console.error(`❌ Ошибка отправки пользователю ${telegramUser.telegramId}:`, error.message);
       }
     }
-    
-    console.log('📲 Все уведомления отправлены');
+
+    console.log('🎉 Уведомления отправлены всем ПРО исполнителям');
   } catch (error) {
-    console.error('💥 Ошибка при отправке Telegram уведомлений:', error.message);
+    console.error('❌ Ошибка отправки уведомлений:', error);
   }
 }
 

@@ -8,6 +8,7 @@ const Notification = require('./Notification');
 const VehiclePhoto = require('./VehiclePhoto');
 const News = require('./News');
 const TelegramUser = require('./TelegramUser');
+const Subscription = require('./Subscription')(sequelize);
 
 // Связи между моделями
 
@@ -62,6 +63,10 @@ News.belongsTo(User, { foreignKey: 'authorId', as: 'author' });
 User.hasOne(TelegramUser, { foreignKey: 'userId', as: 'telegramUser' });
 TelegramUser.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
+// User - Subscription (пользователь может иметь много подписок)
+User.hasMany(Subscription, { foreignKey: 'userId', as: 'subscriptions' });
+Subscription.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+
 module.exports = {
   sequelize,
   User,
@@ -72,5 +77,6 @@ module.exports = {
   Notification,
   VehiclePhoto,
   News,
-  TelegramUser
+  TelegramUser,
+  Subscription
 }; 
