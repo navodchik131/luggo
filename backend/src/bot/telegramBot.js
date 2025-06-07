@@ -189,30 +189,41 @@ bot.on('message', async (msg) => {
       // Ищем пользователя в БД
       const user = await User.findOne({ where: { email } });
       
+      console.log(`🔍 Telegram авторизация: email=${email}`);
+      
       if (!user) {
+        console.log(`❌ Пользователь не найден: ${email}`);
         await bot.sendMessage(chatId, '❌ Пользователь с таким email не найден.');
         authSessions.delete(telegramId);
         await showAuthMessage(chatId);
         return;
       }
       
+      console.log(`👤 Найден пользователь: ${user.name}, роль: "${user.role}"`);
+      
       // Проверяем пароль
       const isValidPassword = await bcrypt.compare(password, user.password);
       
       if (!isValidPassword) {
+        console.log(`❌ Неверный пароль для: ${email}`);
         await bot.sendMessage(chatId, '❌ Неверный пароль.');
         authSessions.delete(telegramId);
         await showAuthMessage(chatId);
         return;
       }
       
+      console.log(`✅ Пароль верный для: ${email}`);
+      
       // Проверяем роль пользователя
       if (user.role !== 'executor') {
+        console.log(`❌ Неверная роль: "${user.role}" !== "executor" для ${email}`);
         await bot.sendMessage(chatId, '❌ Доступ только для исполнителей.');
         authSessions.delete(telegramId);
         await showAuthMessage(chatId);
         return;
       }
+      
+      console.log(`✅ Роль исполнителя подтверждена для: ${email}`);
       
       // Успешная авторизация
       await TelegramUser.update(
